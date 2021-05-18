@@ -5,8 +5,8 @@
     <!-- Copyright © 2020 by m@mcloc.cn -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>徐晓雅与黄朝政</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
         html,
         body {
@@ -17,7 +17,7 @@
             position: relative;
             height: 100%;
             width: 100%;
-            background-image: url("./img/1.jpg");
+            background-image: url("https://bing.mcloc.cn/api");
             background-size: cover;
             background-position: center;
         }
@@ -116,14 +116,14 @@
         </div>
     </div>
 
-    <script src="js/jquery-1.11.0.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src='js/Valine.min.js'></script><!-- Valine 评论系统 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src='https://cdn.bootcdn.net/ajax/libs/valine/1.4.9/Valine.min.js'></script><!-- Valine 评论系统 -->
 
     <!-- 计时器 -->
     <script>
         function timer() {
-            var start = new Date(2020, 02, 15, 23, 45, 00); // 2020.07.31 13:14:00
+            var start = new Date(2020, 07, 04, 22, 54, 00);
             var t = new Date() - start;
             var h = ~~(t / 1000 / 60 / 60 % 24);
             if (h < 10) {
@@ -215,7 +215,8 @@
 
         $("#updatalove").click(function () {
             $.ajax({
-                url: 'php/love.php',
+                // url: 'php/love.php',
+                url: 'https://api.mcloc.cn/love/',
                 type: "GET",
                 async: true,
                 data: "type=json",
@@ -236,8 +237,8 @@
     <script>
         new Valine({
             el: '#vcomments',
-            appId: 'CW70Y8gzuaHy2xsyBDftke40-gzGzoHsz',
-            appKey: 'DoSF6Hi6bXyEMUGpfr3xkDqE'
+            appId: 'kOAT9PqbjXcDGkFLu9PnhAK9-gzGzoHsz',
+            appKey: 'xLQkDNsVxqrH2YaWiVcxkXw3'
         })
     </script>
 
