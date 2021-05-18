@@ -126,14 +126,11 @@
             var start = new Date(1593874440000);
             console.log("start ",start.getTime());
             var t = new Date() - start;
-            console.log(t);
             var h = ~~(t / 1000 / 60 / 60 % 24);
-            console.log(h);
             if (h < 10) {
                 h = "0" + h;
             }
             var m = ~~(t / 1000 / 60 % 60);
-            console.log(m);
             if (m < 10) {
                 m = "0" + m;
             }
