@@ -180,7 +180,7 @@
     <script>
         //进入页面时请求
         $.ajax({
-            url: 'php/love.php',
+            url: 'https://api.mcloc.cn/love',
             type: "GET",
             async: true,
             data: "type=json",
@@ -197,7 +197,7 @@
         //点击时请求
         $(".love").click(function () {
             $.ajax({
-                url: 'php/love.php',
+                url: 'https://api.mcloc.cn/love',
                 type: "GET",
                 async: true,
                 data: "type=json",
