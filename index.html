@@ -79,7 +79,7 @@
 </head>
 
 <body>
-    <div class="wrap">
+    <div class="wrap" id="nm-container">
         <div class="wrap-son">
             <div class="container-fluid">
                 <div class="box">
@@ -115,7 +115,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src='https://cdn.bootcdn.net/ajax/libs/valine/1.4.9/Valine.min.js'></script><!-- Valine 评论系统 -->
@@ -242,8 +241,17 @@
         })
     </script>
 
+
     <!-- 底部波浪 -->
     <script src="php/wave.php"></script>
+
+    <canvas class="fireworks" 
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999999; pointer-events: none; width: 1158px; height: 916px;" 
+        width="2316" 
+        height="1832">
+    </canvas>
+    <script type="text/javascript" src="/js/anime.min.js"></script>
+    <script type="text/javascript" src="/js/fireworks.js"></script>
 </body>
 
 </html>
