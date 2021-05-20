@@ -75,16 +75,39 @@
             margin-top: 30px;
             margin-bottom: 100px;
         }
+
+
+        .garden-container{
+            position: absolute;
+            display: flex;/*设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效*/
+            display: -webkit-flex; /* Safari */
+            flex-direction: column;/*容器内项目的排列方向(默认横向排列 row)*/
+            flex-wrap: nowrap;/*容器内项目换行方式*/
+            justify-content: center;/*项目在主轴上的对齐方式*/
+            align-items: center;/*项目在交叉轴上如何对齐*/
+            align-content: center;/*定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用*/
+            width: 100%;
+            height: 100%;
+            left:0px;
+            pointer-events: none;
+        }
+        #garden {
+
+        }
     </style>
 </head>
 
 <body>
     <div class="wrap" id="nm-container">
         <div class="wrap-son">
+            
             <div class="container-fluid">
-                <div class="box">
+                <div class="garden-container">
+                    <canvas id="garden"></canvas>
+                </div>
+                <div class="box" style="margin-top: 8%;">
                     <div class="jumbotron text-center">
-                        <h1>我们相恋了</h1>
+                        <h1 >我们相恋了</h1>
                         <h3 class="timer">
                             <div class="row">
                                 <b id="d"></b> 天 <b id="h"></b> 时 <b id="m"></b> 分
@@ -253,6 +276,28 @@
     </canvas>
     <script type="text/javascript" src="/js/anime.min.js"></script>
     <script type="text/javascript" src="/js/fireworks.js"></script>
+    <script>
+        var myDate = new Date();
+        var year  =myDate.getFullYear();
+        var month = myDate.getMonth()+1;
+        var day   = myDate.getDate();
+        if(month == 5 && day == 20){
+            document.title = "520快乐♥";
+            setTimeout(function () {
+                startHeartAnimation();
+            }, 2000);
+            $(".wrap").css("background-image","url('./img/p2562342088.webp')");
+        }
+        if(month == 5 && day == 21){
+            document.title = "521快乐♥";
+            setTimeout(function () {
+                startHeartAnimation();
+            }, 2000);
+        }
+    </script>      
+
+	<script type="text/javascript" src="js/garden_dev.js"></script>
+    <script type="text/javascript" src="js/functions_dev.js"></script>
 </body>
 
 </html>
