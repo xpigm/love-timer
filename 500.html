@@ -100,6 +100,26 @@
         }
 
         #garden {}
+
+        @media (min-width:1040px) {
+            #img-p-500 {
+                max-height: 400px;
+            }
+
+            #img-p-500 img {
+                height: 100%;
+            }
+        }
+
+        @media (max-width:1040px) {
+            #img-p-500 {
+                max-height: 400px;
+            }
+
+            #img-p-500 img {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -122,14 +142,17 @@
                                 <b id="s"></b> 秒
                             </div>
                         </h3>
-                        <p>
+                        <!-- <p>
                             <a id="to_comments" class="btn btn-primary btn-lg" role="button">留个言吧</a>
+                        </p> -->
+                        <p id="img-p-500">
+                            <img src="/img/500.jpg" />
                         </p>
                     </div>
                 </div>
 
                 <div class="row">
-                    <h4 class="love text-center"><span class="love-son"></span></h4>
+                    <h4 class="love text-center"><span class="love-son">佛曰：瑟皤舍孕哆曳罰利侄以諳以帝奢除俱涅特缽故滅冥波羅夷</span></h4>
                 </div>
                 <div id="hans-bolang"></div>
             </div>
@@ -205,62 +228,6 @@
         to_comments.onclick = move;
     </script>
 
-    <!-- 情话接口 -->
-    <script>
-        //进入页面时请求
-        $.ajax({
-            url: 'https://api.mcloc.cn/love',
-            type: "GET",
-            async: true,
-            data: "type=json",
-            dataType: "json",
-            success: function (loveJson) {
-                let love = loveJson["data"];
-                $(".love-son").append(love);
-            },
-            error: function (textStatus) {
-                console.log(JSON.stringify(textStatus));
-            }
-        });
-
-        //点击时请求
-        $(".love").click(function () {
-            $.ajax({
-                url: 'https://api.mcloc.cn/love',
-                type: "GET",
-                async: true,
-                data: "type=json",
-                dataType: "json",
-                success: function (loveJson) {
-                    let love = loveJson["data"];
-                    love = `<span class="love-son"">${love}</span>`;
-                    $(".love").children().replaceWith(love);
-                },
-                error: function (textStatus) {
-                    console.log(JSON.stringify(textStatus));
-                }
-            });
-        });
-
-        $("#updatalove").click(function () {
-            $.ajax({
-                // url: 'php/love.php',
-                url: 'https://api.mcloc.cn/love/',
-                type: "GET",
-                async: true,
-                data: "type=json",
-                dataType: "json",
-                success: function (loveJson) {
-                    let love = loveJson["data"];
-                    love = `<span class="love-son"">${love}</span>`;
-                    $(".love").children().replaceWith(love);
-                },
-                error: function (textStatus) {
-                    console.log(JSON.stringify(textStatus));
-                }
-            });
-        });
-    </script>
 
     <!-- Valine 评论系统； 由 LeanCloud 管理数据 -->
     <script>
@@ -281,34 +248,6 @@
     </canvas>
     <script type="text/javascript" src="/js/anime.min.js"></script>
     <script type="text/javascript" src="/js/fireworks.js"></script>
-    <script>
-        var startDate = new Date("2020-07-04 00:00:00")
-        var startAccurateDate = new new Date(1593874440000);
-        var today = new Date();
-        var year = today.getFullYear();
-        var month = today.getMonth() + 1;
-        var day = today.getDate();
-        var hour = today.getHours();
-        var diffDay = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 24 * 3600));
-        if (month == 5 && day == 20) {
-            document.title = "520快乐♥";
-            setTimeout(function () {
-                startHeartAnimation();
-            }, 2000);
-            $(".wrap").css("background-image", "url('./img/p2562342088.webp')");
-        }
-        if (month == 5 && day == 21) {
-            document.title = "521快乐♥";
-            setTimeout(function () {
-                startHeartAnimation();
-            }, 2000);
-            $(".wrap").css("background-image", "url('./img/pic-todaybing-hd-txempYYe.jpg')");
-        }
-        //500天
-        if (diffDay == 500 && hour > 9) {
-            location.url = "/500.html";
-        }
-    </script>
 
     <script type="text/javascript" src="js/garden_dev.js"></script>
     <script type="text/javascript" src="js/functions_dev.js"></script>
