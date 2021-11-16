@@ -284,13 +284,14 @@
     <script type="text/javascript" src="/js/fireworks.js"></script>
     <script>
         var startDate = new Date("2020-07-04 00:00:00")
+        var start00Date = new Date(1593792000000);
         var startAccurateDate = new Date(1593874440000);
         var today = new Date();
         var year = today.getFullYear();
         var month = today.getMonth() + 1;
         var day = today.getDate();
         var hour = today.getHours();
-        var diffDay = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 24 * 3600));
+        var diffDay = Math.floor((today.getTime() - start00Date.getTime()) / (1000 * 24 * 3600));
         if (month == 5 && day == 20) {
             document.title = "520快乐♥";
             setTimeout(function () {
