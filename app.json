@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/wall/wall",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarTitleText": "恋爱纪念册",
+    "navigationBarBackgroundColor": "#fff7f4",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fff7f4",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

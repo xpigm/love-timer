@@ -1,0 +1,83 @@
+.theme-blush {
+  background: linear-gradient(180deg, #fff7f4 0%, #fff2f0 100%);
+}
+
+.theme-ocean {
+  background: linear-gradient(180deg, #eef8ff 0%, #f4fbff 100%);
+}
+
+.theme-sunset {
+  background: linear-gradient(180deg, #fff5ed 0%, #fff7f0 100%);
+}
+
+.wall-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding-bottom: 36rpx;
+}
+
+.intro-card,
+.composer-card,
+.note-card {
+  padding: 28rpx;
+}
+
+.field-wrap + .field-wrap {
+  margin-top: 20rpx;
+}
+
+.composer-card .btn-row {
+  margin-top: 24rpx;
+}
+
+.flex-btn {
+  flex: 1;
+}
+
+.list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.note-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.note-author {
+  color: #3d2d35;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.note-time {
+  margin-top: 8rpx;
+  color: #9d8088;
+  font-size: 22rpx;
+}
+
+.note-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.note-action {
+  color: #cc7385;
+  font-size: 24rpx;
+}
+
+.note-action.danger {
+  color: #d45454;
+}
+
+.note-content {
+  margin-top: 18rpx;
+  color: #755d66;
+  font-size: 26rpx;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
