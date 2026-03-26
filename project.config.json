@@ -1,0 +1,16 @@
+{
+  "appid": "wx5b772cc8dc9677c2",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "./",
+  "projectname": "love-miniprogram",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmRelationList": [],
+    "ignoreUploadUnusedFiles": true
+  }
+}

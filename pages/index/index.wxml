@@ -1,0 +1,117 @@
+﻿<view class="page {{themeClass}}">
+  <view class="hero">
+    <view class="hero-glow hero-glow-left"></view>
+    <view class="hero-glow hero-glow-right"></view>
+    <view class="float-dot dot-a"></view>
+    <view class="float-dot dot-b"></view>
+    <view class="float-dot dot-c"></view>
+
+    <view class="container hero-inner">
+      <view class="hero-card card">
+        <view class="hero-top">
+          <text class="pill">{{specialTitle}}</text>
+          <text class="hero-city">{{profile.city}}</text>
+        </view>
+
+        <view class="hero-title">{{profile.personA}} 涓?{{profile.personB}}</view>
+        <view class="hero-subtitle">鐩告亱璧风偣锛歿{profile.startDate}}</view>
+        <view class="hero-promise">{{specialTag}}</view>
+
+        <view class="timer-panel">
+          <view class="timer-item">
+            <text class="timer-value">{{timer.days}}</text>
+            <text class="timer-label">澶?/text>
+          </view>
+          <view class="timer-item">
+            <text class="timer-value">{{timer.hours}}</text>
+            <text class="timer-label">鏃?/text>
+          </view>
+          <view class="timer-item">
+            <text class="timer-value">{{timer.minutes}}</text>
+            <text class="timer-label">鍒?/text>
+          </view>
+          <view class="timer-item timer-item-strong">
+            <text class="timer-value">{{timer.seconds}}</text>
+            <text class="timer-label">绉?/text>
+          </view>
+        </view>
+
+        <view class="btn-row hero-actions">
+          <button class="btn-primary flex-btn" bindtap="refreshQuote">鎹竴鍙ユ儏璇?/button>
+          <button class="btn-secondary flex-btn" bindtap="openWall">鍐欑暀瑷€</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="container content">
+    <view class="card quote-card">
+      <view class="section-title">浠婃棩鎯呰瘽</view>
+      <view class="quote-text">{{quote}}</view>
+      <view class="quote-footer">
+        <text class="muted">{{profile.promise}}</text>
+        <button class="btn-ghost mini-btn" bindtap="copySummary">澶嶅埗绾康鏂囨</button>
+      </view>
+    </view>
+
+    <view class="section-block">
+      <view class="section-title">鎭嬬埍姒傝</view>
+      <view class="stats-grid">
+        <view class="card stat-card" wx:for="{{stats}}" wx:key="label">
+          <view class="stat-label">{{item.label}}</view>
+          <view class="stat-value">{{item.value}}</view>
+          <view class="stat-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block">
+      <view class="section-title">鎺ヤ笅鏉ョ殑绾康鏃?/view>
+      <view class="milestone-list">
+        <view class="card milestone-card" wx:for="{{nextMilestones}}" wx:key="day">
+          <view class="milestone-day">{{item.day}}</view>
+          <view class="milestone-info">
+            <view class="milestone-label">{{item.label}}</view>
+            <view class="milestone-left">{{item.leftText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block">
+      <view class="section-title">绾康鐗囨</view>
+      <view class="memory-list">
+        <view class="card memory-card" wx:for="{{memoriesPreview}}" wx:key="id">
+          <view class="memory-date">{{item.date}}</view>
+          <view class="memory-title">{{item.title}}</view>
+          <view class="memory-content">{{item.content}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block">
+      <view class="section-title">鏈€杩戠暀瑷€</view>
+      <view wx:if="{{notesPreview.length}}">
+        <view class="card note-card" wx:for="{{notesPreview}}" wx:key="id">
+          <view class="note-head">
+            <text class="note-author">{{item.author}}</text>
+            <text class="note-time">{{item.createdAt}}</text>
+          </view>
+          <view class="note-content">{{item.content}}</view>
+        </view>
+      </view>
+      <view wx:else class="empty-state">杩樻病鏈夌暀瑷€锛屽幓鍐欎笅绗竴鍙ユ兂璇寸殑璇濆惂銆?/view>
+    </view>
+
+    <view class="card action-card">
+      <view class="section-title">灏忕▼搴忕増閫傞厤</view>
+      <view class="section-desc">
+        鍙傝€冪珯鐐圭殑缃戦〉鐣欒█绯荤粺鍜屽閮ㄦ帴鍙ｅ凡鏀归€犳垚鏇撮€傚悎寰俊绔殑鏈湴瀛樺偍鐗堟湰锛屾敮鎸佷釜鎬у寲淇℃伅銆佺邯蹇电墖娈靛拰鐣欒█澧欍€?      </view>
+      <view class="btn-row action-row">
+        <button class="btn-secondary flex-btn" bindtap="openWall">鎵撳紑鐣欒█澧?/button>
+        <button class="btn-primary flex-btn" bindtap="openSettings">缂栬緫璧勬枡</button>
+      </view>
+    </view>
+  </view>
+</view>
+

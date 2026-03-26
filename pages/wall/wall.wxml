@@ -1,0 +1,57 @@
+﻿<view class="page {{themeClass}}">
+  <view class="container wall-page">
+    <view class="card intro-card">
+      <view class="section-title">蹇冨姩鐣欒█澧?/view>
+      <view class="section-desc">
+        鍙傝€冪珯鐐圭殑缃戦〉璇勮鍖哄凡鏇挎崲鎴愰€傚悎灏忕▼搴忕殑杞婚噺鐣欒█澧欙紝鎵€鏈夊唴瀹归粯璁や繚瀛樺湪鏈満锛岄€傚悎鍋氬弻浜虹邯蹇典笌鏃ュ父纰庣蹇点€?      </view>
+    </view>
+
+    <view class="card composer-card">
+      <view class="section-title">鍐欎竴鍙ユ兂璇寸殑璇?/view>
+
+      <view class="field-wrap">
+        <view class="field-label">鐣欒█韬唤</view>
+        <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
+          <view class="picker-box">{{authorOptions[authorIndex]}}</view>
+        </picker>
+      </view>
+
+      <view class="field-wrap">
+        <view class="field-label">鐣欒█鍐呭</view>
+        <textarea
+          class="text-area"
+          maxlength="300"
+          placeholder="鍐欎笅浠婂ぉ鎯冲 TA 璇寸殑璇?
+          value="{{form.content}}"
+          bindinput="onContentInput"
+        ></textarea>
+      </view>
+
+      <view class="btn-row">
+        <button class="btn-secondary flex-btn" bindtap="fillInspiration">琛ヤ竴鍙ョ伒鎰?/button>
+        <button class="btn-primary flex-btn" bindtap="submitNote">淇濆瓨鐣欒█</button>
+      </view>
+    </view>
+
+    <view class="list-section">
+      <view class="section-title">鏈€杩戠暀瑷€</view>
+      <view wx:if="{{notes.length}}">
+        <view class="card note-card" wx:for="{{notes}}" wx:key="id">
+          <view class="note-top">
+            <view>
+              <view class="note-author">{{item.author}}</view>
+              <view class="note-time">{{item.createdAt}}</view>
+            </view>
+            <view class="note-actions">
+              <text class="note-action" data-content="{{item.content}}" bindtap="copyNote">澶嶅埗</text>
+              <text class="note-action danger" data-id="{{item.id}}" bindtap="deleteNote">鍒犻櫎</text>
+            </view>
+          </view>
+          <view class="note-content">{{item.content}}</view>
+        </view>
+      </view>
+      <view wx:else class="empty-state">杩樻病鏈夌暀瑷€锛屽啓涓嬩粖澶╃殑绗竴鍙ユ倓鎮勮瘽鍚с€?/view>
+    </view>
+  </view>
+</view>
+

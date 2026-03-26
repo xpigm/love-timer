@@ -1,0 +1,70 @@
+.theme-blush {
+  background: linear-gradient(180deg, #fff7f4 0%, #fff4f2 100%);
+}
+
+.theme-ocean {
+  background: linear-gradient(180deg, #eef8ff 0%, #f5fbff 100%);
+}
+
+.theme-sunset {
+  background: linear-gradient(180deg, #fff5ec 0%, #fff8f2 100%);
+}
+
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  padding-bottom: 36rpx;
+}
+
+.field-group + .field-group {
+  margin-top: 20rpx;
+}
+
+.field-actions {
+  margin-top: 24rpx;
+}
+
+.flex-btn {
+  flex: 1;
+}
+
+.memory-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.memory-card {
+  padding: 26rpx;
+}
+
+.memory-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.memory-date {
+  color: #d47582;
+  font-size: 22rpx;
+}
+
+.memory-title {
+  margin-top: 8rpx;
+  color: #3f3037;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.memory-content {
+  margin-top: 14rpx;
+  color: #78616a;
+  font-size: 26rpx;
+  line-height: 1.75;
+}
+
+.memory-delete {
+  color: #d85c5c;
+  font-size: 24rpx;
+}
