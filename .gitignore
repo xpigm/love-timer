@@ -4,3 +4,4 @@ remote_repo/
 private.*.key
 *.log
 .DS_Store
+.claude/
