@@ -1,7 +1,1 @@
-const appConfig = require("./app.json");
-
-App({
-  globalData: {
-    appName: appConfig.window.navigationBarTitleText
-  }
-});
+require("./app.json.js");
