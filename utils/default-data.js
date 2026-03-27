@@ -20,7 +20,7 @@ const DEFAULT_QUOTES = [
 const DEFAULT_NOTES = [
   {
     id: "note-demo",
-    author: "小宇",
+    author: "我",
     content: "欢迎来到我们的恋爱纪念册，今天也要记得好好吃饭。",
     createdAt: "2026-03-26 10:00",
     timestamp: 1774490400000

@@ -1,4 +1,4 @@
-﻿const path = require("path");
+const path = require("path");
 
 if (!global.localStorage || typeof global.localStorage.getItem !== "function") {
   const memoryStorage = {};
@@ -24,14 +24,19 @@ if (!global.localStorage || typeof global.localStorage.getItem !== "function") {
 }
 
 const ci = require("miniprogram-ci");
+const packageJson = require("../package.json");
+const projectConfig = require("../project.config.json");
+const miniprogramConfig = packageJson.miniprogram || {};
 
 const projectPath = path.resolve(__dirname, "..");
-const appid = "wx5b772cc8dc9677c2";
-const privateKeyPath = path.join(projectPath, "private.wx5b772cc8dc9677c2.key");
-const version = process.env.MINIPROGRAM_VERSION || "1.0.0";
+const appid = projectConfig.appid;
+const privateKeyPath = path.join(projectPath, `private.${appid}.key`);
+const version = process.env.MINIPROGRAM_VERSION || packageJson.version;
 const desc =
   process.env.MINIPROGRAM_DESC ||
-  "初始版本，包含核心功能：恋爱天数计时、纪念日提醒、留言记录、纪念片段整理及个性化资料设置。";
+  miniprogramConfig.uploadDescription ||
+  packageJson.description;
+const robot = miniprogramConfig.robot || 1;
 
 async function main() {
   const project = new ci.Project({
@@ -46,14 +51,18 @@ async function main() {
     project,
     version,
     desc,
+    useCOS: true,
     setting: {
       es6: true,
       minify: true,
       codeProtect: false,
       autoPrefixWXSS: true
     },
-    robot: 1,
-    threads: 8
+    robot,
+    threads: 8,
+    onProgressUpdate(progress) {
+      console.log(`[upload] ${progress.status}: ${progress.message || progress.id}`);
+    }
   });
 
   console.log("Upload success");

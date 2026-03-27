@@ -14,7 +14,13 @@
           <text class="hero-city">{{profile.city}}</text>
         </view>
 
-        <view class="hero-title">{{profile.personA}} 和 {{profile.personB}}</view>
+        <view class="hero-kicker">恋爱纪念册</view>
+        <view class="hero-divider">
+          <view class="hero-divider-line"></view>
+          <view class="hero-divider-dot"></view>
+          <view class="hero-divider-line"></view>
+        </view>
+        <view class="hero-title">{{profile.title}}</view>
         <view class="hero-subtitle">恋爱起点：{{profile.startTime}}</view>
         <view class="hero-promise">{{scene.tag}}</view>
 
@@ -94,9 +100,9 @@
     </view>
 
     <view class="card action-card">
-      <view class="section-title">版本说明</view>
+      <view class="section-title">把今天记下来</view>
       <view class="section-desc">
-        这一版回归轻量纪念体验，资料改为配置文件驱动，不再提供在线编辑；首页保留恋爱计时、节日氛围和留言记录三条主线。
+        想说的话、想纪念的瞬间，我都想留在留言墙里，慢慢攒成我们的记录。
       </view>
       <view class="btn-row action-row">
         <button class="btn-primary flex-btn" bindtap="openWall">打开留言墙</button>

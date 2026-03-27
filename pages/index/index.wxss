@@ -107,9 +107,82 @@
   font-size: 24rpx;
 }
 
-.hero-title {
+.hero-kicker {
   margin-top: 32rpx;
-  font-size: 48rpx;
+  color: #b2858d;
+  font-size: 22rpx;
+  font-weight: 600;
+  letter-spacing: 10rpx;
+  text-transform: uppercase;
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  width: 220rpx;
+  margin-top: 18rpx;
+}
+
+.hero-divider-line {
+  flex: 1;
+  height: 2rpx;
+  background: rgba(211, 137, 155, 0.28);
+}
+
+.hero-divider-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 999rpx;
+  background: #d9879b;
+  box-shadow: 0 0 0 8rpx rgba(217, 135, 155, 0.12);
+}
+
+.scene-anniversary .hero-kicker,
+.scene-milestone .hero-kicker {
+  color: #b38a4d;
+}
+
+.scene-anniversary .hero-divider-line,
+.scene-milestone .hero-divider-line {
+  background: rgba(196, 145, 65, 0.26);
+}
+
+.scene-anniversary .hero-divider-dot,
+.scene-milestone .hero-divider-dot {
+  background: #c49141;
+  box-shadow: 0 0 0 8rpx rgba(196, 145, 65, 0.12);
+}
+
+.scene-christmas .hero-kicker {
+  color: #5e9eab;
+}
+
+.scene-christmas .hero-divider-line {
+  background: rgba(95, 158, 171, 0.26);
+}
+
+.scene-christmas .hero-divider-dot {
+  background: #5e9eab;
+  box-shadow: 0 0 0 8rpx rgba(95, 158, 171, 0.12);
+}
+
+.scene-newyear .hero-kicker {
+  color: #6076bb;
+}
+
+.scene-newyear .hero-divider-line {
+  background: rgba(96, 118, 187, 0.26);
+}
+
+.scene-newyear .hero-divider-dot {
+  background: #6076bb;
+  box-shadow: 0 0 0 8rpx rgba(96, 118, 187, 0.14);
+}
+
+.hero-title {
+  margin-top: 22rpx;
+  font-size: 46rpx;
   font-weight: 700;
   color: #402d35;
   line-height: 1.3;

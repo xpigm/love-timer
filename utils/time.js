@@ -5,13 +5,13 @@ const SCENE_PRESETS = {
   default: {
     key: "default",
     sceneClass: "scene-default",
-    badge: "日常模式",
+    badge: "温柔日常",
     title: "今天也适合相爱",
     tag: "把普通日子过成纪念日。",
     description: "保留温柔的基础氛围，等待下一个值得庆祝的时刻。",
     chips: ["常驻柔光", "轻微漂浮", "留言陪伴"],
     metricValue: "柔光日常",
-    metricDesc: "轻量氛围常驻"
+    metricDesc: "温柔氛围陪伴"
   },
   anniversary: {
     key: "anniversary",
@@ -239,13 +239,15 @@ function getSpecialScene(profile, now = new Date()) {
   const configuredScene = matchConfiguredScene(profile, month, day);
   if (configuredScene) {
     const presetKey = configuredScene.key || "default";
-    return buildSceneFromPreset(presetKey, {
-      ...configuredScene,
-      tag:
-        presetKey === "anniversary" && loveYears > 0
-          ? `这是你们的第 ${loveYears} 个恋爱周年。`
-          : configuredScene.tag
-    });
+    const sceneOverrides = {
+      ...configuredScene
+    };
+
+    if (presetKey === "anniversary" && loveYears > 0) {
+      sceneOverrides.tag = `这是我们的第 ${loveYears} 个恋爱周年。`;
+    }
+
+    return buildSceneFromPreset(presetKey, sceneOverrides);
   }
 
   if (MILESTONE_DAYS.includes(togetherDays)) {

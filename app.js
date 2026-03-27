@@ -1,5 +1,7 @@
+const appConfig = require("./app.json");
+
 App({
   globalData: {
-    appName: "恋爱纪念册"
+    appName: appConfig.window.navigationBarTitleText
   }
 });

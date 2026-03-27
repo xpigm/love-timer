@@ -1,12 +1,16 @@
 {
   "name": "love-miniprogram",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "情侣纪念与情感记录微信小程序",
   "scripts": {
-    "upload": "node scripts/upload.js"
+    "upload": "node --no-experimental-webstorage scripts/upload.js"
   },
-  "dependencies": {
-    "miniprogram-ci": "^2.1.13"
+  "miniprogram": {
+    "robot": 1,
+    "uploadDescription": "整理首页视觉与文案，收敛项目配置。"
+  },
+  "devDependencies": {
+    "miniprogram-ci": "^2.1.31"
   }
 }
