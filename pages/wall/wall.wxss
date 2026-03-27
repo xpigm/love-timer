@@ -1,33 +1,142 @@
-.theme-blush {
-  background: linear-gradient(180deg, #fff7f4 0%, #fff2f0 100%);
-}
-
-.theme-ocean {
-  background: linear-gradient(180deg, #eef8ff 0%, #f4fbff 100%);
-}
-
-.theme-sunset {
-  background: linear-gradient(180deg, #fff5ed 0%, #fff7f0 100%);
-}
-
 .wall-page {
   display: flex;
   flex-direction: column;
   gap: 24rpx;
-  padding-bottom: 36rpx;
+  padding-bottom: 44rpx;
 }
 
-.intro-card,
+.wall-glow {
+  position: absolute;
+  border-radius: 999rpx;
+  filter: blur(28rpx);
+  opacity: 0.72;
+}
+
+.glow-a {
+  top: 120rpx;
+  left: -100rpx;
+  width: 280rpx;
+  height: 280rpx;
+  background: rgba(255, 189, 179, 0.54);
+}
+
+.glow-b {
+  top: 360rpx;
+  right: -80rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background: rgba(255, 223, 171, 0.5);
+}
+
+.theme-ocean .glow-a {
+  background: rgba(143, 220, 231, 0.48);
+}
+
+.theme-ocean .glow-b {
+  background: rgba(212, 244, 246, 0.52);
+}
+
+.theme-sunset .glow-a {
+  background: rgba(240, 192, 119, 0.48);
+}
+
+.wall-header,
 .composer-card,
 .note-card {
-  padding: 28rpx;
+  padding: 30rpx;
 }
 
-.field-wrap + .field-wrap {
+.wall-header-top,
+.composer-top,
+.notes-section-head,
+.note-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.wall-kicker,
+.composer-kicker {
+  color: var(--accent-deep);
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 6rpx;
+}
+
+.wall-title,
+.composer-title {
+  margin-top: 14rpx;
+  margin-bottom: 0;
+}
+
+.wall-counter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150rpx;
+  min-height: 150rpx;
+  border-radius: 30rpx;
+  background: rgba(39, 28, 35, 0.92);
+  color: #fff9f6;
+}
+
+.wall-counter-value {
+  font-size: 54rpx;
+  font-weight: 700;
+  font-family: "Times New Roman", "Georgia", serif;
+}
+
+.wall-counter-label {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+}
+
+.wall-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 24rpx;
+}
+
+.wall-tag {
+  padding: 10rpx 18rpx;
+  border: 2rpx solid rgba(70, 40, 52, 0.08);
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--ink-soft);
+  font-size: 22rpx;
+}
+
+.composer-card {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 245, 0.96) 0%, rgba(255, 246, 239, 0.86) 100%);
+}
+
+.composer-date {
+  color: var(--ink-soft);
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+}
+
+.composer-row + .composer-row {
   margin-top: 20rpx;
 }
 
-.composer-card .btn-row {
+.composer-field {
+  width: 100%;
+}
+
+.diary-area {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 251, 246, 1) 100%);
+}
+
+.composer-actions {
   margin-top: 24rpx;
 }
 
@@ -35,28 +144,65 @@
   flex: 1;
 }
 
-.list-section {
+.notes-section {
   display: flex;
   flex-direction: column;
   gap: 16rpx;
 }
 
-.note-top {
+.notes-section-meta {
+  color: var(--ink-soft);
+  font-size: 22rpx;
+}
+
+.notes-list {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20rpx;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.note-card {
+  border-radius: 32rpx;
+}
+
+.pin-left {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 244, 0.95) 0%, rgba(255, 246, 237, 0.88) 100%);
+}
+
+.pin-right {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 242, 0.95) 0%, rgba(255, 242, 234, 0.88) 100%);
+}
+
+.pin-flat {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.95) 0%, rgba(255, 248, 241, 0.88) 100%);
+}
+
+.note-card-label {
+  color: var(--accent-deep);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
 }
 
 .note-author {
-  color: #3d2d35;
+  margin-top: 12rpx;
+  color: var(--ink-strong);
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+.note-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12rpx;
 }
 
 .note-time {
-  margin-top: 8rpx;
-  color: #9d8088;
+  color: var(--ink-soft);
   font-size: 22rpx;
 }
 
@@ -66,18 +212,19 @@
 }
 
 .note-action {
-  color: #cc7385;
+  color: var(--accent-deep);
   font-size: 24rpx;
+  font-weight: 600;
 }
 
 .note-action.danger {
-  color: #d45454;
+  color: #cf5858;
 }
 
 .note-content {
   margin-top: 18rpx;
-  color: #755d66;
+  color: #614d56;
   font-size: 26rpx;
-  line-height: 1.8;
+  line-height: 1.85;
   white-space: pre-wrap;
 }

@@ -1,293 +1,281 @@
-.page {
-  min-height: 100vh;
-}
-
-.theme-blush {
-  background: linear-gradient(180deg, #fff7f4 0%, #fff1f1 55%, #fff7f4 100%);
-}
-
-.theme-ocean {
-  background: linear-gradient(180deg, #eef8ff 0%, #f5fbff 55%, #eef8ff 100%);
-}
-
-.theme-sunset {
-  background: linear-gradient(180deg, #fff5ec 0%, #fff0e9 55%, #fff8f2 100%);
-}
-
 .hero {
   position: relative;
   overflow: hidden;
-  padding-bottom: 26rpx;
+  padding-bottom: 28rpx;
 }
 
-.scene-default .hero {
-  background: linear-gradient(180deg, rgba(255, 244, 243, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+.scene-default {
+  --hero-wash: rgba(255, 235, 227, 0.76);
+  --hero-shadow: rgba(111, 67, 77, 0.14);
 }
 
-.scene-anniversary .hero {
-  background: linear-gradient(180deg, rgba(255, 235, 214, 0.76) 0%, rgba(255, 247, 240, 0) 100%);
+.scene-anniversary {
+  --hero-wash: rgba(255, 234, 194, 0.82);
+  --hero-shadow: rgba(170, 122, 58, 0.16);
 }
 
-.scene-valentine .hero {
-  background: linear-gradient(180deg, rgba(255, 224, 234, 0.82) 0%, rgba(255, 244, 246, 0) 100%);
+.scene-valentine {
+  --hero-wash: rgba(255, 223, 234, 0.84);
+  --hero-shadow: rgba(152, 67, 98, 0.18);
 }
 
-.scene-520 .hero {
-  background: linear-gradient(180deg, rgba(255, 218, 210, 0.86) 0%, rgba(255, 245, 242, 0) 100%);
+.scene-520 {
+  --hero-wash: rgba(255, 222, 207, 0.86);
+  --hero-shadow: rgba(173, 88, 78, 0.18);
 }
 
-.scene-521 .hero {
-  background: linear-gradient(180deg, rgba(255, 228, 237, 0.84) 0%, rgba(255, 246, 248, 0) 100%);
+.scene-521 {
+  --hero-wash: rgba(255, 224, 239, 0.84);
+  --hero-shadow: rgba(154, 81, 115, 0.18);
 }
 
-.scene-christmas .hero {
-  background: linear-gradient(180deg, rgba(215, 240, 245, 0.86) 0%, rgba(244, 251, 253, 0) 100%);
+.scene-christmas {
+  --hero-wash: rgba(217, 240, 244, 0.88);
+  --hero-shadow: rgba(64, 111, 121, 0.18);
 }
 
-.scene-newyear .hero {
-  background: linear-gradient(180deg, rgba(28, 46, 86, 0.88) 0%, rgba(60, 83, 125, 0.12) 100%);
+.scene-newyear {
+  --hero-wash: rgba(53, 71, 123, 0.9);
+  --hero-shadow: rgba(16, 24, 53, 0.24);
 }
 
-.scene-milestone .hero {
-  background: linear-gradient(180deg, rgba(255, 233, 196, 0.78) 0%, rgba(255, 248, 236, 0) 100%);
+.scene-milestone {
+  --hero-wash: rgba(255, 234, 200, 0.84);
+  --hero-shadow: rgba(169, 125, 51, 0.18);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--hero-wash) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
 }
 
 .hero-inner {
-  position: relative;
-  z-index: 2;
-  padding-top: 28rpx;
+  padding-top: 32rpx;
 }
 
 .hero-card {
-  position: relative;
   padding: 34rpx;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 251, 249, 0.78) 100%);
-}
-
-.scene-anniversary .hero-card {
-  background: linear-gradient(180deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 247, 235, 0.84) 100%);
-  box-shadow: 0 24rpx 56rpx rgba(197, 146, 72, 0.15);
-}
-
-.scene-valentine .hero-card {
-  background: linear-gradient(180deg, rgba(255, 248, 251, 0.94) 0%, rgba(255, 238, 244, 0.84) 100%);
-}
-
-.scene-520 .hero-card {
-  background: linear-gradient(180deg, rgba(255, 248, 245, 0.94) 0%, rgba(255, 235, 226, 0.84) 100%);
-}
-
-.scene-521 .hero-card {
-  background: linear-gradient(180deg, rgba(255, 248, 251, 0.94) 0%, rgba(255, 240, 246, 0.84) 100%);
-}
-
-.scene-christmas .hero-card {
-  background: linear-gradient(180deg, rgba(245, 252, 253, 0.94) 0%, rgba(235, 247, 249, 0.84) 100%);
-  box-shadow: 0 24rpx 56rpx rgba(83, 135, 150, 0.14);
+  border-radius: 46rpx;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.95) 0%, rgba(255, 246, 239, 0.82) 100%);
+  box-shadow:
+    0 30rpx 68rpx var(--hero-shadow),
+    inset 0 0 0 2rpx rgba(255, 255, 255, 0.38);
 }
 
 .scene-newyear .hero-card {
-  background: linear-gradient(180deg, rgba(248, 249, 255, 0.96) 0%, rgba(232, 238, 250, 0.88) 100%);
-  box-shadow: 0 24rpx 56rpx rgba(17, 31, 69, 0.22);
+  background:
+    linear-gradient(180deg, rgba(246, 248, 255, 0.96) 0%, rgba(231, 237, 249, 0.88) 100%);
 }
 
-.scene-milestone .hero-card {
-  background: linear-gradient(180deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 244, 226, 0.84) 100%);
+.scene-christmas .hero-card {
+  background:
+    linear-gradient(180deg, rgba(248, 254, 255, 0.96) 0%, rgba(237, 248, 250, 0.88) 100%);
 }
 
-.hero-top {
+.hero-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20rpx;
+  gap: 18rpx;
 }
 
-.hero-city {
-  color: #9b7d86;
-  font-size: 24rpx;
+.hero-head-side {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hero-kicker,
+.hero-day {
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
 }
 
 .hero-kicker {
-  margin-top: 32rpx;
-  color: #b2858d;
-  font-size: 22rpx;
-  font-weight: 600;
-  letter-spacing: 10rpx;
-  text-transform: uppercase;
+  color: var(--accent-deep);
 }
 
-.hero-divider {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  width: 220rpx;
-  margin-top: 18rpx;
+.hero-day {
+  color: var(--ink-soft);
 }
 
-.hero-divider-line {
-  flex: 1;
-  height: 2rpx;
-  background: rgba(211, 137, 155, 0.28);
-}
-
-.hero-divider-dot {
-  width: 12rpx;
-  height: 12rpx;
+.hero-special {
+  padding: 8rpx 14rpx;
   border-radius: 999rpx;
-  background: #d9879b;
-  box-shadow: 0 0 0 8rpx rgba(217, 135, 155, 0.12);
-}
-
-.scene-anniversary .hero-kicker,
-.scene-milestone .hero-kicker {
-  color: #b38a4d;
-}
-
-.scene-anniversary .hero-divider-line,
-.scene-milestone .hero-divider-line {
-  background: rgba(196, 145, 65, 0.26);
-}
-
-.scene-anniversary .hero-divider-dot,
-.scene-milestone .hero-divider-dot {
-  background: #c49141;
-  box-shadow: 0 0 0 8rpx rgba(196, 145, 65, 0.12);
-}
-
-.scene-christmas .hero-kicker {
-  color: #5e9eab;
-}
-
-.scene-christmas .hero-divider-line {
-  background: rgba(95, 158, 171, 0.26);
-}
-
-.scene-christmas .hero-divider-dot {
-  background: #5e9eab;
-  box-shadow: 0 0 0 8rpx rgba(95, 158, 171, 0.12);
-}
-
-.scene-newyear .hero-kicker {
-  color: #6076bb;
-}
-
-.scene-newyear .hero-divider-line {
-  background: rgba(96, 118, 187, 0.26);
-}
-
-.scene-newyear .hero-divider-dot {
-  background: #6076bb;
-  box-shadow: 0 0 0 8rpx rgba(96, 118, 187, 0.14);
+  background: rgba(39, 28, 35, 0.92);
+  color: #fffaf6;
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
 }
 
 .hero-title {
   margin-top: 22rpx;
-  font-size: 46rpx;
+  color: var(--ink-strong);
+  font-size: 72rpx;
+  line-height: 1;
+  font-family: "Times New Roman", "Georgia", "Songti SC", serif;
   font-weight: 700;
-  color: #402d35;
-  line-height: 1.3;
 }
 
-.hero-subtitle {
-  margin-top: 14rpx;
-  color: #7e646f;
-  font-size: 26rpx;
+.hero-line-text {
+  margin-top: 18rpx;
+  color: var(--ink-strong);
+  font-size: 38rpx;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
-.hero-promise {
+.hero-description {
   margin-top: 16rpx;
-  color: #c3637a;
+  max-width: 560rpx;
+  color: var(--ink-soft);
   font-size: 26rpx;
+  line-height: 1.8;
 }
 
-.scene-anniversary .hero-promise,
-.scene-milestone .hero-promise {
-  color: #b67a2c;
+.hero-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 22rpx;
 }
 
-.scene-christmas .hero-promise {
-  color: #4f94a3;
+.hero-tag {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  border: 2rpx solid rgba(70, 40, 52, 0.08);
+  background: rgba(255, 255, 255, 0.54);
+  color: var(--ink-soft);
+  font-size: 22rpx;
 }
 
-.scene-newyear .hero-promise {
-  color: #4460a8;
-}
-
-.timer-panel {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16rpx;
-  margin-top: 34rpx;
-}
-
-.timer-item {
+.hero-metric {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 18rpx;
+  margin-top: 28rpx;
+}
+
+.hero-days-block {
+  padding: 26rpx 26rpx 30rpx;
+  border-radius: 32rpx;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.66) 0%, rgba(255, 245, 238, 0.94) 100%);
+  border: 2rpx solid rgba(70, 40, 52, 0.08);
+}
+
+.hero-days-value {
+  display: block;
+  color: var(--ink-strong);
+  font-size: 118rpx;
+  line-height: 0.9;
+  font-family: "Times New Roman", "Georgia", serif;
+  font-weight: 700;
+}
+
+.hero-days-label {
+  display: block;
+  margin-top: 14rpx;
+  color: var(--accent-deep);
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  text-transform: uppercase;
+}
+
+.hero-clock {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14rpx;
+}
+
+.hero-clock-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
   justify-content: center;
-  min-height: 152rpx;
-  border-radius: 28rpx;
-  background: rgba(255, 246, 244, 0.96);
+  min-height: 122rpx;
+  padding: 20rpx;
+  border-radius: 26rpx;
+  background: rgba(255, 255, 255, 0.56);
+  border: 2rpx solid rgba(70, 40, 52, 0.08);
 }
 
-.scene-anniversary .timer-item,
-.scene-milestone .timer-item {
-  background: rgba(255, 248, 234, 0.96);
-}
-
-.scene-valentine .timer-item,
-.scene-520 .timer-item,
-.scene-521 .timer-item {
-  background: rgba(255, 243, 246, 0.96);
-}
-
-.scene-christmas .timer-item {
-  background: rgba(240, 249, 250, 0.96);
-}
-
-.scene-newyear .timer-item {
-  background: rgba(237, 242, 255, 0.96);
-}
-
-.timer-item-strong {
-  background: linear-gradient(135deg, #ff8fa3 0%, #ffb19f 100%);
+.hero-clock-item-strong {
+  background: linear-gradient(135deg, var(--accent) 0%, #f1b17f 100%);
   color: #ffffff;
+  box-shadow: 0 16rpx 34rpx rgba(141, 61, 72, 0.16);
 }
 
-.scene-anniversary .timer-item-strong,
-.scene-milestone .timer-item-strong {
-  background: linear-gradient(135deg, #f0ba62 0%, #f2c987 100%);
+.scene-christmas .hero-clock-item-strong {
+  background: linear-gradient(135deg, #5eb0ba 0%, #9bdbe3 100%);
 }
 
-.scene-valentine .timer-item-strong {
-  background: linear-gradient(135deg, #ff839e 0%, #ffb2c1 100%);
+.scene-newyear .hero-clock-item-strong {
+  background: linear-gradient(135deg, #4c69be 0%, #8396eb 100%);
 }
 
-.scene-521 .timer-item-strong {
-  background: linear-gradient(135deg, #ff8db1 0%, #ffc0d4 100%);
+.scene-anniversary .hero-clock-item-strong,
+.scene-milestone .hero-clock-item-strong {
+  background: linear-gradient(135deg, #d09a4f 0%, #ebc17f 100%);
 }
 
-.scene-christmas .timer-item-strong {
-  background: linear-gradient(135deg, #6bc4d7 0%, #9cdde5 100%);
+.hero-clock-label {
+  color: rgba(0, 0, 0, 0.52);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
 }
 
-.scene-newyear .timer-item-strong {
-  background: linear-gradient(135deg, #4c69be 0%, #7c8fe5 100%);
+.hero-clock-item-strong .hero-clock-label {
+  color: rgba(255, 255, 255, 0.76);
 }
 
-.timer-value {
+.hero-clock-value {
+  color: inherit;
   font-size: 44rpx;
   font-weight: 700;
 }
 
-.timer-label {
-  margin-top: 10rpx;
-  font-size: 24rpx;
-  opacity: 0.9;
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 22rpx;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 220rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 24rpx;
+  background: rgba(39, 28, 35, 0.92);
+}
+
+.hero-meta-label {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 20rpx;
+  letter-spacing: 3rpx;
+}
+
+.hero-meta-value {
+  color: #fffaf6;
+  font-size: 26rpx;
+  font-weight: 700;
 }
 
 .hero-actions {
-  margin-top: 30rpx;
+  margin-top: 24rpx;
 }
 
 .flex-btn {
@@ -298,94 +286,49 @@
   display: flex;
   flex-direction: column;
   gap: 24rpx;
-  padding-bottom: 36rpx;
+  padding-bottom: 44rpx;
 }
 
-.scene-card,
-.quote-card,
-.action-card {
-  padding: 28rpx;
+.summary-card,
+.notes-card {
+  padding: 30rpx;
 }
 
-.scene-head {
+.summary-head,
+.notes-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24rpx;
+  gap: 18rpx;
 }
 
-.scene-title {
+.summary-eyebrow,
+.notes-kicker {
+  color: var(--accent-deep);
+  font-size: 22rpx;
+  font-weight: 700;
+  letter-spacing: 6rpx;
+}
+
+.summary-title,
+.notes-title {
+  margin-top: 14rpx;
   margin-bottom: 0;
 }
 
-.scene-badge {
-  padding: 12rpx 20rpx;
-  border-radius: 999rpx;
-  background: rgba(255, 239, 240, 0.86);
-  color: #cb6b7e;
-  font-size: 22rpx;
-  font-weight: 600;
-}
-
-.scene-anniversary .scene-badge,
-.scene-milestone .scene-badge {
-  background: rgba(255, 242, 214, 0.96);
-  color: #b07a2c;
-}
-
-.scene-christmas .scene-badge {
-  background: rgba(231, 247, 249, 0.96);
-  color: #4b93a2;
-}
-
-.scene-newyear .scene-badge {
-  background: rgba(233, 238, 255, 0.96);
-  color: #4862a3;
-}
-
-.scene-chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14rpx;
-  margin-top: 20rpx;
-}
-
-.scene-chip {
-  padding: 10rpx 18rpx;
-  border-radius: 999rpx;
-  background: #fff4f2;
-  color: #9d6673;
-  font-size: 22rpx;
-}
-
-.scene-anniversary .scene-chip,
-.scene-milestone .scene-chip {
-  background: #fff7e9;
-  color: #ad7933;
-}
-
-.scene-christmas .scene-chip {
-  background: #effafb;
-  color: #4f92a0;
-}
-
-.scene-newyear .scene-chip {
-  background: #edf1ff;
-  color: #5367aa;
-}
-
-.quote-text {
-  font-size: 34rpx;
-  color: #3f3036;
+.summary-body {
+  margin-top: 24rpx;
+  color: var(--ink-strong);
+  font-size: 38rpx;
   line-height: 1.7;
+  font-family: "Times New Roman", "Georgia", "Songti SC", serif;
 }
 
-.quote-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  margin-top: 22rpx;
+.summary-aside {
+  margin-top: 18rpx;
+  color: var(--ink-soft);
+  font-size: 24rpx;
+  line-height: 1.8;
 }
 
 .mini-btn {
@@ -402,163 +345,211 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18rpx;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
 }
 
-.stat-card,
-.note-card {
+.stat-card {
+  min-height: 190rpx;
   padding: 24rpx;
 }
 
+.stat-card-0 {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.92) 0%, rgba(255, 241, 234, 0.82) 100%);
+}
+
+.stat-card-1 {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 245, 0.92) 0%, rgba(255, 247, 241, 0.82) 100%);
+}
+
+.stat-card-2 {
+  background:
+    linear-gradient(180deg, rgba(255, 249, 233, 0.92) 0%, rgba(255, 242, 214, 0.82) 100%);
+}
+
+.theme-ocean .stat-card-2,
+.scene-christmas .stat-card-2 {
+  background:
+    linear-gradient(180deg, rgba(241, 251, 253, 0.92) 0%, rgba(232, 246, 250, 0.82) 100%);
+}
+
+.scene-newyear .stat-card-2 {
+  background:
+    linear-gradient(180deg, rgba(239, 243, 255, 0.92) 0%, rgba(229, 235, 255, 0.82) 100%);
+}
+
 .stat-label {
-  color: #8f7078;
-  font-size: 24rpx;
+  color: var(--ink-soft);
+  font-size: 22rpx;
 }
 
 .stat-value {
-  margin-top: 12rpx;
-  color: #3c2d35;
-  font-size: 38rpx;
+  margin-top: 16rpx;
+  color: var(--ink-strong);
+  font-size: 40rpx;
   font-weight: 700;
 }
 
 .stat-desc {
   margin-top: 12rpx;
-  color: #997f87;
+  color: var(--ink-soft);
   font-size: 22rpx;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-.note-head {
+.notes-footnote {
+  color: var(--ink-soft);
+  font-size: 22rpx;
+}
+
+.notes-desc {
+  margin-top: 16rpx;
+}
+
+.notes-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.note-card {
+  padding: 24rpx;
+  border-radius: 30rpx;
+  border: 2rpx solid rgba(70, 40, 52, 0.08);
+}
+
+.note-card-primary {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(255, 245, 237, 0.86) 100%);
+}
+
+.note-card-secondary {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 242, 0.96) 0%, rgba(255, 240, 232, 0.86) 100%);
+}
+
+.note-card-label {
+  color: var(--accent-deep);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.note-author-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20rpx;
+  gap: 18rpx;
+  margin-top: 14rpx;
 }
 
 .note-author {
-  color: #3d2d35;
+  color: var(--ink-strong);
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .note-time {
-  color: #a0848a;
+  color: var(--ink-soft);
   font-size: 22rpx;
 }
 
 .note-content {
   margin-top: 16rpx;
-  color: #765f68;
-  line-height: 1.8;
+  color: #614d56;
+  font-size: 26rpx;
+  line-height: 1.85;
   white-space: pre-wrap;
 }
 
-.action-row {
+.notes-actions {
   margin-top: 24rpx;
 }
 
 .hero-glow,
-.float-dot,
+.hero-line,
 .scene-spark {
   position: absolute;
+}
+
+.hero-glow {
   border-radius: 999rpx;
+  filter: blur(28rpx);
 }
 
 .hero-glow-left {
   top: 40rpx;
   left: -100rpx;
-  width: 320rpx;
-  height: 320rpx;
-  background: rgba(255, 179, 190, 0.3);
-  filter: blur(20rpx);
+  width: 300rpx;
+  height: 300rpx;
+  background: rgba(255, 178, 176, 0.4);
 }
 
 .hero-glow-right {
-  top: 80rpx;
-  right: -80rpx;
-  width: 260rpx;
-  height: 260rpx;
-  background: rgba(255, 212, 183, 0.4);
-  filter: blur(22rpx);
-}
-
-.scene-anniversary .hero-glow-left,
-.scene-milestone .hero-glow-left {
-  background: rgba(247, 201, 119, 0.34);
-}
-
-.scene-anniversary .hero-glow-right,
-.scene-milestone .hero-glow-right {
-  background: rgba(255, 230, 177, 0.42);
-}
-
-.scene-valentine .hero-glow-left,
-.scene-521 .hero-glow-left {
-  background: rgba(255, 171, 203, 0.34);
+  top: 100rpx;
+  right: -90rpx;
+  width: 280rpx;
+  height: 280rpx;
+  background: rgba(255, 213, 171, 0.4);
 }
 
 .scene-christmas .hero-glow-left {
-  background: rgba(155, 220, 231, 0.36);
+  background: rgba(135, 220, 232, 0.42);
 }
 
 .scene-christmas .hero-glow-right {
-  background: rgba(205, 243, 245, 0.42);
+  background: rgba(214, 244, 246, 0.44);
 }
 
 .scene-newyear .hero-glow-left {
-  background: rgba(107, 139, 234, 0.34);
+  background: rgba(114, 142, 229, 0.42);
 }
 
 .scene-newyear .hero-glow-right {
-  background: rgba(255, 193, 105, 0.28);
+  background: rgba(255, 208, 123, 0.32);
 }
 
-.float-dot {
-  background: rgba(255, 255, 255, 0.55);
-  animation: drift 6s ease-in-out infinite;
+.hero-line {
+  border: 2rpx solid rgba(255, 255, 255, 0.26);
+  border-radius: 999rpx;
 }
 
-.dot-a {
-  top: 180rpx;
-  left: 70rpx;
-  width: 30rpx;
-  height: 30rpx;
+.line-a {
+  top: 90rpx;
+  right: 44rpx;
+  width: 220rpx;
+  height: 220rpx;
+  transform: rotate(-12deg);
 }
 
-.dot-b {
-  top: 120rpx;
-  right: 120rpx;
-  width: 46rpx;
-  height: 46rpx;
-  animation-delay: 1s;
-}
-
-.dot-c {
-  top: 360rpx;
-  right: 70rpx;
-  width: 20rpx;
-  height: 20rpx;
-  animation-delay: 2s;
+.line-b {
+  top: 280rpx;
+  left: -54rpx;
+  width: 240rpx;
+  height: 170rpx;
+  transform: rotate(18deg);
 }
 
 .scene-spark {
   z-index: 1;
-  opacity: 0.8;
+  border-radius: 999rpx;
+  opacity: 0.78;
   animation: drift 7s ease-in-out infinite;
 }
 
 .spark-one {
-  top: 120rpx;
-  left: 28rpx;
-  width: 32rpx;
-  height: 32rpx;
-  background: rgba(255, 255, 255, 0.7);
+  top: 124rpx;
+  left: 26rpx;
+  width: 30rpx;
+  height: 30rpx;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .spark-two {
-  top: 220rpx;
+  top: 238rpx;
   right: 48rpx;
   width: 18rpx;
   height: 18rpx;
@@ -567,8 +558,8 @@
 }
 
 .spark-three {
-  top: 420rpx;
-  left: 120rpx;
+  top: 430rpx;
+  left: 136rpx;
   width: 20rpx;
   height: 20rpx;
   background: rgba(255, 255, 255, 0.58);
@@ -576,27 +567,27 @@
 }
 
 .spark-four {
-  top: 480rpx;
-  right: 150rpx;
-  width: 28rpx;
-  height: 28rpx;
+  top: 500rpx;
+  right: 148rpx;
+  width: 26rpx;
+  height: 26rpx;
   background: rgba(255, 255, 255, 0.62);
   animation-delay: 3s;
 }
 
 .spark-five {
-  top: 160rpx;
-  right: 220rpx;
-  width: 42rpx;
-  height: 42rpx;
+  top: 180rpx;
+  right: 216rpx;
+  width: 40rpx;
+  height: 40rpx;
   animation-delay: 1.5s;
 }
 
 .spark-six {
-  top: 360rpx;
-  left: 210rpx;
-  width: 38rpx;
-  height: 38rpx;
+  top: 370rpx;
+  left: 216rpx;
+  width: 36rpx;
+  height: 36rpx;
   animation-delay: 2.5s;
 }
 
@@ -634,7 +625,7 @@
   }
   50% {
     transform: translateY(-14rpx);
-    opacity: 0.95;
+    opacity: 0.92;
   }
   100% {
     transform: translateY(0);

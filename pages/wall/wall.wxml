@@ -1,51 +1,82 @@
 <view class="page {{themeClass}}">
+  <view class="wall-glow glow-a"></view>
+  <view class="wall-glow glow-b"></view>
+
   <view class="container wall-page">
-    <view class="card intro-card">
-      <view class="section-title">心动留言墙</view>
-      <view class="section-desc">
-        我想说的话，可以记在这里，留言会保存在当前设备里。
+    <view class="card wall-header">
+      <view class="wall-header-top">
+        <view>
+          <view class="wall-kicker">MESSAGE ARCHIVE</view>
+          <view class="section-title wall-title">心动留言墙</view>
+          <view class="section-desc">{{latestNoteLabel}}</view>
+        </view>
+        <view class="wall-counter">
+          <text class="wall-counter-value">{{noteCount}}</text>
+          <text class="wall-counter-label">条记录</text>
+        </view>
+      </view>
+
+      <view class="wall-tags">
+        <text class="wall-tag" wx:for="{{boardTags}}" wx:key="*this">{{item}}</text>
       </view>
     </view>
 
     <view class="card composer-card">
-      <view class="section-title">写一句想说的话</view>
-
-      <view class="field-wrap">
-        <view class="field-label">留言身份</view>
-        <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
-          <view class="picker-box">{{authorOptions[authorIndex]}}</view>
-        </picker>
+      <view class="composer-top">
+        <view>
+          <view class="composer-kicker">WRITE SOMETHING REAL</view>
+          <view class="section-title composer-title">写一句今天想说的话</view>
+        </view>
+        <text class="composer-date">{{todayLabel}}</text>
       </view>
 
-      <view class="field-wrap">
-        <view class="field-label">留言内容</view>
-        <textarea
-          class="text-area"
-          maxlength="300"
-          placeholder="写下今天想对 TA 说的话"
-          value="{{form.content}}"
-          bindinput="onContentInput"
-        ></textarea>
+      <view class="composer-row">
+        <view class="composer-field">
+          <view class="field-label">留言身份</view>
+          <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
+            <view class="picker-box">{{authorOptions[authorIndex]}}</view>
+          </picker>
+        </view>
       </view>
 
-      <view class="btn-row">
+      <view class="composer-row">
+        <view class="composer-field composer-field-wide">
+          <view class="field-label">留言内容</view>
+          <textarea
+            class="text-area diary-area"
+            maxlength="300"
+            placeholder="写下今天想对 TA 说的话"
+            value="{{form.content}}"
+            bindinput="onContentInput"
+          ></textarea>
+        </view>
+      </view>
+
+      <view class="btn-row composer-actions">
         <button class="btn-secondary flex-btn" bindtap="fillInspiration">补一句灵感</button>
         <button class="btn-primary flex-btn" bindtap="submitNote">保存留言</button>
       </view>
     </view>
 
-    <view class="list-section">
-      <view class="section-title">最近留言</view>
-      <view wx:if="{{notes.length}}">
-        <view class="card note-card" wx:for="{{notes}}" wx:key="id">
-          <view class="note-top">
+    <view class="notes-section">
+      <view class="notes-section-head">
+        <view class="section-title">最近留言</view>
+        <text class="notes-section-meta">{{profile.personA}} / {{profile.personB}}</text>
+      </view>
+
+      <view wx:if="{{notes.length}}" class="notes-list">
+        <view class="card note-card {{item.cardClass}}" wx:for="{{notes}}" wx:key="id">
+          <view class="note-card-top">
             <view>
+              <view class="note-card-label">{{item.stamp}}</view>
               <view class="note-author">{{item.author}}</view>
-              <view class="note-time">{{item.createdAt}}</view>
             </view>
-            <view class="note-actions">
-              <text class="note-action" data-content="{{item.content}}" bindtap="copyNote">复制</text>
-              <text class="note-action danger" data-id="{{item.id}}" bindtap="deleteNote">删除</text>
+            <view class="note-side">
+              <view class="note-time">{{item.createdAt}}</view>
+              <view class="note-actions">
+                <text class="note-action" data-content="{{item.content}}" bindtap="copyNote">复制</text>
+                <text class="note-action danger" data-id="{{item.id}}" bindtap="deleteNote">删除</text>
+              </view>
             </view>
           </view>
           <view class="note-content">{{item.content}}</view>

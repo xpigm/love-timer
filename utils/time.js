@@ -5,90 +5,90 @@ const SCENE_PRESETS = {
   default: {
     key: "default",
     sceneClass: "scene-default",
-    badge: "温柔日常",
+    badge: "日常篇",
     title: "今天也适合相爱",
     tag: "把普通日子过成纪念日。",
     description: "保留温柔的基础氛围，等待下一个值得庆祝的时刻。",
     chips: ["常驻柔光", "轻微漂浮", "留言陪伴"],
-    metricValue: "柔光日常",
-    metricDesc: "温柔氛围陪伴"
+    metricValue: "日常篇",
+    metricDesc: "适合安静记录"
   },
   anniversary: {
     key: "anniversary",
     sceneClass: "scene-anniversary",
-    badge: "周年流光",
+    badge: "周年篇",
     title: "恋爱纪念日",
     tag: "把今天过得更有仪式感。",
     description: "首页切换为周年主题，叠加金色流光和漂浮爱心元素。",
     chips: ["周年换肤", "金色流光", "爱心漂浮"],
-    metricValue: "周年庆祝",
-    metricDesc: "适合截图留念"
+    metricValue: "周年篇",
+    metricDesc: "适合认真纪念"
   },
   valentine: {
     key: "valentine",
     sceneClass: "scene-valentine",
-    badge: "玫瑰特效",
+    badge: "情人节",
     title: "今天是情人节",
     tag: "把爱意说得更明显一点。",
     description: "增加玫瑰色高光和花瓣粒子，让当天更有节日感。",
     chips: ["玫瑰高光", "花瓣粒子", "告白文案"],
-    metricValue: "玫瑰流光",
-    metricDesc: "节日氛围增强"
+    metricValue: "情人节",
+    metricDesc: "适合说爱与偏爱"
   },
   "520": {
     key: "520",
     sceneClass: "scene-520",
-    badge: "心动粒子",
+    badge: "520",
     title: "今天是 520",
     tag: "甜度拉满，适合大声告白。",
     description: "切换粉橘渐变背景，并增加心动粒子和高亮徽章。",
     chips: ["520 换肤", "心动粒子", "甜度高亮"],
-    metricValue: "甜度拉满",
-    metricDesc: "告白氛围已开启"
+    metricValue: "520",
+    metricDesc: "适合把喜欢说出口"
   },
   "521": {
     key: "521",
     sceneClass: "scene-521",
-    badge: "告白光晕",
+    badge: "521",
     title: "今天是 521",
     tag: "继续偏爱，也继续热恋。",
     description: "延续告白主题，叠加柔和光晕和闪烁气泡元素。",
     chips: ["521 光晕", "告白延续", "柔和闪烁"],
-    metricValue: "偏爱继续",
-    metricDesc: "氛围持续在线"
+    metricValue: "521",
+    metricDesc: "适合继续表态"
   },
   christmas: {
     key: "christmas",
     sceneClass: "scene-christmas",
-    badge: "圣诞飘雪",
+    badge: "冬日篇",
     title: "冬日纪念时刻",
     tag: "灯光、礼物和拥抱都更适合今天。",
     description: "切换冷调冬夜主题，并增加雪点与暖光装饰。",
     chips: ["冬夜换肤", "雪点漂浮", "暖灯氛围"],
-    metricValue: "冬日浪漫",
-    metricDesc: "节日氛围增强"
+    metricValue: "冬日篇",
+    metricDesc: "适合拍照与拥抱"
   },
   newyear: {
     key: "newyear",
     sceneClass: "scene-newyear",
-    badge: "新年烟火",
+    badge: "新年篇",
     title: "新年特别场景",
     tag: "把这一年的喜欢继续带到下一年。",
     description: "切换深色节庆氛围，强调倒数感与烟火色彩。",
     chips: ["烟火高光", "节庆粒子", "跨年氛围"],
-    metricValue: "节庆高亮",
-    metricDesc: "适合倒数和截图"
+    metricValue: "新年篇",
+    metricDesc: "适合倒数与留念"
   },
   milestone: {
     key: "milestone",
     sceneClass: "scene-milestone",
-    badge: "特别计数",
+    badge: "纪念日",
     title: "今天值得庆祝",
     tag: "重要天数会自动触发纪念特效。",
     description: "在关键天数自动切换高亮主题，让数字本身变成纪念感。",
     chips: ["关键天数", "数字高亮", "限定氛围"],
-    metricValue: "数字纪念",
-    metricDesc: "里程碑特效触发"
+    metricValue: "纪念日",
+    metricDesc: "重要数字已抵达"
   }
 };
 

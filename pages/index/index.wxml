@@ -2,82 +2,83 @@
   <view class="hero">
     <view class="hero-glow hero-glow-left"></view>
     <view class="hero-glow hero-glow-right"></view>
-    <view class="float-dot dot-a"></view>
-    <view class="float-dot dot-b"></view>
-    <view class="float-dot dot-c"></view>
+    <view class="hero-line line-a"></view>
+    <view class="hero-line line-b"></view>
     <view wx:for="{{sceneDecorations}}" wx:key="id" class="{{item.className}}"></view>
 
     <view class="container hero-inner">
       <view class="hero-card card">
-        <view class="hero-top">
-          <text class="pill">{{scene.badge}}</text>
-          <text class="hero-city">{{profile.city}}</text>
+        <view class="hero-head">
+          <text class="hero-kicker">PRIVATE EDITION</text>
+          <view class="hero-head-side">
+            <text class="hero-day">{{startDateLabel}}</text>
+            <text wx:if="{{specialLabel}}" class="hero-special">{{specialLabel}}</text>
+          </view>
         </view>
 
-        <view class="hero-kicker">恋爱纪念册</view>
-        <view class="hero-divider">
-          <view class="hero-divider-line"></view>
-          <view class="hero-divider-dot"></view>
-          <view class="hero-divider-line"></view>
-        </view>
-        <view class="hero-title">{{profile.title}}</view>
-        <view class="hero-subtitle">恋爱起点：{{profile.startTime}}</view>
-        <view class="hero-promise">{{scene.tag}}</view>
+        <view class="hero-title">{{profile.personA}} / {{profile.personB}}</view>
+        <view class="hero-line-text">{{coverLine}}</view>
+        <view class="hero-description">{{scene.tag}}</view>
 
-        <view class="timer-panel">
-          <view class="timer-item">
-            <text class="timer-value">{{timer.days}}</text>
-            <text class="timer-label">天</text>
+        <view class="hero-tag-row">
+          <text class="hero-tag" wx:for="{{coverTags}}" wx:key="*this">{{item}}</text>
+        </view>
+
+        <view class="hero-metric">
+          <view class="hero-days-block">
+            <text class="hero-days-value">{{timer.days}}</text>
+            <text class="hero-days-label">days together</text>
           </view>
-          <view class="timer-item">
-            <text class="timer-value">{{timer.hours}}</text>
-            <text class="timer-label">时</text>
+
+          <view class="hero-clock">
+            <view class="hero-clock-item">
+              <text class="hero-clock-label">时</text>
+              <text class="hero-clock-value">{{timer.hours}}</text>
+            </view>
+            <view class="hero-clock-item">
+              <text class="hero-clock-label">分</text>
+              <text class="hero-clock-value">{{timer.minutes}}</text>
+            </view>
+            <view class="hero-clock-item hero-clock-item-strong">
+              <text class="hero-clock-label">秒</text>
+              <text class="hero-clock-value">{{timer.seconds}}</text>
+            </view>
           </view>
-          <view class="timer-item">
-            <text class="timer-value">{{timer.minutes}}</text>
-            <text class="timer-label">分</text>
-          </view>
-          <view class="timer-item timer-item-strong">
-            <text class="timer-value">{{timer.seconds}}</text>
-            <text class="timer-label">秒</text>
+        </view>
+
+        <view class="hero-meta">
+          <view class="hero-meta-item" wx:for="{{dateMeta}}" wx:key="label">
+            <text class="hero-meta-label">{{item.label}}</text>
+            <text class="hero-meta-value">{{item.value}}</text>
           </view>
         </view>
 
         <view class="btn-row hero-actions">
-          <button class="btn-primary flex-btn" bindtap="refreshQuote">换一句情话</button>
-          <button class="btn-secondary flex-btn" bindtap="openWall">写留言</button>
+          <button class="btn-primary flex-btn" bindtap="openWall">{{spotlight.cta}}</button>
+          <button class="btn-secondary flex-btn" bindtap="refreshQuote">换一句情话</button>
         </view>
       </view>
     </view>
   </view>
 
   <view class="container content">
-    <view class="card scene-card">
-      <view class="scene-head">
-        <view>
-          <view class="section-title scene-title">{{scene.title}}</view>
-          <view class="section-desc">{{scene.description}}</view>
-        </view>
-        <text class="scene-badge">{{scene.badge}}</text>
+    <view class="card summary-card">
+        <view class="summary-head">
+          <view>
+            <view wx:if="{{summary.eyebrow}}" class="summary-eyebrow">{{summary.eyebrow}}</view>
+            <view class="section-title summary-title">{{summary.title}}</view>
+          </view>
+        <button class="btn-ghost mini-btn" bindtap="copySummary">复制文案</button>
       </view>
-      <view class="scene-chip-list">
-        <text class="scene-chip" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</text>
-      </view>
-    </view>
 
-    <view class="card quote-card">
-      <view class="section-title">今日情话</view>
-      <view class="quote-text">{{quote}}</view>
-      <view class="quote-footer">
-        <text class="muted">{{profile.promise}}</text>
-        <button class="btn-ghost mini-btn" bindtap="copySummary">复制纪念文案</button>
-      </view>
+      <view class="summary-body">{{summary.body}}</view>
+      <view class="summary-aside">{{summary.aside}}</view>
     </view>
 
     <view class="section-block">
-      <view class="section-title">恋爱概览</view>
+      <view class="section-title">核心摘要</view>
       <view class="stats-grid">
-        <view class="card stat-card" wx:for="{{stats}}" wx:key="label">
+        <view class="card stat-card stat-card-{{index}}" wx:for="{{quickStats}}" wx:key="label" wx:for-index="index">
           <view class="stat-label">{{item.label}}</view>
           <view class="stat-value">{{item.value}}</view>
           <view class="stat-desc">{{item.desc}}</view>
@@ -85,26 +86,30 @@
       </view>
     </view>
 
-    <view class="section-block">
-      <view class="section-title">最近留言</view>
-      <view wx:if="{{notesPreview.length}}">
-        <view class="card note-card" wx:for="{{notesPreview}}" wx:key="id">
-          <view class="note-head">
+    <view class="card notes-card">
+      <view class="notes-head">
+        <view>
+          <view class="notes-kicker">MESSAGE SPOTLIGHT</view>
+          <view class="section-title notes-title">{{spotlight.title}}</view>
+        </view>
+        <text class="notes-footnote">{{spotlight.footnote}}</text>
+      </view>
+
+      <view class="section-desc notes-desc">{{spotlight.body}}</view>
+
+      <view wx:if="{{notesPreview.length}}" class="notes-preview">
+        <view class="note-card {{item.cardClass}}" wx:for="{{notesPreview}}" wx:key="id">
+          <view class="note-card-label">{{item.noteLabel}}</view>
+          <view class="note-author-row">
             <text class="note-author">{{item.author}}</text>
             <text class="note-time">{{item.createdAt}}</text>
           </view>
           <view class="note-content">{{item.content}}</view>
         </view>
       </view>
-      <view wx:else class="empty-state">还没有留言，去写下第一句想说的话吧。</view>
-    </view>
+      <view wx:else class="empty-state">还没有留言，但今天已经有了被写下的理由。</view>
 
-    <view class="card action-card">
-      <view class="section-title">把今天记下来</view>
-      <view class="section-desc">
-        想说的话、想纪念的瞬间，我都想留在留言墙里，慢慢攒成我们的记录。
-      </view>
-      <view class="btn-row action-row">
+      <view class="btn-row notes-actions">
         <button class="btn-primary flex-btn" bindtap="openWall">打开留言墙</button>
       </view>
     </view>

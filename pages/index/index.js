@@ -3,29 +3,89 @@ const profileUtils = require("../../utils/profile-config");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
-function buildStats(duration, notesCount, loveYears, scene) {
+const NOTE_CARD_CLASSES = ["note-card-primary", "note-card-secondary"];
+
+function formatStartDateLabel(startTime) {
+  return String(startTime || "")
+    .split(" ")[0]
+    .replace(/-/g, ".");
+}
+
+function buildQuickStats(duration, notesCount, loveYears) {
   return [
     {
       label: "一起走过",
       value: `${duration.days} 天`,
-      desc: "把喜欢过成日常"
+      desc: "喜欢已经有了长度"
     },
     {
-      label: "恋爱阶段",
+      label: "恋爱章节",
       value: `第 ${loveYears + 1} 年`,
-      desc: loveYears > 0 ? `已经走过 ${loveYears} 个完整周年` : "热恋故事刚刚写下开头"
+      desc: loveYears > 0 ? `已经跨过 ${loveYears} 个完整周年` : "故事刚刚写下序章"
     },
     {
-      label: "留言数量",
+      label: "留存记录",
       value: `${notesCount} 条`,
-      desc: "把想说的话认真留下来"
-    },
-    {
-      label: "今日氛围",
-      value: scene.metricValue,
-      desc: scene.metricDesc
+      desc: notesCount ? "有些话已经被认真收藏" : "还等着第一条被写下"
     }
   ];
+}
+
+function decorateNotes(notes) {
+  return notes.slice(0, 2).map((note, index) => ({
+    ...note,
+    cardClass: NOTE_CARD_CLASSES[index % NOTE_CARD_CLASSES.length],
+    noteLabel: index === 0 ? "RECENT 01" : "RECENT 02"
+  }));
+}
+
+function buildCoverTags(profile, scene) {
+  return [profile.city].filter(Boolean);
+}
+
+function buildSpecialLabel(scene) {
+  if (!scene || scene.key === "default") {
+    return "";
+  }
+
+  return scene.badge || scene.title || "";
+}
+
+function buildSummary(profile, scene, quote, notesCount) {
+  const quoteText = quote || "把普通日子过成纪念日。";
+
+  return {
+    eyebrow: buildSpecialLabel(scene),
+    title: scene.title,
+    body: `${scene.tag} ${quoteText}`,
+    aside: notesCount
+      ? `我们已经留下 ${notesCount} 条记录，今天也值得再写下一条。`
+      : "还没有太多存档，但今天就很适合写下第一条。"
+  };
+}
+
+function buildCoverLine(profile, duration) {
+  return `第 ${duration.days} 天，喜欢还在增量`;
+}
+
+function buildDateMeta(profile) {
+  return [
+    {
+      label: "开始于",
+      value: formatStartDateLabel(profile.startTime)
+    }
+  ];
+}
+
+function buildSpotlight(profile, scene, notesCount) {
+  return {
+    title: notesCount ? "今天想收藏的话" : "今天先留一个位置",
+    body: notesCount
+      ? "留下来的，不只是记录，更是之后回看时仍会心动的证据。"
+      : `${scene.tag} 不必等特别日子，今天就可以开始记录。`,
+    cta: notesCount ? "继续写一条新的" : "写下第一条留言",
+    footnote: `${profile.personA} / ${profile.personB}`
+  };
 }
 
 Page({
@@ -40,7 +100,24 @@ Page({
       minutes: "00",
       seconds: "00"
     },
-    stats: [],
+    coverLine: "",
+    startDateLabel: "",
+    coverTags: [],
+    dateMeta: [],
+    quickStats: [],
+    summary: {
+      eyebrow: "",
+      title: "",
+      body: "",
+      aside: ""
+    },
+    specialLabel: "",
+    spotlight: {
+      title: "",
+      body: "",
+      cta: "",
+      footnote: ""
+    },
     scene: {
       title: "",
       tag: "",
@@ -106,18 +183,26 @@ Page({
 
   loadPageData(keepQuote = false) {
     const { profile, notes, duration, loveYears, scene } = this.getBaseData();
+    const quote = keepQuote && this.data.quote ? this.data.quote : this.pickQuote();
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
       sceneClass: scene.sceneClass || "scene-default",
       profile,
-      quote: keepQuote && this.data.quote ? this.data.quote : this.pickQuote(),
+      quote,
       timer: duration,
+      coverLine: buildCoverLine(profile, duration),
+      startDateLabel: formatStartDateLabel(profile.startTime),
+      coverTags: buildCoverTags(profile, scene),
+      dateMeta: buildDateMeta(profile),
+      quickStats: buildQuickStats(duration, notes.length, loveYears),
+      summary: buildSummary(profile, scene, quote, notes.length),
+      specialLabel: buildSpecialLabel(scene),
+      spotlight: buildSpotlight(profile, scene, notes.length),
       scene,
       sceneDecorations: scene.decorations || [],
-      notesPreview: notes.slice(0, 3),
-      notesCount: notes.length,
-      stats: buildStats(duration, notes.length, loveYears, scene)
+      notesPreview: decorateNotes(notes),
+      notesCount: notes.length
     });
   },
 
@@ -146,15 +231,25 @@ Page({
       themeClass: `theme-${profile.theme || "blush"}`,
       sceneClass: scene.sceneClass || "scene-default",
       timer: duration,
+      coverLine: buildCoverLine(profile, duration),
+      startDateLabel: formatStartDateLabel(profile.startTime),
+      coverTags: buildCoverTags(profile, scene),
+      dateMeta: buildDateMeta(profile),
+      quickStats: buildQuickStats(duration, this.data.notesCount, loveYears),
+      summary: buildSummary(profile, scene, this.data.quote, this.data.notesCount),
+      specialLabel: buildSpecialLabel(scene),
+      spotlight: buildSpotlight(profile, scene, this.data.notesCount),
       scene,
-      sceneDecorations: scene.decorations || [],
-      stats: buildStats(duration, this.data.notesCount, loveYears, scene)
+      sceneDecorations: scene.decorations || []
     });
   },
 
   refreshQuote() {
+    const quote = this.pickQuote();
+
     this.setData({
-      quote: this.pickQuote()
+      quote,
+      summary: buildSummary(this.data.profile, this.data.scene, quote, this.data.notesCount)
     });
   },
 
