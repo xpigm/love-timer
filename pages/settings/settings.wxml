@@ -1,78 +1,78 @@
-﻿<view class="page {{themeClass}}">
+<view class="page {{themeClass}}">
   <view class="container settings-page">
     <view class="card field-card">
-      <view class="section-title">鎯呬荆璧勬枡</view>
+      <view class="section-title">情侣资料</view>
 
       <view class="field-group">
-        <view class="field-label">浣犵殑鏄电О</view>
-        <input class="text-input" placeholder="渚嬪锛氬皬瀹? value="{{profile.personA}}" data-field="personA" bindinput="onProfileInput" />
+        <view class="field-label">你的昵称</view>
+        <input class="text-input" placeholder="例如：小安" value="{{profile.personA}}" data-field="personA" bindinput="onProfileInput" />
       </view>
 
       <view class="field-group">
-        <view class="field-label">TA 鐨勬樀绉?/view>
-        <input class="text-input" placeholder="渚嬪锛氬皬婊? value="{{profile.personB}}" data-field="personB" bindinput="onProfileInput" />
+        <view class="field-label">TA 的昵称</view>
+        <input class="text-input" placeholder="例如：小满" value="{{profile.personB}}" data-field="personB" bindinput="onProfileInput" />
       </view>
 
       <view class="field-group">
-        <view class="field-label">鎭嬬埍寮€濮嬫棩鏈?/view>
+        <view class="field-label">恋爱开始日期</view>
         <picker mode="date" value="{{profile.startDate}}" bindchange="onStartDateChange">
           <view class="picker-box">{{profile.startDate}}</view>
         </picker>
       </view>
 
       <view class="field-group">
-        <view class="field-label">鍩庡競</view>
-        <input class="text-input" placeholder="渚嬪锛氫笂娴? value="{{profile.city}}" data-field="city" bindinput="onProfileInput" />
+        <view class="field-label">城市</view>
+        <input class="text-input" placeholder="例如：上海" value="{{profile.city}}" data-field="city" bindinput="onProfileInput" />
       </view>
 
       <view class="field-group">
-        <view class="field-label">棣栭〉鏍囬</view>
-        <input class="text-input" placeholder="渚嬪锛氭垜浠凡缁忕浉鎭? value="{{profile.title}}" data-field="title" bindinput="onProfileInput" />
+        <view class="field-label">首页标题</view>
+        <input class="text-input" placeholder="例如：我们已经相恋" value="{{profile.title}}" data-field="title" bindinput="onProfileInput" />
       </view>
 
       <view class="field-group">
-        <view class="field-label">涓€鍙ユ壙璇?/view>
-        <textarea class="text-area" maxlength="80" placeholder="渚嬪锛氭妸鏅€氭棩瀛愯繃鎴愮邯蹇垫棩銆? value="{{profile.promise}}" data-field="promise" bindinput="onProfileInput"></textarea>
+        <view class="field-label">一句承诺</view>
+        <textarea class="text-area" maxlength="80" placeholder="例如：把普通日子过成纪念日。" value="{{profile.promise}}" data-field="promise" bindinput="onProfileInput"></textarea>
       </view>
 
       <view class="field-group">
-        <view class="field-label">涓婚椋庢牸</view>
+        <view class="field-label">主题风格</view>
         <picker mode="selector" range="{{themeOptions}}" range-key="label" value="{{themeIndex}}" bindchange="onThemeChange">
           <view class="picker-box">{{themeOptions[themeIndex].label}}</view>
         </picker>
       </view>
 
       <view class="btn-row field-actions">
-        <button class="btn-secondary flex-btn" bindtap="resetProfile">鎭㈠榛樿璧勬枡</button>
-        <button class="btn-primary flex-btn" bindtap="saveProfile">淇濆瓨璧勬枡</button>
+        <button class="btn-secondary flex-btn" bindtap="resetProfile">恢复默认资料</button>
+        <button class="btn-primary flex-btn" bindtap="saveProfile">保存资料</button>
       </view>
     </view>
 
     <view class="card field-card">
-      <view class="section-title">鏂板绾康鐗囨</view>
+      <view class="section-title">新增纪念片段</view>
 
       <view class="field-group">
-        <view class="field-label">鏃ユ湡</view>
+        <view class="field-label">日期</view>
         <picker mode="date" value="{{memoryForm.date}}" bindchange="onMemoryDateChange">
           <view class="picker-box">{{memoryForm.date}}</view>
         </picker>
       </view>
 
       <view class="field-group">
-        <view class="field-label">鏍囬</view>
-        <input class="text-input" placeholder="渚嬪锛氱涓€娆′竴璧风湅娴? value="{{memoryForm.title}}" data-field="title" bindinput="onMemoryInput" />
+        <view class="field-label">标题</view>
+        <input class="text-input" placeholder="例如：第一次一起看海" value="{{memoryForm.title}}" data-field="title" bindinput="onMemoryInput" />
       </view>
 
       <view class="field-group">
-        <view class="field-label">鍐呭</view>
-        <textarea class="text-area" maxlength="160" placeholder="鍐欎笅褰撳ぉ鍙戠敓鐨勪簨" value="{{memoryForm.content}}" data-field="content" bindinput="onMemoryInput"></textarea>
+        <view class="field-label">内容</view>
+        <textarea class="text-area" maxlength="160" placeholder="写下当天发生的事" value="{{memoryForm.content}}" data-field="content" bindinput="onMemoryInput"></textarea>
       </view>
 
-      <button class="btn-primary" bindtap="addMemory">鍔犲叆绾康鐗囨</button>
+      <button class="btn-primary" bindtap="addMemory">加入纪念片段</button>
     </view>
 
     <view class="memory-section">
-      <view class="section-title">褰撳墠绾康鐗囨</view>
+      <view class="section-title">当前纪念片段</view>
       <view wx:if="{{memories.length}}">
         <view class="card memory-card" wx:for="{{memories}}" wx:key="id">
           <view class="memory-top">
@@ -80,22 +80,21 @@
               <view class="memory-date">{{item.date}}</view>
               <view class="memory-title">{{item.title}}</view>
             </view>
-            <text class="memory-delete" data-id="{{item.id}}" bindtap="deleteMemory">鍒犻櫎</text>
+            <text class="memory-delete" data-id="{{item.id}}" bindtap="deleteMemory">删除</text>
           </view>
           <view class="memory-content">{{item.content}}</view>
         </view>
       </view>
-      <view wx:else class="empty-state">杩樻病鏈夌邯蹇电墖娈碉紝鍏堟柊澧炰竴鏉″睘浜庝綘浠殑鏁呬簨銆?/view>
+      <view wx:else class="empty-state">还没有纪念片段，先新增一条属于你们的故事。</view>
     </view>
 
     <view class="card field-card">
-      <view class="section-title">鏁版嵁鏁寸悊</view>
-      <view class="section-desc">杩欓噷鍙互鎭㈠绀轰緥绾康鐗囨锛屾垨鑰呮竻绌虹暀瑷€澧欍€?/view>
+      <view class="section-title">数据整理</view>
+      <view class="section-desc">这里可以恢复示例纪念片段，或者清空留言墙。</view>
       <view class="btn-row field-actions">
-        <button class="btn-secondary flex-btn" bindtap="restoreDefaultMemories">鎭㈠绀轰緥鐗囨</button>
-        <button class="btn-ghost flex-btn" bindtap="clearNotes">娓呯┖鐣欒█澧?/button>
+        <button class="btn-secondary flex-btn" bindtap="restoreDefaultMemories">恢复示例片段</button>
+        <button class="btn-ghost flex-btn" bindtap="clearNotes">清空留言墙</button>
       </view>
     </view>
   </view>
 </view>
-
