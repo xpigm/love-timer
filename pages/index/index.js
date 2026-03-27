@@ -1,8 +1,9 @@
-﻿const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const profileUtils = require("../../utils/profile-config");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
-function buildStats(profile, duration, notesCount, memoriesCount, nextMilestones) {
+function buildStats(duration, notesCount, loveYears, scene) {
   return [
     {
       label: "一起走过",
@@ -10,19 +11,19 @@ function buildStats(profile, duration, notesCount, memoriesCount, nextMilestones
       desc: "把喜欢过成日常"
     },
     {
-      label: "下个节点",
-      value: nextMilestones.length ? `${nextMilestones[0].day} 天` : "已解锁",
-      desc: nextMilestones.length ? nextMilestones[0].leftText : "继续创造新的纪念"
+      label: "恋爱阶段",
+      value: `第 ${loveYears + 1} 年`,
+      desc: loveYears > 0 ? `已经走过 ${loveYears} 个完整周年` : "热恋故事刚刚写下开头"
     },
     {
       label: "留言数量",
       value: `${notesCount} 条`,
-      desc: "把想说的话留下来"
+      desc: "把想说的话认真留下来"
     },
     {
-      label: "纪念片段",
-      value: `${memoriesCount} 条`,
-      desc: profile.city || "记录你们的故事"
+      label: "今日氛围",
+      value: scene.metricValue,
+      desc: scene.metricDesc
     }
   ];
 }
@@ -30,6 +31,7 @@ function buildStats(profile, duration, notesCount, memoriesCount, nextMilestones
 Page({
   data: {
     themeClass: "theme-blush",
+    sceneClass: "scene-default",
     profile: {},
     quote: "",
     timer: {
@@ -39,13 +41,18 @@ Page({
       seconds: "00"
     },
     stats: [],
-    specialTitle: "",
-    specialTag: "",
-    nextMilestones: [],
+    scene: {
+      title: "",
+      tag: "",
+      badge: "",
+      description: "",
+      chips: [],
+      metricValue: "",
+      metricDesc: ""
+    },
+    sceneDecorations: [],
     notesPreview: [],
-    notesCount: 0,
-    memoriesPreview: [],
-    memoriesCount: 0
+    notesCount: 0
   },
 
   onLoad() {
@@ -81,27 +88,36 @@ Page({
     return next.trim();
   },
 
-  loadPageData(keepQuote = false) {
-    const profile = storage.getProfile();
+  getBaseData() {
+    const profile = profileUtils.getProfile();
     const notes = storage.getNotes();
-    const memories = storage.getMemories();
-    const duration = time.getDuration(profile.startDate);
-    const nextMilestones = time.getUpcomingMilestones(profile.startDate);
-    const specialMoment = time.getSpecialMoment(profile);
+    const duration = time.getDuration(profile.startTime);
+    const loveYears = time.getLoveYears(profile.startTime);
+    const scene = time.getSpecialScene(profile);
+
+    return {
+      profile,
+      notes,
+      duration,
+      loveYears,
+      scene
+    };
+  },
+
+  loadPageData(keepQuote = false) {
+    const { profile, notes, duration, loveYears, scene } = this.getBaseData();
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
+      sceneClass: scene.sceneClass || "scene-default",
       profile,
       quote: keepQuote && this.data.quote ? this.data.quote : this.pickQuote(),
       timer: duration,
-      specialTitle: specialMoment.title,
-      specialTag: specialMoment.tag,
-      nextMilestones,
+      scene,
+      sceneDecorations: scene.decorations || [],
       notesPreview: notes.slice(0, 3),
       notesCount: notes.length,
-      memoriesPreview: memories.slice(0, 4),
-      memoriesCount: memories.length,
-      stats: buildStats(profile, duration, notes.length, memories.length, nextMilestones)
+      stats: buildStats(duration, notes.length, loveYears, scene)
     });
   },
 
@@ -121,24 +137,18 @@ Page({
   },
 
   updateTimer() {
-    const profile = this.data.profile.personA ? this.data.profile : storage.getProfile();
-    const duration = time.getDuration(profile.startDate);
-    const nextMilestones = time.getUpcomingMilestones(profile.startDate);
-    const specialMoment = time.getSpecialMoment(profile);
+    const profile = this.data.profile.personA ? this.data.profile : profileUtils.getProfile();
+    const duration = time.getDuration(profile.startTime);
+    const loveYears = time.getLoveYears(profile.startTime);
+    const scene = time.getSpecialScene(profile);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
+      sceneClass: scene.sceneClass || "scene-default",
       timer: duration,
-      nextMilestones,
-      specialTitle: specialMoment.title,
-      specialTag: specialMoment.tag,
-      stats: buildStats(
-        profile,
-        duration,
-        this.data.notesCount,
-        this.data.memoriesCount,
-        nextMilestones
-      )
+      scene,
+      sceneDecorations: scene.decorations || [],
+      stats: buildStats(duration, this.data.notesCount, loveYears, scene)
     });
   },
 
@@ -154,15 +164,11 @@ Page({
     });
   },
 
-  openSettings() {
-    wx.navigateTo({
-      url: "/pages/settings/settings"
-    });
-  },
-
   copySummary() {
-    const { profile, timer } = this.data;
-    const summary = `${profile.personA}和${profile.personB}已经相恋 ${timer.days} 天 ${timer.hours} 小时 ${timer.minutes} 分 ${timer.seconds} 秒。`;
+    const { profile, timer, scene } = this.data;
+    const summary =
+      `${profile.personA}和${profile.personB}已经相恋 ${timer.days} 天 ${timer.hours} 小时 ` +
+      `${timer.minutes} 分 ${timer.seconds} 秒。${scene.title}，${scene.tag}`;
 
     wx.setClipboardData({
       data: summary,
@@ -184,9 +190,9 @@ Page({
   },
 
   onShareTimeline() {
-    const { profile, timer } = this.data;
+    const { profile, timer, scene } = this.data;
     return {
-      title: `${profile.personA}和${profile.personB}的恋爱纪念册 · 第 ${timer.days} 天`
+      title: `${profile.personA}和${profile.personB}的恋爱纪念册 · 第 ${timer.days} 天 · ${scene.badge}`
     };
   }
 });

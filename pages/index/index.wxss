@@ -20,6 +20,38 @@
   padding-bottom: 26rpx;
 }
 
+.scene-default .hero {
+  background: linear-gradient(180deg, rgba(255, 244, 243, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.scene-anniversary .hero {
+  background: linear-gradient(180deg, rgba(255, 235, 214, 0.76) 0%, rgba(255, 247, 240, 0) 100%);
+}
+
+.scene-valentine .hero {
+  background: linear-gradient(180deg, rgba(255, 224, 234, 0.82) 0%, rgba(255, 244, 246, 0) 100%);
+}
+
+.scene-520 .hero {
+  background: linear-gradient(180deg, rgba(255, 218, 210, 0.86) 0%, rgba(255, 245, 242, 0) 100%);
+}
+
+.scene-521 .hero {
+  background: linear-gradient(180deg, rgba(255, 228, 237, 0.84) 0%, rgba(255, 246, 248, 0) 100%);
+}
+
+.scene-christmas .hero {
+  background: linear-gradient(180deg, rgba(215, 240, 245, 0.86) 0%, rgba(244, 251, 253, 0) 100%);
+}
+
+.scene-newyear .hero {
+  background: linear-gradient(180deg, rgba(28, 46, 86, 0.88) 0%, rgba(60, 83, 125, 0.12) 100%);
+}
+
+.scene-milestone .hero {
+  background: linear-gradient(180deg, rgba(255, 233, 196, 0.78) 0%, rgba(255, 248, 236, 0) 100%);
+}
+
 .hero-inner {
   position: relative;
   z-index: 2;
@@ -27,8 +59,40 @@
 }
 
 .hero-card {
+  position: relative;
   padding: 34rpx;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 251, 249, 0.76) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 251, 249, 0.78) 100%);
+}
+
+.scene-anniversary .hero-card {
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 247, 235, 0.84) 100%);
+  box-shadow: 0 24rpx 56rpx rgba(197, 146, 72, 0.15);
+}
+
+.scene-valentine .hero-card {
+  background: linear-gradient(180deg, rgba(255, 248, 251, 0.94) 0%, rgba(255, 238, 244, 0.84) 100%);
+}
+
+.scene-520 .hero-card {
+  background: linear-gradient(180deg, rgba(255, 248, 245, 0.94) 0%, rgba(255, 235, 226, 0.84) 100%);
+}
+
+.scene-521 .hero-card {
+  background: linear-gradient(180deg, rgba(255, 248, 251, 0.94) 0%, rgba(255, 240, 246, 0.84) 100%);
+}
+
+.scene-christmas .hero-card {
+  background: linear-gradient(180deg, rgba(245, 252, 253, 0.94) 0%, rgba(235, 247, 249, 0.84) 100%);
+  box-shadow: 0 24rpx 56rpx rgba(83, 135, 150, 0.14);
+}
+
+.scene-newyear .hero-card {
+  background: linear-gradient(180deg, rgba(248, 249, 255, 0.96) 0%, rgba(232, 238, 250, 0.88) 100%);
+  box-shadow: 0 24rpx 56rpx rgba(17, 31, 69, 0.22);
+}
+
+.scene-milestone .hero-card {
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 244, 226, 0.84) 100%);
 }
 
 .hero-top {
@@ -63,6 +127,19 @@
   font-size: 26rpx;
 }
 
+.scene-anniversary .hero-promise,
+.scene-milestone .hero-promise {
+  color: #b67a2c;
+}
+
+.scene-christmas .hero-promise {
+  color: #4f94a3;
+}
+
+.scene-newyear .hero-promise {
+  color: #4460a8;
+}
+
 .timer-panel {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -80,9 +157,49 @@
   background: rgba(255, 246, 244, 0.96);
 }
 
+.scene-anniversary .timer-item,
+.scene-milestone .timer-item {
+  background: rgba(255, 248, 234, 0.96);
+}
+
+.scene-valentine .timer-item,
+.scene-520 .timer-item,
+.scene-521 .timer-item {
+  background: rgba(255, 243, 246, 0.96);
+}
+
+.scene-christmas .timer-item {
+  background: rgba(240, 249, 250, 0.96);
+}
+
+.scene-newyear .timer-item {
+  background: rgba(237, 242, 255, 0.96);
+}
+
 .timer-item-strong {
   background: linear-gradient(135deg, #ff8fa3 0%, #ffb19f 100%);
   color: #ffffff;
+}
+
+.scene-anniversary .timer-item-strong,
+.scene-milestone .timer-item-strong {
+  background: linear-gradient(135deg, #f0ba62 0%, #f2c987 100%);
+}
+
+.scene-valentine .timer-item-strong {
+  background: linear-gradient(135deg, #ff839e 0%, #ffb2c1 100%);
+}
+
+.scene-521 .timer-item-strong {
+  background: linear-gradient(135deg, #ff8db1 0%, #ffc0d4 100%);
+}
+
+.scene-christmas .timer-item-strong {
+  background: linear-gradient(135deg, #6bc4d7 0%, #9cdde5 100%);
+}
+
+.scene-newyear .timer-item-strong {
+  background: linear-gradient(135deg, #4c69be 0%, #7c8fe5 100%);
 }
 
 .timer-value {
@@ -111,9 +228,77 @@
   padding-bottom: 36rpx;
 }
 
+.scene-card,
 .quote-card,
 .action-card {
   padding: 28rpx;
+}
+
+.scene-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.scene-title {
+  margin-bottom: 0;
+}
+
+.scene-badge {
+  padding: 12rpx 20rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 239, 240, 0.86);
+  color: #cb6b7e;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.scene-anniversary .scene-badge,
+.scene-milestone .scene-badge {
+  background: rgba(255, 242, 214, 0.96);
+  color: #b07a2c;
+}
+
+.scene-christmas .scene-badge {
+  background: rgba(231, 247, 249, 0.96);
+  color: #4b93a2;
+}
+
+.scene-newyear .scene-badge {
+  background: rgba(233, 238, 255, 0.96);
+  color: #4862a3;
+}
+
+.scene-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 20rpx;
+}
+
+.scene-chip {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #fff4f2;
+  color: #9d6673;
+  font-size: 22rpx;
+}
+
+.scene-anniversary .scene-chip,
+.scene-milestone .scene-chip {
+  background: #fff7e9;
+  color: #ad7933;
+}
+
+.scene-christmas .scene-chip {
+  background: #effafb;
+  color: #4f92a0;
+}
+
+.scene-newyear .scene-chip {
+  background: #edf1ff;
+  color: #5367aa;
 }
 
 .quote-text {
@@ -148,7 +333,8 @@
   gap: 18rpx;
 }
 
-.stat-card {
+.stat-card,
+.note-card {
   padding: 24rpx;
 }
 
@@ -169,67 +355,6 @@
   color: #997f87;
   font-size: 22rpx;
   line-height: 1.6;
-}
-
-.milestone-list,
-.memory-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.milestone-card {
-  display: flex;
-  align-items: center;
-  padding: 22rpx 24rpx;
-}
-
-.milestone-day {
-  min-width: 120rpx;
-  font-size: 42rpx;
-  font-weight: 700;
-  color: #d66d7d;
-}
-
-.milestone-info {
-  display: flex;
-  flex-direction: column;
-  gap: 10rpx;
-}
-
-.milestone-label {
-  color: #413138;
-  font-size: 30rpx;
-  font-weight: 600;
-}
-
-.milestone-left {
-  color: #997d84;
-  font-size: 24rpx;
-}
-
-.memory-card,
-.note-card {
-  padding: 24rpx;
-}
-
-.memory-date {
-  color: #d47380;
-  font-size: 22rpx;
-}
-
-.memory-title {
-  margin-top: 8rpx;
-  color: #3d2d35;
-  font-size: 30rpx;
-  font-weight: 600;
-}
-
-.memory-content {
-  margin-top: 12rpx;
-  color: #826971;
-  font-size: 24rpx;
-  line-height: 1.7;
 }
 
 .note-head {
@@ -262,7 +387,8 @@
 }
 
 .hero-glow,
-.float-dot {
+.float-dot,
+.scene-spark {
   position: absolute;
   border-radius: 999rpx;
 }
@@ -283,6 +409,37 @@
   height: 260rpx;
   background: rgba(255, 212, 183, 0.4);
   filter: blur(22rpx);
+}
+
+.scene-anniversary .hero-glow-left,
+.scene-milestone .hero-glow-left {
+  background: rgba(247, 201, 119, 0.34);
+}
+
+.scene-anniversary .hero-glow-right,
+.scene-milestone .hero-glow-right {
+  background: rgba(255, 230, 177, 0.42);
+}
+
+.scene-valentine .hero-glow-left,
+.scene-521 .hero-glow-left {
+  background: rgba(255, 171, 203, 0.34);
+}
+
+.scene-christmas .hero-glow-left {
+  background: rgba(155, 220, 231, 0.36);
+}
+
+.scene-christmas .hero-glow-right {
+  background: rgba(205, 243, 245, 0.42);
+}
+
+.scene-newyear .hero-glow-left {
+  background: rgba(107, 139, 234, 0.34);
+}
+
+.scene-newyear .hero-glow-right {
+  background: rgba(255, 193, 105, 0.28);
 }
 
 .float-dot {
@@ -313,10 +470,94 @@
   animation-delay: 2s;
 }
 
+.scene-spark {
+  z-index: 1;
+  opacity: 0.8;
+  animation: drift 7s ease-in-out infinite;
+}
+
+.spark-one {
+  top: 120rpx;
+  left: 28rpx;
+  width: 32rpx;
+  height: 32rpx;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.spark-two {
+  top: 220rpx;
+  right: 48rpx;
+  width: 18rpx;
+  height: 18rpx;
+  background: rgba(255, 255, 255, 0.64);
+  animation-delay: 1s;
+}
+
+.spark-three {
+  top: 420rpx;
+  left: 120rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background: rgba(255, 255, 255, 0.58);
+  animation-delay: 2s;
+}
+
+.spark-four {
+  top: 480rpx;
+  right: 150rpx;
+  width: 28rpx;
+  height: 28rpx;
+  background: rgba(255, 255, 255, 0.62);
+  animation-delay: 3s;
+}
+
+.spark-five {
+  top: 160rpx;
+  right: 220rpx;
+  width: 42rpx;
+  height: 42rpx;
+  animation-delay: 1.5s;
+}
+
+.spark-six {
+  top: 360rpx;
+  left: 210rpx;
+  width: 38rpx;
+  height: 38rpx;
+  animation-delay: 2.5s;
+}
+
+.spark-heart {
+  background: linear-gradient(135deg, rgba(255, 121, 154, 0.95) 0%, rgba(255, 176, 157, 0.9) 100%);
+  transform: rotate(45deg);
+  border-radius: 12rpx;
+}
+
+.spark-petal {
+  background: linear-gradient(135deg, rgba(255, 127, 160, 0.92) 0%, rgba(255, 193, 214, 0.86) 100%);
+  border-radius: 60% 40% 60% 40%;
+}
+
+.spark-bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 165, 202, 0.74));
+}
+
+.spark-snow {
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.96), rgba(190, 231, 239, 0.82));
+}
+
+.spark-firework {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 227, 160, 0.98), rgba(95, 129, 225, 0.86));
+}
+
+.spark-gold {
+  background: linear-gradient(135deg, rgba(255, 217, 128, 0.95) 0%, rgba(247, 188, 89, 0.88) 100%);
+}
+
 @keyframes drift {
   0% {
     transform: translateY(0);
-    opacity: 0.5;
+    opacity: 0.45;
   }
   50% {
     transform: translateY(-14rpx);
@@ -324,6 +565,6 @@
   }
   100% {
     transform: translateY(0);
-    opacity: 0.5;
+    opacity: 0.45;
   }
 }

@@ -1,21 +1,22 @@
-<view class="page {{themeClass}}">
+<view class="page {{themeClass}} {{sceneClass}}">
   <view class="hero">
     <view class="hero-glow hero-glow-left"></view>
     <view class="hero-glow hero-glow-right"></view>
     <view class="float-dot dot-a"></view>
     <view class="float-dot dot-b"></view>
     <view class="float-dot dot-c"></view>
+    <view wx:for="{{sceneDecorations}}" wx:key="id" class="{{item.className}}"></view>
 
     <view class="container hero-inner">
       <view class="hero-card card">
         <view class="hero-top">
-          <text class="pill">{{specialTitle}}</text>
+          <text class="pill">{{scene.badge}}</text>
           <text class="hero-city">{{profile.city}}</text>
         </view>
 
         <view class="hero-title">{{profile.personA}} 和 {{profile.personB}}</view>
-        <view class="hero-subtitle">恋爱起点：{{profile.startDate}}</view>
-        <view class="hero-promise">{{specialTag}}</view>
+        <view class="hero-subtitle">恋爱起点：{{profile.startTime}}</view>
+        <view class="hero-promise">{{scene.tag}}</view>
 
         <view class="timer-panel">
           <view class="timer-item">
@@ -45,6 +46,19 @@
   </view>
 
   <view class="container content">
+    <view class="card scene-card">
+      <view class="scene-head">
+        <view>
+          <view class="section-title scene-title">{{scene.title}}</view>
+          <view class="section-desc">{{scene.description}}</view>
+        </view>
+        <text class="scene-badge">{{scene.badge}}</text>
+      </view>
+      <view class="scene-chip-list">
+        <text class="scene-chip" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+
     <view class="card quote-card">
       <view class="section-title">今日情话</view>
       <view class="quote-text">{{quote}}</view>
@@ -66,30 +80,6 @@
     </view>
 
     <view class="section-block">
-      <view class="section-title">接下来的纪念日</view>
-      <view class="milestone-list">
-        <view class="card milestone-card" wx:for="{{nextMilestones}}" wx:key="day">
-          <view class="milestone-day">{{item.day}}</view>
-          <view class="milestone-info">
-            <view class="milestone-label">{{item.label}}</view>
-            <view class="milestone-left">{{item.leftText}}</view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="section-block">
-      <view class="section-title">纪念片段</view>
-      <view class="memory-list">
-        <view class="card memory-card" wx:for="{{memoriesPreview}}" wx:key="id">
-          <view class="memory-date">{{item.date}}</view>
-          <view class="memory-title">{{item.title}}</view>
-          <view class="memory-content">{{item.content}}</view>
-        </view>
-      </view>
-    </view>
-
-    <view class="section-block">
       <view class="section-title">最近留言</view>
       <view wx:if="{{notesPreview.length}}">
         <view class="card note-card" wx:for="{{notesPreview}}" wx:key="id">
@@ -104,13 +94,12 @@
     </view>
 
     <view class="card action-card">
-      <view class="section-title">小程序版本说明</view>
+      <view class="section-title">版本说明</view>
       <view class="section-desc">
-        当前版本聚焦情侣纪念与情感记录，提供恋爱计时、纪念日提醒、留言记录、纪念片段整理与资料设置等核心功能。
+        这一版回归轻量纪念体验，资料改为配置文件驱动，不再提供在线编辑；首页保留恋爱计时、节日氛围和留言记录三条主线。
       </view>
       <view class="btn-row action-row">
-        <button class="btn-secondary flex-btn" bindtap="openWall">打开留言墙</button>
-        <button class="btn-primary flex-btn" bindtap="openSettings">编辑资料</button>
+        <button class="btn-primary flex-btn" bindtap="openWall">打开留言墙</button>
       </view>
     </view>
   </view>

@@ -1,4 +1,5 @@
-﻿const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const profileUtils = require("../../utils/profile-config");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
@@ -20,8 +21,8 @@ Page({
   },
 
   loadData() {
-    const profile = storage.getProfile();
-    const authorOptions = [profile.personA, profile.personB, "匿名"];
+    const profile = profileUtils.getProfile();
+    const authorOptions = [profile.personA, profile.personB, "匿名"].filter(Boolean);
     const notes = storage.getNotes();
 
     this.setData({
@@ -54,9 +55,7 @@ Page({
 
   fillInspiration() {
     const text = DEFAULT_QUOTES[Math.floor(Math.random() * DEFAULT_QUOTES.length)].trim();
-    const content = this.data.form.content
-      ? `${this.data.form.content}\n${text}`
-      : text;
+    const content = this.data.form.content ? `${this.data.form.content}\n${text}` : text;
 
     this.setData({
       "form.content": content

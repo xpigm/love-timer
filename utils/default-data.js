@@ -1,17 +1,5 @@
 const STORAGE_KEYS = {
-  profile: "love-profile",
-  notes: "love-notes",
-  memories: "love-memories"
-};
-
-const DEFAULT_PROFILE = {
-  personA: "小宇",
-  personB: "小满",
-  startDate: "2020-07-04",
-  title: "我们已经相恋",
-  city: "上海",
-  promise: "把普通日子过成纪念日。",
-  theme: "blush"
+  notes: "love-notes"
 };
 
 const DEFAULT_QUOTES = [
@@ -39,53 +27,8 @@ const DEFAULT_NOTES = [
   }
 ];
 
-const DEFAULT_MEMORIES = [
-  {
-    id: "memory-1",
-    date: "2020-07-04",
-    title: "恋爱第一天",
-    content: "从这一天起，普通的一天有了新的名字。"
-  },
-  {
-    id: "memory-2",
-    date: "2020-08-15",
-    title: "第一次一起旅行",
-    content: "在陌生城市散步，也像回到了自己熟悉的生活里。"
-  },
-  {
-    id: "memory-3",
-    date: "2021-02-14",
-    title: "第一个情人节",
-    content: "没做盛大的事，只认真陪在彼此身边。"
-  },
-  {
-    id: "memory-4",
-    date: "2022-12-31",
-    title: "跨年夜",
-    content: "一起倒数的时候，希望以后每年都能这样。"
-  }
-];
-
-const THEME_OPTIONS = [
-  {
-    label: "奶油粉",
-    value: "blush"
-  },
-  {
-    label: "海盐蓝",
-    value: "ocean"
-  },
-  {
-    label: "落日晚霞",
-    value: "sunset"
-  }
-];
-
 module.exports = {
   STORAGE_KEYS,
-  DEFAULT_PROFILE,
   DEFAULT_QUOTES,
-  DEFAULT_NOTES,
-  DEFAULT_MEMORIES,
-  THEME_OPTIONS
+  DEFAULT_NOTES
 };

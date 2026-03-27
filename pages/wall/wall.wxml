@@ -3,7 +3,7 @@
     <view class="card intro-card">
       <view class="section-title">心动留言墙</view>
       <view class="section-desc">
-        这里可以记录想对彼此说的话，所有内容默认保存在本地，适合日常情感记录与纪念留存。
+        这里可以记录想对彼此说的话。当前版本默认保存在本地，后续会升级为 Cloudflare 云端同步方案。
       </view>
     </view>
 

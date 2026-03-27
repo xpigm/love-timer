@@ -1,8 +1,7 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/wall/wall",
-    "pages/settings/settings"
+    "pages/wall/wall"
   ],
   "window": {
     "navigationBarTitleText": "恋爱纪念册",
