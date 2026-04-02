@@ -1,117 +1,113 @@
 <view class="page {{themeClass}} {{sceneClass}}">
-  <view class="hero">
-    <view class="hero-glow hero-glow-left"></view>
-    <view class="hero-glow hero-glow-right"></view>
-    <view class="hero-line line-a"></view>
-    <view class="hero-line line-b"></view>
-    <view wx:for="{{sceneDecorations}}" wx:key="id" class="{{item.className}}"></view>
+  <!-- 极光/霓虹氛围光球 -->
+  <view class="ambient-orb orb-1" style="width: 600rpx; height: 600rpx; top: -100rpx; left: -100rpx; background: var(--neon-primary);"></view>
+  <view class="ambient-orb orb-2" style="width: 500rpx; height: 500rpx; top: 300rpx; right: -150rpx; background: var(--neon-secondary); animation-delay: -2s;"></view>
+  <view class="ambient-orb orb-3" style="width: 400rpx; height: 400rpx; bottom: 100rpx; left: 10%; background: var(--neon-accent); animation-delay: -4s;"></view>
 
-    <view class="container hero-inner">
-      <view class="hero-card card">
-        <view class="hero-head">
-          <text class="hero-kicker">PRIVATE EDITION</text>
-          <view class="hero-head-side">
-            <text class="hero-day">{{startDateLabel}}</text>
-            <text wx:if="{{specialLabel}}" class="hero-special">{{specialLabel}}</text>
-          </view>
-        </view>
+  <!-- 场景粒子装饰 -->
+  <view wx:for="{{sceneDecorations}}" wx:key="id" class="{{item.className}} neon-spark"></view>
 
-        <view class="hero-title">{{profile.personA}} / {{profile.personB}}</view>
-        <view class="hero-line-text">{{coverLine}}</view>
-        <view class="hero-description">{{scene.tag}}</view>
+  <view class="container">
 
-        <view class="hero-tag-row">
-          <text class="hero-tag" wx:for="{{coverTags}}" wx:key="*this">{{item}}</text>
-        </view>
-
-        <view class="hero-metric">
-          <view class="hero-days-block">
-            <text class="hero-days-value">{{timer.days}}</text>
-            <text class="hero-days-label">days together</text>
-          </view>
-
-          <view class="hero-clock">
-            <view class="hero-clock-item">
-              <text class="hero-clock-label">时</text>
-              <text class="hero-clock-value">{{timer.hours}}</text>
-            </view>
-            <view class="hero-clock-item">
-              <text class="hero-clock-label">分</text>
-              <text class="hero-clock-value">{{timer.minutes}}</text>
-            </view>
-            <view class="hero-clock-item hero-clock-item-strong">
-              <text class="hero-clock-label">秒</text>
-              <text class="hero-clock-value">{{timer.seconds}}</text>
-            </view>
-          </view>
-        </view>
-
-        <view class="hero-meta">
-          <view class="hero-meta-item" wx:for="{{dateMeta}}" wx:key="label">
-            <text class="hero-meta-label">{{item.label}}</text>
-            <text class="hero-meta-value">{{item.value}}</text>
-          </view>
-        </view>
-
-        <view class="btn-row hero-actions">
-          <button class="btn-primary flex-btn" bindtap="openWall">{{spotlight.cta}}</button>
-          <button class="btn-secondary flex-btn" bindtap="refreshQuote">换一句情话</button>
-        </view>
+    <!-- 头部身份信息与状态 -->
+    <view class="header-status animate-enter delay-1">
+      <view class="glass-tag tag-special" wx:if="{{specialLabel}}">
+        <text class="tag-dot"></text>{{specialLabel}}
       </view>
-    </view>
-  </view>
-
-  <view class="container content">
-    <view class="card summary-card">
-        <view class="summary-head">
-          <view>
-            <view wx:if="{{summary.eyebrow}}" class="summary-eyebrow">{{summary.eyebrow}}</view>
-            <view class="section-title summary-title">{{summary.title}}</view>
-          </view>
-        <button class="btn-ghost mini-btn" bindtap="copySummary">复制文案</button>
-      </view>
-
-      <view class="summary-body">{{summary.body}}</view>
-      <view class="summary-aside">{{summary.aside}}</view>
+      <view class="glass-tag">{{startDateLabel}}</view>
     </view>
 
-    <view class="section-block">
-      <view class="section-title">核心摘要</view>
-      <view class="stats-grid">
-        <view class="card stat-card stat-card-{{index}}" wx:for="{{quickStats}}" wx:key="label" wx:for-index="index">
-          <view class="stat-label">{{item.label}}</view>
-          <view class="stat-value">{{item.value}}</view>
-          <view class="stat-desc">{{item.desc}}</view>
+    <!-- 核心区域：纪念日计时 (带渐变外发光边框) -->
+    <view class="hero-section animate-enter delay-2">
+      <view class="hero-names">{{profile.personA}} <text class="text-gradient">&</text> {{profile.personB}}</view>
+      <view class="title-primary hero-motto">{{scene.tag || coverLine}}</view>
+
+      <view class="gradient-border-wrap timer-wrap float-subtle">
+        <view class="glass-card timer-card">
+          <!-- 巨大数字：天数 -->
+          <view class="timer-main">
+            <text class="timer-days text-gradient">{{timer.days}}</text>
+            <text class="timer-label">DAYS TOGETHER</text>
+          </view>
+
+          <!-- 时分秒分隔区 -->
+          <view class="timer-subs">
+            <view class="timer-sub-item">
+              <text class="sub-val">{{timer.hours}}</text>
+              <text class="sub-lbl">HOURS</text>
+            </view>
+            <view class="timer-sub-divider">:</view>
+            <view class="timer-sub-item">
+              <text class="sub-val">{{timer.minutes}}</text>
+              <text class="sub-lbl">MINS</text>
+            </view>
+            <view class="timer-sub-divider">:</view>
+            <view class="timer-sub-item">
+              <text class="sub-val neon-pulse">{{timer.seconds}}</text>
+              <text class="sub-lbl text-gradient">SECS</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="hero-tags">
+        <text class="glass-tag" wx:for="{{coverTags}}" wx:key="*this">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 核心摘要：Bento Grid 风格 -->
+    <view class="bento-grid animate-enter delay-3">
+      <view class="glass-card bento-card bento-quote float-subtle" style="animation-delay: 1.5s;">
+        <view class="bento-header">
+          <text class="bento-icon">✧</text>
+          <text class="bento-title">{{summary.title || '今日寄语'}}</text>
+        </view>
+        <view class="bento-content quote-text">{{summary.body}}</view>
+        <view class="bento-actions">
+          <button class="btn btn-glass btn-mini" bindtap="refreshQuote">更换</button>
+          <button class="btn btn-glass btn-mini" bindtap="copySummary">复制</button>
+        </view>
+      </view>
+
+      <view class="bento-row">
+        <view class="glass-card bento-card stat-item" wx:for="{{quickStats}}" wx:key="label" wx:if="{{index < 2}}">
+          <view class="stat-val">{{item.value}}</view>
+          <view class="stat-lbl">{{item.label}}</view>
         </view>
       </view>
     </view>
 
-    <view class="card notes-card">
-      <view class="notes-head">
-        <view>
-          <view class="notes-kicker">MESSAGE SPOTLIGHT</view>
-          <view class="section-title notes-title">{{spotlight.title}}</view>
+    <!-- 留言聚光灯 -->
+    <view class="glass-card spotlight-card animate-enter delay-4">
+      <view class="spotlight-header">
+        <view class="spot-left">
+          <text class="spot-eyebrow">MEMORY FRAGMENTS</text>
+          <view class="title-secondary">{{spotlight.title}}</view>
         </view>
-        <text class="notes-footnote">{{spotlight.footnote}}</text>
+        <view class="glass-tag">{{notesCount}} 碎片</view>
       </view>
 
-      <view class="section-desc notes-desc">{{spotlight.body}}</view>
+      <view class="text-muted spot-desc">{{spotlight.body}}</view>
 
-      <view wx:if="{{notesPreview.length}}" class="notes-preview">
-        <view class="note-card {{item.cardClass}}" wx:for="{{notesPreview}}" wx:key="id">
-          <view class="note-card-label">{{item.noteLabel}}</view>
-          <view class="note-author-row">
-            <text class="note-author">{{item.author}}</text>
+      <view class="notes-preview-area" wx:if="{{notesPreview.length}}">
+        <view class="note-item" wx:for="{{notesPreview}}" wx:key="id">
+          <view class="note-meta">
+            <text class="note-author text-gradient">{{item.author}}</text>
             <text class="note-time">{{item.createdAt}}</text>
           </view>
           <view class="note-content">{{item.content}}</view>
         </view>
       </view>
-      <view wx:else class="empty-state">还没有留言，但今天已经有了被写下的理由。</view>
+      <view wx:else class="empty-glass">
+        仿佛还没捕捉到深空信号，发射第一道波段吧。
+      </view>
 
-      <view class="btn-row notes-actions">
-        <button class="btn-primary flex-btn" bindtap="openWall">打开留言墙</button>
+      <view class="btn-row spot-actions">
+        <button class="btn btn-neon flex-1" bindtap="openWall">
+          {{notesCount ? '开启观测站' : '刻印首条记录'}}
+        </button>
       </view>
     </view>
+
   </view>
 </view>

@@ -1,7 +1,11 @@
+/* app.wxss - Apple Event / Fluent Design 动效升级版 */
+
 page {
-  background: #f4e2dc;
-  color: #281b22;
-  font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* 基础背景色：极光深色底 */
+  background: #000000; /* Apple 式纯黑底，对比度更强烈 */
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "PingFang SC", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 view,
@@ -13,193 +17,266 @@ picker {
   box-sizing: border-box;
 }
 
+/* 全局变量定义区 */
 .page {
   min-height: 100vh;
-  --bg-top: #f3ddd6;
-  --bg-bottom: #f9eee7;
-  --paper-soft: rgba(255, 249, 242, 0.78);
-  --paper-solid: #fff7ef;
-  --paper-contrast: rgba(255, 244, 237, 0.96);
-  --line-soft: rgba(78, 48, 60, 0.14);
-  --line-strong: rgba(70, 40, 52, 0.22);
-  --ink-strong: #281b22;
-  --ink-soft: #7e6772;
-  --accent: #dd6f68;
-  --accent-deep: #8d3d48;
-  --accent-soft: rgba(221, 111, 104, 0.12);
   position: relative;
   overflow: hidden;
+
+  /* --- 颜色变量 --- */
+  --bg-base: #000000;
+  --ink-primary: #f8fafc;
+  --ink-secondary: rgba(255, 255, 255, 0.6);
+  --ink-tertiary: rgba(255, 255, 255, 0.4);
+
+  /* Fluent/Apple 光效颜色 */
+  --neon-primary: #5e5ce6;
+  --neon-secondary: #ff375f;
+  --neon-accent: #64d2ff;
+
+  /* Fluent 玻璃态材质 */
+  --glass-bg: rgba(25, 25, 25, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-highlight: rgba(255, 255, 255, 0.2);
+
+  /* Apple/Fluent 缓动曲线 - 极其顺滑 */
+  --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --fluent-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 发光与阴影 */
+  --glow-primary: 0 0 40px rgba(94, 92, 230, 0.4);
+  --shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+  /* 背景渐变遮罩 */
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.52) 0, rgba(255, 255, 255, 0) 28%),
-    radial-gradient(circle at 85% 12%, rgba(255, 219, 194, 0.68) 0, rgba(255, 219, 194, 0) 24%),
-    linear-gradient(155deg, var(--bg-top) 0%, var(--bg-bottom) 52%, #f7efe9 100%);
+    radial-gradient(ellipse at 20% -20%, rgba(94, 92, 230, 0.2), transparent 50%),
+    radial-gradient(ellipse at 80% 120%, rgba(255, 55, 95, 0.15), transparent 50%),
+    var(--bg-base);
 }
 
+/* 针对不同主题的光影变体 */
 .theme-blush {
-  --bg-top: #f1d3cd;
-  --bg-bottom: #f7ebe4;
-  --paper-soft: rgba(255, 248, 241, 0.8);
-  --paper-solid: #fff7ef;
-  --paper-contrast: rgba(255, 241, 235, 0.96);
-  --accent: #dd6f68;
-  --accent-deep: #944954;
-  --accent-soft: rgba(221, 111, 104, 0.12);
+  --neon-primary: #ff2d55;
+  --neon-secondary: #ff9500;
+  background:
+    radial-gradient(ellipse at top left, rgba(255, 45, 85, 0.15), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(255, 149, 0, 0.15), transparent 60%),
+    var(--bg-base);
 }
 
 .theme-ocean {
-  --bg-top: #d7ebf2;
-  --bg-bottom: #edf8fb;
-  --paper-soft: rgba(246, 252, 253, 0.82);
-  --paper-solid: #f8feff;
-  --paper-contrast: rgba(236, 249, 252, 0.96);
-  --accent: #4d95a3;
-  --accent-deep: #305866;
-  --accent-soft: rgba(77, 149, 163, 0.12);
+  --neon-primary: #32ade6;
+  --neon-secondary: #30d158;
+  background:
+    radial-gradient(ellipse at top left, rgba(50, 173, 230, 0.15), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(48, 209, 88, 0.15), transparent 60%),
+    var(--bg-base);
 }
 
-.theme-sunset {
-  --bg-top: #eed4bd;
-  --bg-bottom: #faf1e7;
-  --paper-soft: rgba(255, 250, 244, 0.82);
-  --paper-solid: #fffbf4;
-  --paper-contrast: rgba(255, 244, 228, 0.96);
-  --accent: #d28747;
-  --accent-deep: #8b5327;
-  --accent-soft: rgba(210, 135, 71, 0.14);
+/* 苹果风呼吸光晕 (Apple Event 经典背景光流动) */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px); /* 加大模糊度，让它像光影而不是实体 */
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen; /* 叠加模式，光影更加通透 */
+  animation: fluent-flow 20s var(--apple-ease) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes fluent-flow {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate(5vw, -5vh) scale(1.1) rotate(10deg); }
+  66% { transform: translate(-3vw, 8vh) scale(0.9) rotate(-5deg); }
+  100% { transform: translate(2vw, -2vh) scale(1.05) rotate(5deg); }
+}
+
+/* Fluent 亚克力/玻璃态核心类 */
+.glass-card {
+  position: relative;
+  z-index: 10;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: 44rpx; /* Apple 常用的大圆角 */
+  box-shadow: var(--shadow-glass);
+  overflow: hidden;
+  transition: transform 0.4s var(--apple-ease), box-shadow 0.4s var(--apple-ease);
+  will-change: transform;
+}
+
+/* 卡片轻微悬浮呼吸感 (用于一些不操作的卡片自我表现) */
+.float-subtle {
+  animation: float-subtle 8s ease-in-out infinite alternate;
+}
+
+@keyframes float-subtle {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* 内部高光 - 增强 3D 感 */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  z-index: 1;
+}
+
+/* 入场动画类 (Staggered Fade In Up) */
+.animate-enter {
+  animation: fade-in-up 1.2s var(--fluent-ease) both;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .container {
   position: relative;
-  z-index: 2;
-  padding: 30rpx;
+  z-index: 10;
+  padding: 40rpx 32rpx;
 }
 
-.card {
-  position: relative;
-  overflow: hidden;
-  border: 2rpx solid var(--line-soft);
-  border-radius: 40rpx;
-  background: var(--paper-soft);
-  box-shadow: 0 20rpx 60rpx rgba(70, 40, 52, 0.09);
-  backdrop-filter: blur(12rpx);
+/* 字体排版 */
+.title-primary {
+  font-size: 68rpx;
+  font-weight: 800;
+  color: var(--ink-primary);
+  letter-spacing: -0.04em; /* Apple 标志性紧凑大标题缩进 */
 }
 
-.section-title {
-  margin-bottom: 18rpx;
-  color: var(--ink-strong);
-  font-size: 36rpx;
+.title-secondary {
+  font-size: 38rpx;
   font-weight: 700;
-  letter-spacing: 1rpx;
+  color: var(--ink-primary);
+  letter-spacing: -0.02em;
 }
 
-.section-desc {
-  margin-top: 8rpx;
-  color: var(--ink-soft);
-  font-size: 24rpx;
-  line-height: 1.8;
+/* 苹果风流光文字 */
+.text-gradient {
+  background: linear-gradient(120deg, #fff 0%, var(--neon-accent) 50%, var(--neon-primary) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-shine 8s linear infinite;
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 10rpx 18rpx;
-  border: 2rpx solid rgba(255, 255, 255, 0.5);
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.32);
-  color: var(--accent-deep);
-  font-size: 22rpx;
-  font-weight: 600;
-  letter-spacing: 2rpx;
+@keyframes text-shine {
+  to { background-position: 200% center; }
 }
 
+.text-muted {
+  color: var(--ink-secondary);
+  font-size: 28rpx;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* 按钮样式 - Fluent 顺滑交互 */
 .btn-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 18rpx;
+  gap: 24rpx;
 }
 
-.btn-primary,
-.btn-secondary,
-.btn-ghost {
+.btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 92rpx;
-  padding: 0 28rpx;
-  border-radius: 999rpx;
-  font-size: 28rpx;
-  font-weight: 700;
-  border: 0;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, #f2ae72 100%);
-  color: #ffffff;
-  box-shadow: 0 18rpx 36rpx rgba(141, 61, 72, 0.2);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.58);
-  color: var(--ink-strong);
-  border: 2rpx solid rgba(70, 40, 52, 0.08);
-}
-
-.btn-ghost {
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-}
-
-button::after {
-  border: 0;
-}
-
-.field-card {
-  padding: 26rpx;
-}
-
-.field-label {
-  margin-bottom: 14rpx;
-  color: var(--accent-deep);
-  font-size: 24rpx;
+  height: 100rpx;
+  border-radius: 50rpx;
+  font-size: 30rpx;
   font-weight: 600;
-  letter-spacing: 2rpx;
+  letter-spacing: 0;
+  border: none;
+  transition: all 0.4s var(--apple-ease);
+  padding: 0 40rpx;
 }
 
-.text-input,
-.text-area,
-.picker-box {
-  width: 100%;
-  border-radius: 28rpx;
-  background: var(--paper-solid);
-  border: 2rpx solid var(--line-soft);
-  color: var(--ink-strong);
+.btn::after {
+  display: none;
+}
+
+.btn:active {
+  transform: scale(0.96); /* Apple 标志性的按压回弹 */
+  opacity: 0.8;
+}
+
+/* 霓虹主按钮 */
+.btn-neon {
+  background: var(--ink-primary);
+  color: var(--bg-base); /* Apple 常用白色背景+黑色文字强调按钮 */
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+/* 玻璃次级按钮 */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: var(--ink-primary);
+  backdrop-filter: blur(20px);
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 标签 */
+.glass-tag {
+  padding: 10rpx 24rpx;
+  border-radius: 40rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
+  color: var(--ink-primary);
+  font-size: 24rpx;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
+/* 空状态 */
+.empty-glass {
+  padding: 60rpx 40rpx;
+  text-align: center;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 32rpx;
+  color: var(--ink-secondary);
   font-size: 28rpx;
 }
 
-.text-input,
-.picker-box {
-  min-height: 92rpx;
-  padding: 0 24rpx;
-  display: flex;
-  align-items: center;
+/* 动态边框 (Fluent Design 发光边框特效) */
+.gradient-border-wrap {
+  position: relative;
+  border-radius: 46rpx;
+  padding: 2px;
+  background: linear-gradient(120deg, var(--neon-accent), var(--neon-primary), transparent 40%, transparent 60%, var(--neon-secondary));
+  background-size: 200% 200%;
+  animation: border-flow 6s ease infinite alternate;
 }
 
-.text-area {
-  min-height: 220rpx;
-  padding: 22rpx 24rpx;
-  line-height: 1.8;
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
-.muted {
-  color: var(--ink-soft);
-}
-
-.empty-state {
-  padding: 42rpx 30rpx;
-  border: 2rpx dashed var(--line-soft);
-  border-radius: 36rpx;
-  background: rgba(255, 249, 242, 0.56);
-  color: var(--ink-soft);
-  line-height: 1.8;
-  text-align: center;
+.gradient-border-wrap > .glass-card {
+  border: none;
+  height: 100%;
+  border-radius: 44rpx;
 }

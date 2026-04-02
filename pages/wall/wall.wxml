@@ -1,88 +1,88 @@
 <view class="page {{themeClass}}">
-  <view class="wall-glow glow-a"></view>
-  <view class="wall-glow glow-b"></view>
+  <!-- 背景氛围光球 -->
+  <view class="ambient-orb" style="width: 700rpx; height: 700rpx; top: 10%; right: -200rpx; background: var(--neon-secondary); opacity: 0.3;"></view>
+  <view class="ambient-orb" style="width: 500rpx; height: 500rpx; top: 40%; left: -100rpx; background: var(--neon-primary); opacity: 0.3; animation-delay: -3s;"></view>
 
-  <view class="container wall-page">
-    <view class="card wall-header">
+  <view class="container">
+    <!-- 头部信息 -->
+    <view class="glass-card wall-header animate-enter delay-1">
       <view class="wall-header-top">
-        <view>
-          <view class="wall-kicker">MESSAGE ARCHIVE</view>
-          <view class="section-title wall-title">心动留言墙</view>
-          <view class="section-desc">{{latestNoteLabel}}</view>
+        <view class="wall-header-text">
+          <text class="spot-eyebrow">MEMORY ARCHIVE</text>
+          <view class="title-primary wall-title text-gradient">记忆储藏室</view>
+          <view class="text-muted">{{latestNoteLabel}}</view>
         </view>
-        <view class="wall-counter">
-          <text class="wall-counter-value">{{noteCount}}</text>
-          <text class="wall-counter-label">条记录</text>
+        <view class="wall-counter-box">
+          <text class="counter-val text-gradient">{{noteCount}}</text>
+          <text class="counter-lbl">FRAGMENTS</text>
         </view>
       </view>
 
-      <view class="wall-tags">
-        <text class="wall-tag" wx:for="{{boardTags}}" wx:key="*this">{{item}}</text>
+      <view class="hero-tags" style="justify-content: flex-start; margin-top: 32rpx;">
+        <text class="glass-tag" wx:for="{{boardTags}}" wx:key="*this">{{item}}</text>
       </view>
     </view>
 
-    <view class="card composer-card">
-      <view class="composer-top">
-        <view>
-          <view class="composer-kicker">WRITE SOMETHING REAL</view>
-          <view class="section-title composer-title">写一句今天想说的话</view>
+    <!-- 撰写卡片 -->
+    <view class="gradient-border-wrap composer-wrap animate-enter delay-2 float-subtle">
+      <view class="glass-card composer-card">
+        <view class="composer-header">
+          <view class="spot-eyebrow">SEAL THE MOMENT</view>
+          <view class="title-secondary">在这颗星球上，留下今日的回声</view>
         </view>
-        <text class="composer-date">{{todayLabel}}</text>
-      </view>
 
-      <view class="composer-row">
-        <view class="composer-field">
-          <view class="field-label">留言身份</view>
-          <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
-            <view class="picker-box">{{authorOptions[authorIndex]}}</view>
-          </picker>
+        <view class="composer-form">
+          <view class="form-group">
+            <view class="form-label">心跳来源 / 频段</view>
+            <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
+              <view class="glass-input picker-box">{{authorOptions[authorIndex]}}</view>
+            </picker>
+          </view>
+
+          <view class="form-group">
+            <view class="form-label">刻印内容</view>
+            <textarea
+              class="glass-input text-area"
+              maxlength="300"
+              placeholder="对着星空，你想说什么..."
+              placeholder-class="input-placeholder"
+              value="{{form.content}}"
+              bindinput="onContentInput"
+            ></textarea>
+          </view>
         </view>
-      </view>
 
-      <view class="composer-row">
-        <view class="composer-field composer-field-wide">
-          <view class="field-label">留言内容</view>
-          <textarea
-            class="text-area diary-area"
-            maxlength="300"
-            placeholder="写下今天想对 TA 说的话"
-            value="{{form.content}}"
-            bindinput="onContentInput"
-          ></textarea>
+        <view class="btn-row">
+          <button class="btn btn-glass flex-1" bindtap="fillInspiration">捕获流星</button>
+          <button class="btn btn-neon flex-1" bindtap="submitNote">封存时光</button>
         </view>
-      </view>
-
-      <view class="btn-row composer-actions">
-        <button class="btn-secondary flex-btn" bindtap="fillInspiration">补一句灵感</button>
-        <button class="btn-primary flex-btn" bindtap="submitNote">保存留言</button>
       </view>
     </view>
 
-    <view class="notes-section">
-      <view class="notes-section-head">
-        <view class="section-title">最近留言</view>
-        <text class="notes-section-meta">{{profile.personA}} / {{profile.personB}}</text>
+    <!-- 留言列表 -->
+    <view class="notes-list-section animate-enter delay-3">
+      <view class="list-header">
+        <view class="title-secondary">星海回响</view>
+        <text class="text-muted">{{profile.personA}} ✧ {{profile.personB}}</text>
       </view>
 
-      <view wx:if="{{notes.length}}" class="notes-list">
-        <view class="card note-card {{item.cardClass}}" wx:for="{{notes}}" wx:key="id">
+      <view wx:if="{{notes.length}}" class="notes-grid">
+        <view class="glass-card note-card" wx:for="{{notes}}" wx:key="id">
           <view class="note-card-top">
-            <view>
-              <view class="note-card-label">{{item.stamp}}</view>
-              <view class="note-author">{{item.author}}</view>
-            </view>
-            <view class="note-side">
-              <view class="note-time">{{item.createdAt}}</view>
-              <view class="note-actions">
-                <text class="note-action" data-content="{{item.content}}" bindtap="copyNote">复制</text>
-                <text class="note-action danger" data-id="{{item.id}}" bindtap="deleteNote">删除</text>
-              </view>
-            </view>
+            <view class="note-author text-gradient">{{item.author}}</view>
+            <view class="note-time">{{item.createdAt}}</view>
           </view>
           <view class="note-content">{{item.content}}</view>
+          <view class="note-actions">
+            <view class="glass-tag action-tag" data-content="{{item.content}}" bindtap="copyNote">拷贝</view>
+            <view class="glass-tag action-tag danger" data-id="{{item.id}}" bindtap="deleteNote">湮灭</view>
+          </view>
         </view>
       </view>
-      <view wx:else class="empty-state">还没有留言，写下今天的第一句悄悄话吧。</view>
+
+      <view wx:else class="empty-glass">
+        这里安静得只听见风声，留存第一段回音吧。
+      </view>
     </view>
   </view>
 </view>
