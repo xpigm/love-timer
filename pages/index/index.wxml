@@ -11,7 +11,6 @@
         <view class="glass-tag tag-special" wx:if="{{specialLabel}}">
           <text class="tag-dot"></text>{{specialLabel}}
         </view>
-        <view class="glass-tag">{{startDateLabel}}</view>
       </view>
       <view class="poster-topside">
         <view class="poster-city" wx:if="{{coverTags.length}}">{{coverTags[0]}}</view>
