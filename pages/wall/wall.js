@@ -15,16 +15,16 @@ function decorateNotes(notes) {
 
 function buildBoardTags(profile, notes) {
   const tags = [
-    profile.city ? `${profile.city} 观测站` : "深空坐标",
-    `${notes.length} 枚碎片`,
-    notes.length ? "电波持续传输" : "频道等待激活"
+    profile.city ? `${profile.city}` : "两个人的留言",
+    `${notes.length} 条留言`,
+    notes.length ? "持续更新中" : "等你们写下第一句"
   ];
 
   return tags.filter(Boolean);
 }
 
 function buildLatestNoteLabel(notes) {
-  return notes.length ? `最新波段捕获于 ${notes[0].createdAt}` : "今夜的星云很适合封存第一句心跳";
+  return notes.length ? `最近更新于 ${notes[0].createdAt}` : "还没有留言，先写下今天想说的话吧";
 }
 
 function buildTodayLabel() {

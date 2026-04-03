@@ -1,62 +1,145 @@
 /* pages/wall/wall.wxss */
 
-.wall-header {
-  padding: 40rpx;
-  margin-bottom: 40rpx;
-  background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.2) 100%);
+.wall-poster-page {
+  min-height: 100vh;
 }
 
-.wall-header-top {
+.wall-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 44rpx;
+  padding-top: 44rpx;
+  padding-bottom: 88rpx;
+}
+
+.wall-page-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 24rpx;
+}
+
+.page-kicker {
+  font-size: 20rpx;
+  color: #c97b9a;
+  letter-spacing: 3rpx;
+  margin-bottom: 10rpx;
+}
+
+.page-title {
+  font-size: 44rpx;
+  line-height: 1.32;
+  color: var(--ink-primary);
+  font-weight: 600;
+}
+
+.page-meta {
+  padding-top: 10rpx;
+  font-size: 24rpx;
+  color: var(--ink-secondary);
+}
+
+.wall-header-wrap {
+  border-radius: 48rpx;
+}
+
+.wall-header {
+  padding: 34rpx 32rpx 30rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 247, 245, 0.56) 100%);
+}
+
+.wall-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20rpx;
+}
+
+.wall-summary-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.wall-side-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14rpx;
+}
+
+.wall-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-wrap: wrap;
 }
 
 .wall-title {
-  margin-bottom: 8rpx;
-  font-size: 56rpx;
+  font-size: 38rpx;
+  line-height: 1.35;
+  color: var(--ink-primary);
+  font-weight: 600;
 }
 
-.wall-counter-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 32rpx;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
+.wall-name-tag {
+  align-self: center;
 }
 
-.counter-val {
-  font-size: 48rpx;
-  font-weight: 800;
-  line-height: 1.1;
+.wall-subcopy {
+  max-width: 480rpx;
 }
 
-.counter-lbl {
-  font-size: 18rpx;
+.wall-date {
+  padding-top: 8rpx;
+  font-size: 24rpx;
+  letter-spacing: 4rpx;
   color: var(--ink-tertiary);
-  letter-spacing: 2px;
-  margin-top: 4rpx;
+}
+
+.wall-count-chip {
+  padding: 12rpx 22rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  font-size: 22rpx;
+  color: var(--ink-secondary);
+  box-shadow: 0 10rpx 22rpx rgba(227, 204, 215, 0.14);
+}
+
+.wall-tags {
+  margin-top: 26rpx;
+}
+
+.wall-main {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: 24rpx;
+  align-items: start;
 }
 
 .composer-wrap {
-  margin-bottom: 60rpx;
+  border-radius: 48rpx;
 }
 
-.composer-card {
-  padding: 40rpx;
+.composer-section {
+  padding: 34rpx 32rpx 32rpx;
+  min-height: 100%;
 }
 
-.composer-header {
-  margin-bottom: 32rpx;
+.compact-head {
+  margin-bottom: 26rpx;
+}
+
+.section-title {
+  font-size: 34rpx;
+  line-height: 1.35;
+  color: var(--ink-primary);
+  font-weight: 600;
 }
 
 .form-group {
-  margin-bottom: 32rpx;
+  margin-bottom: 28rpx;
 }
 
 .form-label {
@@ -68,17 +151,19 @@
 
 .glass-input {
   width: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.82);
   border-radius: 24rpx;
   color: var(--ink-primary);
   font-size: 28rpx;
   transition: all 0.3s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .glass-input:focus {
-  border-color: var(--neon-primary);
-  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(238, 155, 180, 0.88);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 0 0 6rpx rgba(255, 216, 230, 0.32);
 }
 
 .picker-box {
@@ -89,68 +174,101 @@
 }
 
 .text-area {
-  min-height: 240rpx;
+  min-height: 280rpx;
   padding: 32rpx;
-  line-height: 1.6;
+  line-height: 1.72;
 }
 
 .input-placeholder {
   color: var(--ink-tertiary);
 }
 
+.composer-actions {
+  margin-top: 8rpx;
+}
+
 .notes-list-section {
   display: flex;
   flex-direction: column;
-  gap: 32rpx;
-}
-
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10rpx;
 }
 
 .notes-grid {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 20rpx;
 }
 
 .note-card {
-  padding: 32rpx;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  padding: 30rpx 28rpx 24rpx;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 248, 246, 0.54) 100%);
+  box-shadow: 0 18rpx 36rpx rgba(227, 204, 215, 0.16);
+}
+
+.note-stamp {
+  margin-bottom: 18rpx;
+  font-size: 18rpx;
+  letter-spacing: 5rpx;
+  color: var(--ink-tertiary);
 }
 
 .note-card-top {
+  margin-bottom: 20rpx;
+}
+
+.note-author-block {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24rpx;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.note-author {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.note-time {
+  font-size: 22rpx;
+  color: var(--ink-tertiary);
 }
 
 .note-content {
   font-size: 30rpx;
-  line-height: 1.7;
+  line-height: 1.76;
   color: var(--ink-primary);
-  margin-bottom: 32rpx;
+  margin-bottom: 24rpx;
   white-space: pre-wrap;
 }
 
 .note-actions {
   display: flex;
-  gap: 16rpx;
+  gap: 24rpx;
   justify-content: flex-end;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 24rpx;
+  border-top: 1px solid rgba(208, 185, 198, 0.22);
+  padding-top: 20rpx;
 }
 
-.action-tag {
-  cursor: pointer;
-  background: transparent;
+.action-link {
+  font-size: 24rpx;
+  color: var(--ink-secondary);
 }
 
-.action-tag.danger {
-  color: var(--neon-secondary);
-  border-color: rgba(244, 63, 94, 0.3);
+.action-link.danger {
+  color: #d1728e;
+}
+
+.pin-left {
+  transform: rotate(-0.8deg);
+}
+
+.pin-right {
+  transform: rotate(0.8deg);
+}
+
+.pin-flat {
+  transform: rotate(0deg);
+}
+
+.wall-empty {
+  margin-top: 4rpx;
 }

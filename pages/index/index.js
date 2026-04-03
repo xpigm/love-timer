@@ -14,19 +14,14 @@ function formatStartDateLabel(startTime) {
 function buildQuickStats(duration, notesCount, loveYears) {
   return [
     {
-      label: "星轨延伸",
-      value: `${duration.days} 天`,
-      desc: "心动有了光年长度"
-    },
-    {
-      label: "引力公转",
+      label: "第几年",
       value: `第 ${loveYears + 1} 年`,
-      desc: loveYears > 0 ? `已完成 ${loveYears} 次浪漫绕行` : "航行日记刚刚开启"
+      desc: loveYears > 0 ? `已经一起走过 ${loveYears} 个完整年份` : "故事刚刚开始"
     },
     {
-      label: "记忆碎片",
-      value: `${notesCount} 枚`,
-      desc: notesCount ? "星云深处藏着悄悄话" : "这片星空正等第一颗星点亮"
+      label: "留言数量",
+      value: `${notesCount} 条`,
+      desc: notesCount ? "这里留着你们说过的话" : "等你们写下第一条留言"
     }
   ];
 }
@@ -35,12 +30,12 @@ function decorateNotes(notes) {
   return notes.slice(0, 2).map((note, index) => ({
     ...note,
     cardClass: NOTE_CARD_CLASSES[index % NOTE_CARD_CLASSES.length],
-    noteLabel: index === 0 ? "ECHO 01" : "ECHO 02"
+    noteLabel: index === 0 ? "最新" : "上一条"
   }));
 }
 
 function buildCoverTags(profile, scene) {
-  return [profile.city ? `${profile.city} 观测站` : "专属星系"].filter(Boolean);
+  return [profile.city ? `${profile.city}` : "两个人的日常"].filter(Boolean);
 }
 
 function buildSpecialLabel(scene) {
@@ -52,26 +47,26 @@ function buildSpecialLabel(scene) {
 }
 
 function buildSummary(profile, scene, quote, notesCount) {
-  const quoteText = quote || "把普通日子过成纪念日。";
+  const quoteText = quote || "今天也值得认真记一下。";
 
   return {
     eyebrow: buildSpecialLabel(scene),
-    title: scene.title || "星空寄语",
+    title: scene.title || "今天想说的话",
     body: `${scene.tag ? scene.tag + ' ' : ''}${quoteText}`,
     aside: notesCount
-      ? `已经收集了 ${notesCount} 枚记忆碎片，今晚的月色同样值得刻印。`
-      : "深空静谧，正适合刻印下你们的第一条专属信号。"
+      ? `已经留下 ${notesCount} 条留言了。`
+      : "还没有留言，可以从今天开始。"
   };
 }
 
 function buildCoverLine(profile, duration) {
-  return `第 ${duration.days} 天，引力依旧同频`;
+  return `已经一起 ${duration.days} 天了`;
 }
 
 function buildDateMeta(profile) {
   return [
     {
-      label: "信号源起",
+      label: "开始于",
       value: formatStartDateLabel(profile.startTime)
     }
   ];
@@ -79,12 +74,12 @@ function buildDateMeta(profile) {
 
 function buildSpotlight(profile, scene, notesCount) {
   return {
-    title: notesCount ? "今夜截获的信号" : "预留一个时空坐标",
+    title: notesCount ? "最近的留言" : "给今天留一句话",
     body: notesCount
-      ? "留下来的，是宇宙中唯一不会随光年衰减的心跳证据。"
-      : `${scene.tag ? scene.tag + ' ' : ''}不必等特殊天文现象，今天就能发送第一组波段。`,
-    cta: notesCount ? "发射新信号" : "建立首次连接",
-    footnote: `${profile.personA} ✧ ${profile.personB}`
+      ? "写下来的内容，以后再看还是会有当时的感觉。"
+      : `${scene.tag ? scene.tag + ' ' : ''}不用等特别的日子，现在就可以记一条。`,
+    cta: notesCount ? "去写新留言" : "写第一条留言",
+    footnote: `${profile.personA} · ${profile.personB}`
   };
 }
 

@@ -5,12 +5,12 @@ const SCENE_PRESETS = {
   default: {
     key: "default",
     sceneClass: "scene-default",
-    badge: "日常篇",
+    badge: "日常",
     title: "今天也适合相爱",
-    tag: "把普通日子过成纪念日。",
+    tag: "今天也想和你一起好好过。",
     description: "保留温柔的基础氛围，等待下一个值得庆祝的时刻。",
     chips: ["常驻柔光", "轻微漂浮", "留言陪伴"],
-    metricValue: "日常篇",
+    metricValue: "日常",
     metricDesc: "适合安静记录"
   },
   anniversary: {

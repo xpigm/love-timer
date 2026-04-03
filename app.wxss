@@ -1,9 +1,8 @@
-/* app.wxss - Apple Event / Fluent Design 动效升级版 */
+/* app.wxss - Fresh glass light theme */
 
 page {
-  /* 基础背景色：极光深色底 */
-  background: #000000; /* Apple 式纯黑底，对比度更强烈 */
-  color: #f8fafc;
+  background: #fffaf7;
+  color: #4f4356;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "PingFang SC", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -24,111 +23,121 @@ picker {
   overflow: hidden;
 
   /* --- 颜色变量 --- */
-  --bg-base: #000000;
-  --ink-primary: #f8fafc;
-  --ink-secondary: rgba(255, 255, 255, 0.6);
-  --ink-tertiary: rgba(255, 255, 255, 0.4);
+  --bg-base: #fffaf7;
+  --ink-primary: #4f4356;
+  --ink-secondary: #6f6377;
+  --ink-tertiary: #96889c;
 
-  /* Fluent/Apple 光效颜色 */
-  --neon-primary: #5e5ce6;
-  --neon-secondary: #ff375f;
-  --neon-accent: #64d2ff;
+  /* 柔和点缀色 */
+  --neon-primary: #f39ab5;
+  --neon-secondary: #8ecae6;
+  --neon-accent: #f7c7a6;
 
-  /* Fluent 玻璃态材质 */
-  --glass-bg: rgba(25, 25, 25, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-border-highlight: rgba(255, 255, 255, 0.2);
+  /* 轻玻璃材质 */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.78);
+  --glass-border-highlight: rgba(255, 255, 255, 0.92);
 
-  /* Apple/Fluent 缓动曲线 - 极其顺滑 */
+  /* 缓动曲线 */
   --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
   --fluent-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* 发光与阴影 */
-  --glow-primary: 0 0 40px rgba(94, 92, 230, 0.4);
-  --shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.5);
+  /* 柔和阴影 */
+  --glow-primary: 0 0 28px rgba(243, 154, 181, 0.18);
+  --shadow-glass: 0 18px 42px rgba(214, 188, 205, 0.22);
 
   /* 背景渐变遮罩 */
   background:
-    radial-gradient(ellipse at 20% -20%, rgba(94, 92, 230, 0.2), transparent 50%),
-    radial-gradient(ellipse at 80% 120%, rgba(255, 55, 95, 0.15), transparent 50%),
-    var(--bg-base);
+    radial-gradient(circle at 12% 12%, rgba(243, 154, 181, 0.24), transparent 34%),
+    radial-gradient(circle at 88% 18%, rgba(142, 202, 230, 0.22), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(247, 199, 166, 0.22), transparent 34%),
+    linear-gradient(180deg, #fffaf7 0%, #fffefb 42%, #fdf7f5 100%);
 }
 
 /* 针对不同主题的光影变体 */
 .theme-blush {
-  --neon-primary: #ff2d55;
-  --neon-secondary: #ff9500;
+  --neon-primary: #ee9bb4;
+  --neon-secondary: #f7c3a1;
+  --neon-accent: #ffd8e6;
   background:
-    radial-gradient(ellipse at top left, rgba(255, 45, 85, 0.15), transparent 60%),
-    radial-gradient(ellipse at bottom right, rgba(255, 149, 0, 0.15), transparent 60%),
-    var(--bg-base);
+    radial-gradient(circle at top left, rgba(238, 155, 180, 0.26), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(247, 195, 161, 0.2), transparent 30%),
+    linear-gradient(180deg, #fff8f8 0%, #fffdfb 45%, #fef6f6 100%);
 }
 
 .theme-ocean {
-  --neon-primary: #32ade6;
-  --neon-secondary: #30d158;
+  --neon-primary: #89c8e8;
+  --neon-secondary: #9fd8c3;
+  --neon-accent: #d8eff8;
   background:
-    radial-gradient(ellipse at top left, rgba(50, 173, 230, 0.15), transparent 60%),
-    radial-gradient(ellipse at bottom right, rgba(48, 209, 88, 0.15), transparent 60%),
-    var(--bg-base);
+    radial-gradient(circle at top left, rgba(137, 200, 232, 0.22), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(159, 216, 195, 0.22), transparent 30%),
+    linear-gradient(180deg, #f6fbff 0%, #fcfffe 45%, #f4fbf8 100%);
 }
 
-/* 苹果风呼吸光晕 (Apple Event 经典背景光流动) */
 .ambient-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px); /* 加大模糊度，让它像光影而不是实体 */
-  opacity: 0.6;
+  filter: blur(120px);
+  opacity: 0.42;
   pointer-events: none;
   z-index: 0;
-  mix-blend-mode: screen; /* 叠加模式，光影更加通透 */
+  mix-blend-mode: multiply;
   animation: fluent-flow 20s var(--apple-ease) infinite alternate;
   will-change: transform;
 }
 
-@keyframes fluent-flow {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  33% { transform: translate(5vw, -5vh) scale(1.1) rotate(10deg); }
-  66% { transform: translate(-3vw, 8vh) scale(0.9) rotate(-5deg); }
-  100% { transform: translate(2vw, -2vh) scale(1.05) rotate(5deg); }
+.orb-1 {
+  animation-duration: 24s;
 }
 
-/* Fluent 亚克力/玻璃态核心类 */
+.orb-2 {
+  animation-duration: 28s;
+}
+
+.orb-3 {
+  animation-duration: 32s;
+}
+
+@keyframes fluent-flow {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  26% { transform: translate3d(22rpx, -28rpx, 0) scale(1.05) rotate(4deg); }
+  58% { transform: translate3d(-18rpx, 34rpx, 0) scale(0.96) rotate(-3deg); }
+  100% { transform: translate3d(14rpx, -12rpx, 0) scale(1.03) rotate(3deg); }
+}
+
 .glass-card {
   position: relative;
   z-index: 10;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border-radius: 44rpx; /* Apple 常用的大圆角 */
+  backdrop-filter: blur(34px) saturate(145%);
+  -webkit-backdrop-filter: blur(34px) saturate(145%);
+  border-radius: 44rpx;
   box-shadow: var(--shadow-glass);
   overflow: hidden;
   transition: transform 0.4s var(--apple-ease), box-shadow 0.4s var(--apple-ease);
   will-change: transform;
 }
 
-/* 卡片轻微悬浮呼吸感 (用于一些不操作的卡片自我表现) */
 .float-subtle {
-  animation: float-subtle 8s ease-in-out infinite alternate;
+  animation: float-subtle 9.5s ease-in-out infinite alternate;
 }
 
 @keyframes float-subtle {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -12rpx, 0); }
 }
 
-/* 内部高光 - 增强 3D 感 */
 .glass-card::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.72), transparent);
   z-index: 1;
 }
 
-/* 入场动画类 (Staggered Fade In Up) */
 .animate-enter {
   animation: fade-in-up 1.2s var(--fluent-ease) both;
 }
@@ -154,12 +163,11 @@ picker {
   padding: 40rpx 32rpx;
 }
 
-/* 字体排版 */
 .title-primary {
   font-size: 68rpx;
   font-weight: 800;
   color: var(--ink-primary);
-  letter-spacing: -0.04em; /* Apple 标志性紧凑大标题缩进 */
+  letter-spacing: -0.04em;
 }
 
 .title-secondary {
@@ -169,18 +177,17 @@ picker {
   letter-spacing: -0.02em;
 }
 
-/* 苹果风流光文字 */
 .text-gradient {
-  background: linear-gradient(120deg, #fff 0%, var(--neon-accent) 50%, var(--neon-primary) 100%);
-  background-size: 200% auto;
+  background: linear-gradient(120deg, #f1a3bc 0%, #f6b28d 48%, #8fcbe8 100%);
+  background-size: 220% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: text-shine 8s linear infinite;
+  animation: text-shine 12s linear infinite;
 }
 
 @keyframes text-shine {
-  to { background-position: 200% center; }
+  to { background-position: 220% center; }
 }
 
 .text-muted {
@@ -190,7 +197,6 @@ picker {
   font-weight: 400;
 }
 
-/* 按钮样式 - Fluent 顺滑交互 */
 .btn-row {
   display: flex;
   gap: 24rpx;
@@ -215,59 +221,57 @@ picker {
 }
 
 .btn:active {
-  transform: scale(0.96); /* Apple 标志性的按压回弹 */
+  transform: scale(0.96);
   opacity: 0.8;
 }
 
-/* 霓虹主按钮 */
 .btn-neon {
-  background: var(--ink-primary);
-  color: var(--bg-base); /* Apple 常用白色背景+黑色文字强调按钮 */
-  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+  background: linear-gradient(135deg, #f7c1cf 0%, #f7d0ac 100%);
+  color: #5e4d5f;
+  box-shadow: 0 14px 28px rgba(243, 154, 181, 0.22);
 }
 
-/* 玻璃次级按钮 */
 .btn-glass {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.82);
   color: var(--ink-primary);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(18px);
 }
 
 .flex-1 {
   flex: 1;
 }
 
-/* 标签 */
 .glass-tag {
   padding: 10rpx 24rpx;
   border-radius: 40rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.86);
   color: var(--ink-primary);
   font-size: 24rpx;
   font-weight: 500;
   backdrop-filter: blur(8px);
+  box-shadow: 0 10rpx 24rpx rgba(225, 201, 213, 0.16);
 }
 
-/* 空状态 */
 .empty-glass {
   padding: 60rpx 40rpx;
   text-align: center;
-  border: 1px dashed rgba(255,255,255,0.15);
+  border: 1px dashed rgba(197, 176, 191, 0.45);
   border-radius: 32rpx;
   color: var(--ink-secondary);
   font-size: 28rpx;
+  background: rgba(255, 255, 255, 0.36);
 }
 
-/* 动态边框 (Fluent Design 发光边框特效) */
 .gradient-border-wrap {
   position: relative;
   border-radius: 46rpx;
   padding: 2px;
-  background: linear-gradient(120deg, var(--neon-accent), var(--neon-primary), transparent 40%, transparent 60%, var(--neon-secondary));
-  background-size: 200% 200%;
-  animation: border-flow 6s ease infinite alternate;
+  background: linear-gradient(135deg, rgba(255, 216, 230, 0.95), rgba(246, 195, 159, 0.88), rgba(217, 239, 248, 0.95));
+  background-size: 220% 220%;
+  animation: border-flow 9s ease infinite alternate;
+  box-shadow: 0 12px 28px rgba(232, 205, 215, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.28);
 }
 
 @keyframes border-flow {
