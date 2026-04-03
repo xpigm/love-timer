@@ -44,7 +44,7 @@ async function main() {
     type: "miniProgram",
     projectPath,
     privateKeyPath,
-    ignores: ["node_modules/**/*"]
+    ignores: ["node_modules/**/*", ".claude/**/*"]
   });
 
   const result = await ci.upload({
