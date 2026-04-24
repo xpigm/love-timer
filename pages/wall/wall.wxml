@@ -34,54 +34,89 @@
       </view>
     </view>
 
-    <view class="wall-main animate-enter delay-2">
-      <view class="gradient-border-wrap composer-wrap">
-        <view class="glass-card composer-card composer-section">
-          <view class="composer-header compact-head">
+    <view class="wall-story animate-enter delay-2">
+      <view class="gradient-border-wrap wall-cover-wrap">
+        <view class="glass-card wall-cover-card">
+          <view class="wall-cover-glow wall-cover-glow-a"></view>
+          <view class="wall-cover-glow wall-cover-glow-b"></view>
+
+          <view class="wall-cover-top">
             <view>
-              <view class="page-kicker">写留言</view>
-              <view class="section-title">把今天想说的话留在这里</view>
+              <view class="page-kicker">记忆墙</view>
+              <view class="wall-cover-title">{{wallSummary.title}}</view>
+            </view>
+            <view class="wall-cover-side">
+              <view class="glass-tag wall-cover-badge" wx:if="{{scene.badge}}">{{scene.badge}}</view>
+              <view class="wall-cover-date">{{todayLabel}}</view>
             </view>
           </view>
 
-          <view class="composer-form">
-            <view class="form-group">
-              <view class="form-label">留言人</view>
-              <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
-                <view class="glass-input picker-box">{{authorOptions[authorIndex]}}</view>
-              </picker>
-            </view>
+          <view class="wall-cover-body">{{wallSummary.body}}</view>
+          <view class="wall-cover-footnote">{{wallSummary.footnote}}</view>
 
-            <view class="form-group">
-              <view class="form-label">留言内容</view>
-              <textarea
-                class="glass-input text-area"
-                maxlength="300"
-                placeholder="今天想记下什么？"
-                placeholder-class="input-placeholder"
-                value="{{form.content}}"
-                bindinput="onContentInput"
-              ></textarea>
+          <view class="wall-cover-stats">
+            <view class="wall-stat-chip" wx:for="{{wallStats}}" wx:key="label">
+              <view class="wall-stat-label">{{item.label}}</view>
+              <view class="wall-stat-value">{{item.value}}</view>
             </view>
-          </view>
-
-          <view class="btn-row composer-actions">
-            <button class="btn btn-glass flex-1" bindtap="fillInspiration">随机一句</button>
-            <button class="btn btn-neon flex-1" bindtap="submitNote">保存留言</button>
           </view>
         </view>
       </view>
 
-      <view class="notes-list-section">
-        <view class="list-header compact-head">
-          <view>
-            <view class="page-kicker">最近更新</view>
-            <view class="section-title">从新到旧浏览</view>
+      <view class="gradient-border-wrap composer-wrap">
+        <view class="glass-card composer-section memory-composer-card">
+          <view class="composer-shell">
+            <view class="composer-head compact-head">
+              <view>
+                <view class="page-kicker">写留言</view>
+                <view class="section-title">{{composerHint.title}}</view>
+              </view>
+              <view class="glass-tag composer-tag">{{form.content.length}} / 300</view>
+            </view>
+
+            <view class="composer-copy">{{composerHint.body}}</view>
+            <view class="composer-helper">{{composerHint.helper}}</view>
+
+            <view class="composer-form-card">
+              <view class="form-group">
+                <view class="form-label">这张卡片署名</view>
+                <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
+                  <view class="glass-input picker-box">{{authorOptions[authorIndex]}}</view>
+                </picker>
+              </view>
+
+              <view class="form-group composer-content-group">
+                <view class="form-label">今天想记下什么</view>
+                <textarea
+                  class="glass-input text-area"
+                  maxlength="300"
+                  placeholder="写一句话、一个心情，或者今天的小瞬间。"
+                  placeholder-class="input-placeholder"
+                  value="{{form.content}}"
+                  bindinput="onContentInput"
+                ></textarea>
+              </view>
+            </view>
+
+            <view class="btn-row composer-actions composer-action-row">
+              <button class="btn btn-glass flex-1" bindtap="fillInspiration">随机一句</button>
+              <button class="btn btn-neon flex-1" bindtap="submitNote">保存留言</button>
+            </view>
           </view>
         </view>
+      </view>
 
-        <view wx:if="{{notes.length}}" class="notes-grid">
-          <view class="glass-card note-card {{item.cardClass}}" wx:for="{{notes}}" wx:key="id">
+      <view class="memory-stream-section">
+        <view class="list-header compact-head memory-stream-head">
+          <view>
+            <view class="page-kicker">最近更新</view>
+            <view class="section-title">把写过的话一张张收起来</view>
+          </view>
+          <view class="memory-stream-meta">{{latestNoteLabel}}</view>
+        </view>
+
+        <view wx:if="{{notes.length}}" class="notes-grid memory-stream-grid">
+          <view class="glass-card note-card memory-note-card {{item.cardClass}}" wx:for="{{notes}}" wx:key="id">
             <view class="note-stamp">{{item.stamp}}</view>
             <view class="note-card-top">
               <view class="note-author-block">
@@ -97,7 +132,7 @@
           </view>
         </view>
 
-        <view wx:else class="empty-glass wall-empty">
+        <view wx:else class="empty-glass wall-empty memory-empty-card">
           还没有留下内容，写下第一条留言吧。
         </view>
       </view>
