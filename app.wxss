@@ -29,22 +29,22 @@ picker {
   --ink-tertiary: #96889c;
 
   /* 柔和点缀色 */
-  --neon-primary: #f39ab5;
-  --neon-secondary: #8ecae6;
-  --neon-accent: #f7c7a6;
+  --neon-primary: #eea6bb;
+  --neon-secondary: #9bcce2;
+  --neon-accent: #f2c9ad;
 
   /* 轻玻璃材质 */
-  --glass-bg: rgba(255, 255, 255, 0.62);
-  --glass-border: rgba(255, 255, 255, 0.78);
-  --glass-border-highlight: rgba(255, 255, 255, 0.92);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.76);
+  --glass-border-highlight: rgba(255, 255, 255, 0.88);
 
   /* 缓动曲线 */
   --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
   --fluent-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* 柔和阴影 */
-  --glow-primary: 0 0 28px rgba(243, 154, 181, 0.18);
-  --shadow-glass: 0 18px 42px rgba(214, 188, 205, 0.22);
+  --glow-primary: 0 0 24px rgba(243, 154, 181, 0.14);
+  --shadow-glass: 0 14px 32px rgba(214, 188, 205, 0.18);
 
   /* 背景渐变遮罩 */
   background:
@@ -56,9 +56,9 @@ picker {
 
 /* 针对不同主题的光影变体 */
 .theme-blush {
-  --neon-primary: #ee9bb4;
-  --neon-secondary: #f7c3a1;
-  --neon-accent: #ffd8e6;
+  --neon-primary: #eba7bb;
+  --neon-secondary: #f2c6aa;
+  --neon-accent: #f9dde7;
   background:
     radial-gradient(circle at top left, rgba(238, 155, 180, 0.26), transparent 34%),
     radial-gradient(circle at bottom right, rgba(247, 195, 161, 0.2), transparent 30%),
@@ -66,9 +66,9 @@ picker {
 }
 
 .theme-ocean {
-  --neon-primary: #89c8e8;
-  --neon-secondary: #9fd8c3;
-  --neon-accent: #d8eff8;
+  --neon-primary: #92c5e0;
+  --neon-secondary: #abd7c8;
+  --neon-accent: #deeff7;
   background:
     radial-gradient(circle at top left, rgba(137, 200, 232, 0.22), transparent 34%),
     radial-gradient(circle at bottom right, rgba(159, 216, 195, 0.22), transparent 30%),
@@ -78,32 +78,32 @@ picker {
 .ambient-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.42;
+  filter: blur(132px);
+  opacity: 0.5;
   pointer-events: none;
   z-index: 0;
   mix-blend-mode: multiply;
-  animation: fluent-flow 20s var(--apple-ease) infinite alternate;
+  animation: fluent-flow 18s var(--apple-ease) infinite alternate;
   will-change: transform;
 }
 
 .orb-1 {
-  animation-duration: 24s;
+  animation-duration: 20s;
 }
 
 .orb-2 {
-  animation-duration: 28s;
+  animation-duration: 24s;
 }
 
 .orb-3 {
-  animation-duration: 32s;
+  animation-duration: 28s;
 }
 
 @keyframes fluent-flow {
   0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-  26% { transform: translate3d(22rpx, -28rpx, 0) scale(1.05) rotate(4deg); }
-  58% { transform: translate3d(-18rpx, 34rpx, 0) scale(0.96) rotate(-3deg); }
-  100% { transform: translate3d(14rpx, -12rpx, 0) scale(1.03) rotate(3deg); }
+  26% { transform: translate3d(30rpx, -36rpx, 0) scale(1.08) rotate(5deg); }
+  58% { transform: translate3d(-26rpx, 40rpx, 0) scale(0.94) rotate(-4deg); }
+  100% { transform: translate3d(22rpx, -18rpx, 0) scale(1.05) rotate(4deg); }
 }
 
 .glass-card {
@@ -111,8 +111,8 @@ picker {
   z-index: 10;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(34px) saturate(145%);
-  -webkit-backdrop-filter: blur(34px) saturate(145%);
+  backdrop-filter: blur(30px) saturate(138%);
+  -webkit-backdrop-filter: blur(30px) saturate(138%);
   border-radius: 44rpx;
   box-shadow: var(--shadow-glass);
   overflow: hidden;
@@ -121,12 +121,12 @@ picker {
 }
 
 .float-subtle {
-  animation: float-subtle 9.5s ease-in-out infinite alternate;
+  animation: float-subtle 8.8s ease-in-out infinite alternate;
 }
 
 @keyframes float-subtle {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(0, -12rpx, 0); }
+  100% { transform: translate3d(0, -18rpx, 0); }
 }
 
 .glass-card::before {
@@ -139,7 +139,7 @@ picker {
 }
 
 .animate-enter {
-  animation: fade-in-up 1.2s var(--fluent-ease) both;
+  animation: fade-in-up 0.9s var(--fluent-ease) both;
 }
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
@@ -179,11 +179,11 @@ picker {
 
 .text-gradient {
   background: linear-gradient(120deg, #f1a3bc 0%, #f6b28d 48%, #8fcbe8 100%);
-  background-size: 220% auto;
+  background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: text-shine 12s linear infinite;
+  animation: text-shine 9.8s linear infinite;
 }
 
 @keyframes text-shine {
@@ -206,14 +206,14 @@ picker {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100rpx;
-  border-radius: 50rpx;
-  font-size: 30rpx;
+  height: 92rpx;
+  border-radius: 46rpx;
+  font-size: 28rpx;
   font-weight: 600;
   letter-spacing: 0;
   border: none;
-  transition: all 0.4s var(--apple-ease);
-  padding: 0 40rpx;
+  transition: all 0.28s var(--apple-ease);
+  padding: 0 36rpx;
 }
 
 .btn::after {
@@ -221,21 +221,21 @@ picker {
 }
 
 .btn:active {
-  transform: scale(0.96);
-  opacity: 0.8;
+  transform: scale(0.98);
+  opacity: 0.88;
 }
 
 .btn-neon {
-  background: linear-gradient(135deg, #f7c1cf 0%, #f7d0ac 100%);
-  color: #5e4d5f;
-  box-shadow: 0 14px 28px rgba(243, 154, 181, 0.22);
+  background: linear-gradient(135deg, #f5c6d2 0%, #f4d4bb 100%);
+  color: #5b4d5f;
+  box-shadow: 0 10px 20px rgba(243, 154, 181, 0.16);
 }
 
 .btn-glass {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   color: var(--ink-primary);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(16px);
 }
 
 .flex-1 {
@@ -243,15 +243,15 @@ picker {
 }
 
 .glass-tag {
-  padding: 10rpx 24rpx;
-  border-radius: 40rpx;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.86);
+  padding: 10rpx 22rpx;
+  border-radius: 38rpx;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   color: var(--ink-primary);
-  font-size: 24rpx;
+  font-size: 22rpx;
   font-weight: 500;
   backdrop-filter: blur(8px);
-  box-shadow: 0 10rpx 24rpx rgba(225, 201, 213, 0.16);
+  box-shadow: 0 8rpx 18rpx rgba(225, 201, 213, 0.12);
 }
 
 .empty-glass {
@@ -268,10 +268,10 @@ picker {
   position: relative;
   border-radius: 46rpx;
   padding: 2px;
-  background: linear-gradient(135deg, rgba(255, 216, 230, 0.95), rgba(246, 195, 159, 0.88), rgba(217, 239, 248, 0.95));
+  background: linear-gradient(135deg, rgba(255, 220, 232, 0.78), rgba(244, 204, 174, 0.72), rgba(220, 239, 247, 0.78));
   background-size: 220% 220%;
-  animation: border-flow 9s ease infinite alternate;
-  box-shadow: 0 12px 28px rgba(232, 205, 215, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.28);
+  animation: border-flow 13s ease infinite alternate;
+  box-shadow: 0 8px 18px rgba(232, 205, 215, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 @keyframes border-flow {

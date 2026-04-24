@@ -7,8 +7,8 @@
 .wall-shell {
   display: flex;
   flex-direction: column;
-  gap: 44rpx;
-  padding-top: 44rpx;
+  gap: 40rpx;
+  padding-top: 42rpx;
   padding-bottom: 88rpx;
 }
 
@@ -20,23 +20,23 @@
 }
 
 .page-kicker {
-  font-size: 20rpx;
-  color: #c97b9a;
-  letter-spacing: 3rpx;
+  font-size: 18rpx;
+  color: #cb88a1;
+  letter-spacing: 2.8rpx;
   margin-bottom: 10rpx;
 }
 
 .page-title {
-  font-size: 44rpx;
-  line-height: 1.32;
+  font-size: 42rpx;
+  line-height: 1.28;
   color: var(--ink-primary);
   font-weight: 600;
 }
 
 .page-meta {
-  padding-top: 10rpx;
-  font-size: 24rpx;
-  color: var(--ink-secondary);
+  padding-top: 8rpx;
+  font-size: 22rpx;
+  color: rgba(111, 99, 119, 0.88);
 }
 
 .wall-header-wrap {
@@ -44,8 +44,8 @@
 }
 
 .wall-header {
-  padding: 34rpx 32rpx 30rpx;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 247, 245, 0.56) 100%);
+  padding: 32rpx 30rpx 28rpx;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 247, 245, 0.5) 100%);
 }
 
 .wall-summary-row {
@@ -71,13 +71,13 @@
 .wall-title-row {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: 14rpx;
   flex-wrap: wrap;
 }
 
 .wall-title {
-  font-size: 38rpx;
-  line-height: 1.35;
+  font-size: 36rpx;
+  line-height: 1.3;
   color: var(--ink-primary);
   font-weight: 600;
 }
@@ -92,23 +92,23 @@
 
 .wall-date {
   padding-top: 8rpx;
-  font-size: 24rpx;
-  letter-spacing: 4rpx;
-  color: var(--ink-tertiary);
+  font-size: 22rpx;
+  letter-spacing: 3rpx;
+  color: rgba(150, 136, 156, 0.88);
 }
 
 .wall-count-chip {
-  padding: 12rpx 22rpx;
+  padding: 10rpx 20rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.54);
-  border: 1px solid rgba(255, 255, 255, 0.82);
-  font-size: 22rpx;
-  color: var(--ink-secondary);
-  box-shadow: 0 10rpx 22rpx rgba(227, 204, 215, 0.14);
+  background: rgba(255, 255, 255, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  font-size: 20rpx;
+  color: rgba(111, 99, 119, 0.9);
+  box-shadow: 0 8rpx 16rpx rgba(227, 204, 215, 0.1);
 }
 
 .wall-tags {
-  margin-top: 26rpx;
+  margin-top: 22rpx;
 }
 
 .wall-main {
@@ -123,60 +123,60 @@
 }
 
 .composer-section {
-  padding: 34rpx 32rpx 32rpx;
+  padding: 32rpx 30rpx 30rpx;
   min-height: 100%;
 }
 
 .compact-head {
-  margin-bottom: 26rpx;
+  margin-bottom: 22rpx;
 }
 
 .section-title {
-  font-size: 34rpx;
-  line-height: 1.35;
+  font-size: 32rpx;
+  line-height: 1.32;
   color: var(--ink-primary);
   font-weight: 600;
 }
 
 .form-group {
-  margin-bottom: 28rpx;
+  margin-bottom: 24rpx;
 }
 
 .form-label {
-  font-size: 24rpx;
-  color: var(--ink-secondary);
-  margin-bottom: 16rpx;
+  font-size: 22rpx;
+  color: rgba(111, 99, 119, 0.9);
+  margin-bottom: 14rpx;
   font-weight: 500;
 }
 
 .glass-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.76);
   border-radius: 24rpx;
   color: var(--ink-primary);
   font-size: 28rpx;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.24s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
 }
 
 .glass-input:focus {
-  border-color: rgba(238, 155, 180, 0.88);
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 0 0 6rpx rgba(255, 216, 230, 0.32);
+  border-color: rgba(238, 155, 180, 0.74);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0 0 4rpx rgba(255, 216, 230, 0.18);
 }
 
 .picker-box {
-  height: 100rpx;
+  height: 92rpx;
   display: flex;
   align-items: center;
-  padding: 0 32rpx;
+  padding: 0 28rpx;
 }
 
 .text-area {
-  min-height: 280rpx;
-  padding: 32rpx;
-  line-height: 1.72;
+  min-height: 272rpx;
+  padding: 28rpx;
+  line-height: 1.68;
 }
 
 .input-placeholder {
@@ -184,7 +184,7 @@
 }
 
 .composer-actions {
-  margin-top: 8rpx;
+  margin-top: 6rpx;
 }
 
 .notes-list-section {
@@ -199,70 +199,70 @@
 }
 
 .note-card {
-  padding: 30rpx 28rpx 24rpx;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 248, 246, 0.54) 100%);
-  box-shadow: 0 18rpx 36rpx rgba(227, 204, 215, 0.16);
+  padding: 28rpx 26rpx 22rpx;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 248, 246, 0.5) 100%);
+  box-shadow: 0 14rpx 28rpx rgba(227, 204, 215, 0.12);
 }
 
 .note-stamp {
-  margin-bottom: 18rpx;
-  font-size: 18rpx;
-  letter-spacing: 5rpx;
-  color: var(--ink-tertiary);
+  margin-bottom: 16rpx;
+  font-size: 17rpx;
+  letter-spacing: 4rpx;
+  color: rgba(150, 136, 156, 0.82);
 }
 
 .note-card-top {
-  margin-bottom: 20rpx;
+  margin-bottom: 18rpx;
 }
 
 .note-author-block {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .note-author {
-  font-size: 28rpx;
+  font-size: 27rpx;
   font-weight: 600;
   color: var(--ink-primary);
 }
 
 .note-time {
-  font-size: 22rpx;
-  color: var(--ink-tertiary);
+  font-size: 20rpx;
+  color: rgba(150, 136, 156, 0.86);
 }
 
 .note-content {
-  font-size: 30rpx;
-  line-height: 1.76;
+  font-size: 29rpx;
+  line-height: 1.7;
   color: var(--ink-primary);
-  margin-bottom: 24rpx;
+  margin-bottom: 22rpx;
   white-space: pre-wrap;
 }
 
 .note-actions {
   display: flex;
-  gap: 24rpx;
+  gap: 22rpx;
   justify-content: flex-end;
-  border-top: 1px solid rgba(208, 185, 198, 0.22);
-  padding-top: 20rpx;
+  border-top: 1px solid rgba(208, 185, 198, 0.18);
+  padding-top: 18rpx;
 }
 
 .action-link {
-  font-size: 24rpx;
-  color: var(--ink-secondary);
+  font-size: 22rpx;
+  color: rgba(111, 99, 119, 0.86);
 }
 
 .action-link.danger {
-  color: #d1728e;
+  color: #cc738d;
 }
 
 .pin-left {
-  transform: rotate(-0.8deg);
+  transform: rotate(-0.45deg);
 }
 
 .pin-right {
-  transform: rotate(0.8deg);
+  transform: rotate(0.45deg);
 }
 
 .pin-flat {
