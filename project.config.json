@@ -10,12 +10,16 @@
     "minified": true,
     "enhance": true,
     "showShadowRootInWxmlPanel": true,
-    "packNpmRelationList": [],
+    "packNpmRelationList": [{
+      "packageJsonPath": "./package.json",
+      "miniprogramNpmDistDir": "./"
+    }],
+    "filesToIgnore":[],
     "ignoreUploadUnusedFiles": true,
     "compileWorklet": false,
     "uglifyFileName": false,
     "uploadWithSourceMap": true,
-    "packNpmManually": false,
+    "packNpmManually": true,
     "minifyWXSS": true,
     "minifyWXML": true,
     "localPlugins": false,
@@ -32,7 +36,16 @@
   },
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": ".claude"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules"
+      }
+    ],
     "include": []
   },
   "editorSetting": {}

@@ -1,5 +1,35 @@
+const solarlunar = require("./solarlunar.js");
 const DAY_MS = 24 * 60 * 60 * 1000;
-const MILESTONE_DAYS = [100, 365, 520, 999, 1314, 2000];
+const MILESTONE_CONFIG = [
+  { day: 30, label: "满月纪念" },
+  { day: 50, label: "50 天纪念" },
+  { day: 77, label: "77 天纪念" },
+  { day: 100, label: "100 天纪念" },
+  { day: 131, label: "131 天纪念" },
+  { day: 200, label: "200 天纪念" },
+  { day: 365, label: "一周年" },
+  { day: 520, label: "520 天纪念" },
+  { day: 666, label: "666 天纪念" },
+  { day: 777, label: "777 天纪念" },
+  { day: 999, label: "999 天纪念" },
+  { day: 1111, label: "1111 天纪念" },
+  { day: 1314, label: "1314 天纪念" },
+  { day: 1500, label: "1500 天纪念" },
+  { day: 1666, label: "1666 天纪念" },
+  { day: 2000, label: "2000 天纪念" },
+  { day: 2222, label: "2222 天纪念" },
+  { day: 2333, label: "2333 天纪念" },
+  { day: 2520, label: "2520 天纪念" },
+  { day: 2666, label: "2666 天纪念" },
+  { day: 2999, label: "2999 天纪念" },
+  { day: 3141, label: "3141 天纪念" },
+  { day: 3333, label: "3333 天纪念" },
+  { day: 3650, label: "十周年" },
+  { day: 4000, label: "4000 天纪念" },
+  { day: 4444, label: "4444 天纪念" },
+  { day: 5200, label: "5200 天纪念" }
+];
+const MILESTONE_DAYS = MILESTONE_CONFIG.map((item) => item.day);
 
 const SCENE_PRESETS = {
   default: {
@@ -23,6 +53,17 @@ const SCENE_PRESETS = {
     chips: ["周年换肤", "金色流光", "爱心漂浮"],
     metricValue: "周年篇",
     metricDesc: "适合认真纪念"
+  },
+  birthday: {
+    key: "birthday",
+    sceneClass: "scene-birthday",
+    badge: "生日篇",
+    title: "今天是生日",
+    tag: "把蛋糕、愿望和偏爱都留给今天。",
+    description: "切换为生日主题，让今天多一点庆祝感和偏爱感。",
+    chips: ["生日高光", "偏爱加倍", "认真庆祝"],
+    metricValue: "生日篇",
+    metricDesc: "适合庆祝与许愿"
   },
   valentine: {
     key: "valentine",
@@ -147,20 +188,106 @@ function getLoveYears(startTime, now = new Date()) {
   return Math.max(0, years);
 }
 
+function getMilestoneMeta(day) {
+  return MILESTONE_CONFIG.find((item) => item.day === day) || null;
+}
+
 function getMilestoneLabel(day) {
-  if (day === 100) {
-    return "100 天纪念";
+  const milestone = getMilestoneMeta(day);
+  return milestone ? milestone.label : `${day} 天纪念`;
+}
+
+function isMilestoneDay(day) {
+  return Boolean(getMilestoneMeta(day));
+}
+
+function getNextMilestone(day) {
+  return MILESTONE_CONFIG.find((item) => item.day > day) || null;
+}
+
+function getLatestMilestone(day) {
+  for (let index = MILESTONE_CONFIG.length - 1; index >= 0; index -= 1) {
+    if (day >= MILESTONE_CONFIG[index].day) {
+      return MILESTONE_CONFIG[index];
+    }
   }
-  if (day === 365) {
-    return "一周年";
+
+  return null;
+}
+
+function getMilestoneBadgeData(startTime, now = new Date()) {
+  const currentDays = getTogetherDays(startTime, now);
+  const exactMilestone = getMilestoneMeta(currentDays);
+  const nextMilestone = getNextMilestone(currentDays);
+  const latestMilestone = getLatestMilestone(currentDays);
+
+  if (exactMilestone) {
+    return {
+      visible: true,
+      isExactMilestone: true,
+      badgeText: "MILESTONE UNLOCKED",
+      label: exactMilestone.label,
+      description: `今天正好是第 ${currentDays} 天`,
+      accentText: nextMilestone ? `下一站：${nextMilestone.label}` : "把以后也继续过成值得庆祝的日子。",
+      currentDays,
+      next: nextMilestone
+        ? {
+            day: nextMilestone.day,
+            label: nextMilestone.label,
+            remainingDays: nextMilestone.day - currentDays
+          }
+        : null
+    };
   }
-  if (day === 520) {
-    return "520 天纪念";
+
+  if (currentDays >= 2000) {
+    return {
+      visible: true,
+      isExactMilestone: false,
+      badgeText: "2000+ DAYS",
+      label: `已经一起走过 ${currentDays} 天`,
+      description: nextMilestone
+        ? `距离${nextMilestone.label}还有 ${nextMilestone.day - currentDays} 天`
+        : `最近抵达的是${latestMilestone ? latestMilestone.label : "重要纪念日"}`,
+      accentText: "两千天以后，也想继续把平常日子过成纪念日。",
+      currentDays,
+      next: nextMilestone
+        ? {
+            day: nextMilestone.day,
+            label: nextMilestone.label,
+            remainingDays: nextMilestone.day - currentDays
+          }
+        : null
+    };
   }
-  if (day === 1314) {
-    return "1314 天纪念";
+
+  if (nextMilestone) {
+    return {
+      visible: true,
+      isExactMilestone: false,
+      badgeText: "NEXT MILESTONE",
+      label: `奔向第 ${nextMilestone.day} 天`,
+      description: `距离${nextMilestone.label}还有 ${nextMilestone.day - currentDays} 天`,
+      accentText: `今天是第 ${currentDays} 天`,
+      currentDays,
+      next: {
+        day: nextMilestone.day,
+        label: nextMilestone.label,
+        remainingDays: nextMilestone.day - currentDays
+      }
+    };
   }
-  return `${day} 天纪念`;
+
+  return {
+    visible: true,
+    isExactMilestone: false,
+    badgeText: "LOVE ARCHIVE",
+    label: `已经一起走过 ${currentDays} 天`,
+    description: latestMilestone ? `最近抵达的是${latestMilestone.label}` : "每一天都在继续累计。",
+    accentText: "数字会继续增加，喜欢也会继续按天累计。",
+    currentDays,
+    next: null
+  };
 }
 
 function getSceneDecorations(sceneClass) {
@@ -176,6 +303,11 @@ function getSceneDecorations(sceneClass) {
       ...defaults,
       { id: "spark-5", className: "scene-spark spark-five spark-heart" },
       { id: "spark-6", className: "scene-spark spark-six spark-heart" }
+    ],
+    "scene-birthday": [
+      ...defaults,
+      { id: "bubble-1", className: "scene-spark spark-five spark-bubble" },
+      { id: "bubble-2", className: "scene-spark spark-six spark-heart" }
     ],
     "scene-valentine": [
       ...defaults,
@@ -212,9 +344,74 @@ function getSceneDecorations(sceneClass) {
   return enhanced[sceneClass] || defaults;
 }
 
-function matchConfiguredScene(profile, month, day) {
-  const dateItems = Array.isArray(profile.specialDates) ? profile.specialDates : [];
-  return dateItems.find((item) => Number(item.month) === month && Number(item.day) === day) || null;
+function normalizeSpecialDate(item) {
+  return {
+    ...item,
+    calendar: item.calendar || "solar",
+    recurrence: item.recurrence || "yearly"
+  };
+}
+
+function getSolarDateParts(now) {
+  return {
+    year: now.getFullYear(),
+    month: now.getMonth() + 1,
+    day: now.getDate()
+  };
+}
+
+function getLunarDateParts(now) {
+  return solarlunar.solar2lunar(now.getFullYear(), now.getMonth() + 1, now.getDate());
+}
+
+function matchesSolarDate(item, solarDate) {
+  if (Number(item.month) !== solarDate.month || Number(item.day) !== solarDate.day) {
+    return false;
+  }
+
+  if (item.recurrence === "once") {
+    return Number(item.year) === solarDate.year;
+  }
+
+  return true;
+}
+
+function matchesLunarDate(item, lunarDate) {
+  if (item.recurrence === "once") {
+    return false;
+  }
+
+  const monthMatches = Number(item.month) === Number(lunarDate.lMonth);
+  const dayMatches = Number(item.day) === Number(lunarDate.lDay);
+  const leapMatches = item.isLeapMonth == null ? true : Boolean(item.isLeapMonth) === Boolean(lunarDate.isLeap);
+
+  return monthMatches && dayMatches && leapMatches;
+}
+
+function matchConfiguredScene(profile, now = new Date()) {
+  const dateItems = Array.isArray(profile.specialDates) ? profile.specialDates.map(normalizeSpecialDate) : [];
+  const solarDate = getSolarDateParts(now);
+
+  const exactSolarOnce = dateItems.find(
+    (item) => item.calendar === "solar" && item.recurrence === "once" && matchesSolarDate(item, solarDate)
+  );
+
+  if (exactSolarOnce) {
+    return exactSolarOnce;
+  }
+
+  let lunarDate = null;
+
+  return (
+    dateItems.find((item) => {
+      if (item.calendar === "lunar") {
+        lunarDate = lunarDate || getLunarDateParts(now);
+        return matchesLunarDate(item, lunarDate);
+      }
+
+      return matchesSolarDate(item, solarDate);
+    }) || null
+  );
 }
 
 function buildSceneFromPreset(presetKey, overrides = {}) {
@@ -231,26 +428,24 @@ function buildSceneFromPreset(presetKey, overrides = {}) {
 }
 
 function getSpecialScene(profile, now = new Date()) {
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
   const togetherDays = getTogetherDays(profile.startTime, now);
   const loveYears = getLoveYears(profile.startTime, now);
 
-  const configuredScene = matchConfiguredScene(profile, month, day);
+  const configuredScene = matchConfiguredScene(profile, now);
   if (configuredScene) {
     const presetKey = configuredScene.key || "default";
     const sceneOverrides = {
       ...configuredScene
     };
 
-    if (presetKey === "anniversary" && loveYears > 0) {
+    if (presetKey === "anniversary" && !sceneOverrides.tag && loveYears > 0) {
       sceneOverrides.tag = `这是我们的第 ${loveYears} 个恋爱周年。`;
     }
 
     return buildSceneFromPreset(presetKey, sceneOverrides);
   }
 
-  if (MILESTONE_DAYS.includes(togetherDays)) {
+  if (isMilestoneDay(togetherDays)) {
     return buildSceneFromPreset("milestone", {
       title: `今天是第 ${togetherDays} 天`,
       tag: `${getMilestoneLabel(togetherDays)} 已解锁。`,
@@ -270,5 +465,6 @@ module.exports = {
   getDuration,
   getTogetherDays,
   getLoveYears,
+  getMilestoneBadgeData,
   getSpecialScene
 };

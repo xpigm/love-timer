@@ -1,9 +1,7 @@
-const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const { DEFAULT_QUOTES, MEMORY_PROMPTS } = require("../../utils/default-data");
 const profileUtils = require("../../utils/profile-config");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
-
-const NOTE_CARD_CLASSES = ["note-card-primary", "note-card-secondary"];
 
 function formatStartDateLabel(startTime) {
   return String(startTime || "")
@@ -11,27 +9,24 @@ function formatStartDateLabel(startTime) {
     .replace(/-/g, ".");
 }
 
-function buildQuickStats(duration, notesCount, loveYears) {
-  return [
-    {
-      label: "第几年",
-      value: `第 ${loveYears + 1} 年`,
-      desc: loveYears > 0 ? `已经一起走过 ${loveYears} 个完整年份` : "故事刚刚开始"
-    },
-    {
-      label: "留言数量",
-      value: `${notesCount} 条`,
-      desc: notesCount ? "这里留着你们说过的话" : "等你们写下第一条留言"
-    }
-  ];
+function decorateRecentNotes(notes) {
+  return notes.slice(0, 3).map((note) => ({
+    ...note,
+    preview: String(note.content || "").trim(),
+    previewMeta: note.author ? `${note.author} · ${note.createdAt}` : note.createdAt
+  }));
 }
 
-function decorateNotes(notes) {
-  return notes.slice(0, 2).map((note, index) => ({
-    ...note,
-    cardClass: NOTE_CARD_CLASSES[index % NOTE_CARD_CLASSES.length],
-    noteLabel: index === 0 ? "最新" : "上一条"
-  }));
+function pickMemoryPrompt(current = "") {
+  let next = MEMORY_PROMPTS[Math.floor(Math.random() * MEMORY_PROMPTS.length)] || "";
+
+  if (MEMORY_PROMPTS.length > 1) {
+    while (next === current) {
+      next = MEMORY_PROMPTS[Math.floor(Math.random() * MEMORY_PROMPTS.length)] || "";
+    }
+  }
+
+  return next;
 }
 
 function buildCoverTags(profile, scene) {
@@ -46,16 +41,16 @@ function buildSpecialLabel(scene) {
   return scene.badge || scene.title || "";
 }
 
-function buildSummary(profile, scene, quote, notesCount) {
-  const quoteText = quote || "今天也值得认真记一下。";
+function buildMomentPanel(profile, scene, quote, duration) {
+  const sceneTag = String(scene.tag || "").trim();
+  const quoteText = String(quote || "今天也值得认真记一下。").trim();
+  const hasSpecialScene = scene && scene.key && scene.key !== "default";
 
   return {
-    eyebrow: buildSpecialLabel(scene),
-    title: scene.title || "今天想说的话",
-    body: `${scene.tag ? scene.tag + ' ' : ''}${quoteText}`,
-    aside: notesCount
-      ? `已经留下 ${notesCount} 条留言了。`
-      : "还没有留言，可以从今天开始。"
+    badge: buildSpecialLabel(scene),
+    title: hasSpecialScene ? scene.title || "" : "",
+    body: sceneTag ? `${sceneTag} ${quoteText}` : quoteText,
+    actionLabel: "换一句"
   };
 }
 
@@ -72,14 +67,49 @@ function buildDateMeta(profile) {
   ];
 }
 
-function buildSpotlight(profile, scene, notesCount) {
+function buildSpotlight(notes) {
+  const notesCount = notes.length;
+
   return {
-    title: notesCount ? "最近的留言" : "给今天留一句话",
-    body: notesCount
-      ? "写下来的内容，以后再看还是会有当时的感觉。"
-      : `${scene.tag ? scene.tag + ' ' : ''}不用等特别的日子，现在就可以记一条。`,
-    cta: notesCount ? "去写新留言" : "写第一条留言",
-    footnote: `${profile.personA} · ${profile.personB}`
+    status: notesCount ? `${notesCount} 条留言` : "还没有留言",
+    entry: notesCount ? "查看留言墙 →" : "去写留言 →",
+    empty: "先写下今天的第一句话吧。"
+  };
+}
+
+function buildHeroMilestone(milestoneBadge) {
+  if (!milestoneBadge || !milestoneBadge.visible) {
+    return {
+      visible: false,
+      chip: "",
+      text: "",
+      exact: false
+    };
+  }
+
+  if (milestoneBadge.isExactMilestone) {
+    return {
+      visible: true,
+      chip: `${milestoneBadge.currentDays} DAY`,
+      text: `${milestoneBadge.label} 已抵达`,
+      exact: true
+    };
+  }
+
+  if (milestoneBadge.next) {
+    return {
+      visible: true,
+      chip: milestoneBadge.badgeText === "2000+ DAYS" ? "2000+ DAYS" : "NEXT",
+      text: `距 ${milestoneBadge.next.label} 还有 ${milestoneBadge.next.remainingDays} 天`,
+      exact: false
+    };
+  }
+
+  return {
+    visible: true,
+    chip: milestoneBadge.badgeText || "MILESTONE",
+    text: milestoneBadge.description || milestoneBadge.label,
+    exact: false
   };
 }
 
@@ -99,20 +129,20 @@ Page({
     startDateLabel: "",
     coverTags: [],
     dateMeta: [],
-    quickStats: [],
-    summary: {
-      eyebrow: "",
+    momentPanel: {
+      badge: "",
       title: "",
       body: "",
-      aside: ""
+      actionLabel: ""
     },
     specialLabel: "",
+    memoryPrompt: "",
     spotlight: {
-      title: "",
-      body: "",
-      cta: "",
-      footnote: ""
+      status: "",
+      entry: "",
+      empty: ""
     },
+    recentNotes: [],
     scene: {
       title: "",
       tag: "",
@@ -122,8 +152,23 @@ Page({
       metricValue: "",
       metricDesc: ""
     },
+    milestoneBadge: {
+      visible: false,
+      isExactMilestone: false,
+      badgeText: "",
+      label: "",
+      description: "",
+      accentText: "",
+      currentDays: 0,
+      next: null
+    },
+    heroMilestone: {
+      visible: false,
+      chip: "",
+      text: "",
+      exact: false
+    },
     sceneDecorations: [],
-    notesPreview: [],
     notesCount: 0
   },
 
@@ -164,21 +209,22 @@ Page({
     const profile = profileUtils.getProfile();
     const notes = storage.getNotes();
     const duration = time.getDuration(profile.startTime);
-    const loveYears = time.getLoveYears(profile.startTime);
     const scene = time.getSpecialScene(profile);
+    const milestoneBadge = time.getMilestoneBadgeData(profile.startTime);
 
     return {
       profile,
       notes,
       duration,
-      loveYears,
-      scene
+      scene,
+      milestoneBadge
     };
   },
 
   loadPageData(keepQuote = false) {
-    const { profile, notes, duration, loveYears, scene } = this.getBaseData();
+    const { profile, notes, duration, scene, milestoneBadge } = this.getBaseData();
     const quote = keepQuote && this.data.quote ? this.data.quote : this.pickQuote();
+    const memoryPrompt = keepQuote && this.data.memoryPrompt ? this.data.memoryPrompt : pickMemoryPrompt(this.data.memoryPrompt);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
@@ -190,13 +236,15 @@ Page({
       startDateLabel: formatStartDateLabel(profile.startTime),
       coverTags: buildCoverTags(profile, scene),
       dateMeta: buildDateMeta(profile),
-      quickStats: buildQuickStats(duration, notes.length, loveYears),
-      summary: buildSummary(profile, scene, quote, notes.length),
+      momentPanel: buildMomentPanel(profile, scene, quote, duration),
       specialLabel: buildSpecialLabel(scene),
-      spotlight: buildSpotlight(profile, scene, notes.length),
+      memoryPrompt,
+      spotlight: buildSpotlight(notes),
+      recentNotes: decorateRecentNotes(notes),
       scene,
+      milestoneBadge,
+      heroMilestone: buildHeroMilestone(milestoneBadge),
       sceneDecorations: scene.decorations || [],
-      notesPreview: decorateNotes(notes),
       notesCount: notes.length
     });
   },
@@ -219,8 +267,9 @@ Page({
   updateTimer() {
     const profile = this.data.profile.personA ? this.data.profile : profileUtils.getProfile();
     const duration = time.getDuration(profile.startTime);
-    const loveYears = time.getLoveYears(profile.startTime);
+    const notes = storage.getNotes();
     const scene = time.getSpecialScene(profile);
+    const milestoneBadge = time.getMilestoneBadgeData(profile.startTime);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
@@ -230,11 +279,13 @@ Page({
       startDateLabel: formatStartDateLabel(profile.startTime),
       coverTags: buildCoverTags(profile, scene),
       dateMeta: buildDateMeta(profile),
-      quickStats: buildQuickStats(duration, this.data.notesCount, loveYears),
-      summary: buildSummary(profile, scene, this.data.quote, this.data.notesCount),
+      momentPanel: buildMomentPanel(profile, scene, this.data.quote, duration),
       specialLabel: buildSpecialLabel(scene),
-      spotlight: buildSpotlight(profile, scene, this.data.notesCount),
+      spotlight: buildSpotlight(notes),
+      recentNotes: decorateRecentNotes(notes),
       scene,
+      milestoneBadge,
+      heroMilestone: buildHeroMilestone(milestoneBadge),
       sceneDecorations: scene.decorations || []
     });
   },
@@ -244,7 +295,7 @@ Page({
 
     this.setData({
       quote,
-      summary: buildSummary(this.data.profile, this.data.scene, quote, this.data.notesCount)
+      momentPanel: buildMomentPanel(this.data.profile, this.data.scene, quote, this.data.timer)
     });
   },
 
@@ -255,10 +306,10 @@ Page({
   },
 
   copySummary() {
-    const { profile, timer, scene } = this.data;
+    const { profile, timer, momentPanel } = this.data;
     const summary =
       `${profile.personA}和${profile.personB}已经相恋 ${timer.days} 天 ${timer.hours} 小时 ` +
-      `${timer.minutes} 分 ${timer.seconds} 秒。${scene.title}，${scene.tag}`;
+      `${timer.minutes} 分 ${timer.seconds} 秒。${momentPanel.title}，${momentPanel.body}`;
 
     wx.setClipboardData({
       data: summary,

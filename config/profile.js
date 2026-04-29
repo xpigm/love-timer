@@ -20,12 +20,30 @@ const PROFILE = {
       day: 14
     },
     {
+      key: "birthday",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 5,
+      day: 15,
+      title: "今天是张的生日",
+      tag: "今天适合认真庆祝，也适合把偏爱说得更明确。",
+      badge: "张的生日"
+    },
+    {
       key: "valentine",
       month: 3,
       day: 14,
       title: "今天是白色情人节",
       tag: "适合把喜欢再确认一次。",
       badge: "白色情人节"
+    },
+    {
+      key: "anniversary",
+      month: 3,
+      day: 6,
+      title: "今天是领证纪念日",
+      tag: "海淀民政局的那天，正式把彼此写进了以后。",
+      badge: "领证纪念日"
     },
     {
       key: "520",
@@ -54,11 +72,24 @@ const PROFILE = {
     },
     {
       key: "anniversary",
+      calendar: "solar",
+      recurrence: "yearly",
+      originYear: 2024,
       month: 9,
       day: 27,
       title: "今天是结婚纪念日",
-      tag: "从恋爱走到婚姻，今天值得认真庆祝。",
+      tag: "从 2024.09.27 开始，往后的每一年都值得认真庆祝。",
       badge: "结婚纪念"
+    },
+    {
+      key: "birthday",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 11,
+      day: 11,
+      title: "今天是孟的生日",
+      tag: "想把蛋糕、愿望和偏爱都留给你。",
+      badge: "孟的生日"
     },
     {
       key: "christmas",
@@ -74,14 +105,6 @@ const PROFILE = {
       day: 25,
       title: "今天是圣诞节",
       tag: "适合拥抱、拍照和认真庆祝。"
-    },
-    {
-      key: "anniversary",
-      month: 3,
-      day: 6,
-      title: "今天是领证纪念日",
-      tag: "海淀民政局的那天，正式把彼此写进了以后。",
-      badge: "领证纪念日"
     },
     {
       key: "newyear",

@@ -29,11 +29,18 @@
           <view class="hero-frame-lines hero-frame-bottom"></view>
           <view class="hero-glow hero-glow-a"></view>
           <view class="hero-glow hero-glow-b"></view>
-          <view class="hero-timer-caption">TOGETHER FOR</view>
+          <view class="hero-timer-topline">
+            <view class="hero-timer-caption">TOGETHER FOR</view>
+            <view class="hero-milestone-pill {{heroMilestone.exact ? 'is-exact' : ''}}" wx:if="{{heroMilestone.visible}}">
+              <text class="hero-milestone-pill-dot"></text>
+              <text class="hero-milestone-pill-text">{{heroMilestone.chip}}</text>
+            </view>
+          </view>
           <view class="hero-days-row">
             <text class="hero-days text-gradient">{{timer.days}}</text>
             <text class="hero-days-unit">天</text>
           </view>
+          <view class="hero-milestone-inline" wx:if="{{heroMilestone.visible}}">{{heroMilestone.text}}</view>
           <view class="hero-subtime">
             <view class="hero-subtime-item">
               <text class="sub-val">{{timer.hours}}</text>
@@ -50,8 +57,17 @@
               <text class="sub-lbl">秒</text>
             </view>
           </view>
-          <view class="hero-sidecopy">{{summary.aside}}</view>
         </view>
+      </view>
+
+      <view class="hero-moment-band">
+        <view class="hero-moment-topline">
+          <view class="hero-moment-kicker">今日此刻</view>
+          <view class="glass-tag hero-moment-tag" wx:if="{{momentPanel.badge}}">{{momentPanel.badge}}</view>
+        </view>
+        <view class="hero-moment-title" wx:if="{{momentPanel.title}}">{{momentPanel.title}}</view>
+        <view class="hero-moment-body {{momentPanel.title ? '' : 'no-title'}}">{{momentPanel.body}}</view>
+        <view class="hero-moment-action" bindtap="refreshQuote">{{momentPanel.actionLabel}} →</view>
       </view>
     </view>
 
@@ -61,88 +77,19 @@
           <view class="lower-stage-glow lower-stage-glow-a"></view>
           <view class="lower-stage-glow lower-stage-glow-b"></view>
 
-          <view class="lower-stage-header">
-            <view>
-              <view class="section-kicker">今天的片段</view>
-              <view class="lower-stage-title">想认真放进纪念册的部分</view>
+          <view class="lower-memory-band lower-memory-band-standalone" bindtap="openWall">
+            <view class="lower-memory-topline">
+              <view class="lower-memory-status">{{spotlight.status}}</view>
+              <view class="lower-memory-entry">{{spotlight.entry}}</view>
             </view>
-            <view class="lower-stage-meta">
-              <view class="glass-tag lower-stage-tag" wx:if="{{summary.eyebrow}}">{{summary.eyebrow}}</view>
-              <view class="lower-stage-count">{{notesCount ? notesCount + ' 条留言' : '还在等待第一条留言'}}</view>
-            </view>
-          </view>
-
-          <view class="lower-stage-grid">
-            <view class="lower-story">
-              <view class="lower-story-head">
-                <view class="glass-tag lower-story-tag" wx:if="{{scene.tag}}">{{scene.tag}}</view>
-                <view class="lower-story-title">{{summary.title}}</view>
-              </view>
-              <view class="lower-story-body">{{summary.body}}</view>
-              <view class="lower-story-aside">{{summary.aside}}</view>
-              <view class="summary-actions lower-story-actions">
-                <button class="btn btn-glass btn-mini" bindtap="refreshQuote">换一句</button>
-                <button class="btn btn-glass btn-mini" bindtap="copySummary">复制文案</button>
+            <view class="lower-memory-copy">{{memoryPrompt}}</view>
+            <view class="lower-memory-list" wx:if="{{recentNotes.length}}">
+              <view class="lower-memory-item" wx:for="{{recentNotes}}" wx:key="id">
+                <view class="lower-memory-item-meta">{{item.previewMeta}}</view>
+                <view class="lower-memory-item-content">“{{item.preview}}”</view>
               </view>
             </view>
-
-            <view class="lower-insight-rail">
-              <view class="lower-scene-brief">
-                <view class="lower-scene-head">
-                  <view>
-                    <view class="section-kicker">此刻的氛围</view>
-                    <view class="lower-scene-title">{{scene.title || coverLine}}</view>
-                  </view>
-                  <view class="lower-scene-metric" wx:if="{{scene.metricValue}}">{{scene.metricValue}}</view>
-                </view>
-                <view class="lower-scene-copy">{{scene.description || spotlight.body}}</view>
-                <view class="lower-scene-footnote" wx:if="{{scene.metricDesc}}">{{scene.metricDesc}}</view>
-                <view class="lower-scene-tags" wx:if="{{scene.chips.length}}">
-                  <text class="lower-scene-chip" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</text>
-                </view>
-              </view>
-
-              <view class="lower-stat-band">
-                <view class="lower-stat-item" wx:for="{{quickStats}}" wx:key="label">
-                  <view class="stat-lbl">{{item.label}}</view>
-                  <view class="lower-stat-val">{{item.value}}</view>
-                  <view class="lower-stat-desc">{{item.desc}}</view>
-                </view>
-              </view>
-            </view>
-          </view>
-
-          <view class="lower-memory-band">
-            <view class="lower-memory-head">
-              <view>
-                <view class="section-kicker">最近留言</view>
-                <view class="lower-memory-title">{{spotlight.title}}</view>
-              </view>
-              <view class="lower-memory-side">
-                <view class="lower-memory-note">{{spotlight.footnote}}</view>
-                <view class="glass-tag lower-memory-tag">{{notesCount ? '一起写过的片段' : '从今天开始记录'}}</view>
-              </view>
-            </view>
-
-            <view class="lower-memory-copy">{{spotlight.body}}</view>
-
-            <view class="lower-memory-list" wx:if="{{notesPreview.length}}">
-              <view class="lower-memory-snippet {{item.cardClass}}" wx:for="{{notesPreview}}" wx:key="id">
-                <view class="lower-memory-snippet-head">
-                  <view class="lower-memory-snippet-tag">{{item.noteLabel}}</view>
-                  <text class="lower-memory-time">{{item.createdAt}}</text>
-                </view>
-                <view class="lower-memory-author">{{item.author}}</view>
-                <view class="lower-memory-content">{{item.content}}</view>
-              </view>
-            </view>
-            <view wx:else class="empty-glass lower-memory-empty">
-              还没有留言，先写下今天的一句话吧。
-            </view>
-
-            <view class="btn-row lower-memory-actions">
-              <button class="btn btn-neon flex-1" bindtap="openWall">{{spotlight.cta}}</button>
-            </view>
+            <view class="lower-memory-emptycopy" wx:else>{{spotlight.empty}}</view>
           </view>
         </view>
       </view>
