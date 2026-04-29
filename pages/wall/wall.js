@@ -40,6 +40,37 @@ function buildComposerPanel(scene, notes) {
   };
 }
 
+const NAVIGATION_THEME = {
+  midnight: {
+    frontColor: "#ffffff",
+    backgroundColor: "#151327"
+  },
+  blush: {
+    frontColor: "#000000",
+    backgroundColor: "#fff7f4"
+  }
+};
+
+function tapFeedback() {
+  if (wx.vibrateShort) {
+    wx.vibrateShort({ type: "light" });
+  }
+}
+
+function syncNavigationBar(theme) {
+  if (!wx.setNavigationBarColor) {
+    return;
+  }
+
+  const systemInfo = wx.getSystemInfoSync();
+  if (systemInfo.theme === "dark") {
+    wx.setNavigationBarColor(NAVIGATION_THEME.midnight);
+  } else {
+    const navigationTheme = NAVIGATION_THEME[theme] || NAVIGATION_THEME.blush;
+    wx.setNavigationBarColor(navigationTheme);
+  }
+}
+
 function decorateNotes(notes) {
   return notes.map((note, index) => ({
     ...note,
@@ -112,6 +143,14 @@ Page({
     }
   },
 
+  onLoad() {
+    if (wx.onThemeChange) {
+      wx.onThemeChange(() => {
+        this.loadData();
+      });
+    }
+  },
+
   onShow() {
     this.loadData();
   },
@@ -119,6 +158,7 @@ Page({
   loadData() {
     const profile = profileUtils.getProfile();
     const scene = time.getSpecialScene(profile);
+    syncNavigationBar(profile.theme);
     const authorOptions = [profile.personA, profile.personB, "匿名"].filter(Boolean);
     const notes = storage.getNotes();
 
@@ -126,6 +166,7 @@ Page({
   },
 
   onAuthorChange(event) {
+    tapFeedback();
     const authorIndex = Number(event.detail.value);
 
     this.setData({
@@ -141,6 +182,7 @@ Page({
   },
 
   fillInspiration() {
+    tapFeedback();
     const text = DEFAULT_QUOTES[Math.floor(Math.random() * DEFAULT_QUOTES.length)].trim();
     const content = this.data.form.content ? `${this.data.form.content}\n${text}` : text;
 
@@ -177,6 +219,8 @@ Page({
         content: ""
       })
     );
+
+    tapFeedback();
 
     wx.showToast({
       title: "留言已保存",

@@ -5,11 +5,13 @@
   ],
   "window": {
     "navigationBarTitleText": "恋爱纪念册",
-    "navigationBarBackgroundColor": "#fff7f4",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#fff7f4",
+    "navigationBarBackgroundColor": "@navBg",
+    "navigationBarTextStyle": "@navText",
+    "backgroundColor": "@pageBg",
     "backgroundTextStyle": "light"
   },
+  "darkmode": true,
+  "themeLocation": "theme.json",
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

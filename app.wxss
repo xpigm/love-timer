@@ -2,8 +2,8 @@
 
 page {
   background: #fffaf7;
-  color: #4f4356;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "PingFang SC", sans-serif;
+  color: #463746;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -16,37 +16,38 @@ picker {
   box-sizing: border-box;
 }
 
-/* 全局变量定义区 */
 .page {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
 
-  /* --- 颜色变量 --- */
   --bg-base: #fffaf7;
-  --ink-primary: #4f4356;
-  --ink-secondary: #6f6377;
-  --ink-tertiary: #96889c;
+  --ink-primary: #463746;
+  --ink-secondary: #665468;
+  --ink-tertiary: #7f7184;
+  --ink-soft: rgba(102, 84, 104, 0.78);
+  --accent-ink: #b45e82;
+  --display-font: Georgia, "Times New Roman", "Songti SC", serif;
 
-  /* 柔和点缀色 */
-  --neon-primary: #eea6bb;
-  --neon-secondary: #9bcce2;
-  --neon-accent: #f2c9ad;
+  --neon-primary: #ee9fb8;
+  --neon-secondary: #95c7de;
+  --neon-accent: #efbf9e;
 
-  /* 轻玻璃材质 */
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.76);
-  --glass-border-highlight: rgba(255, 255, 255, 0.88);
+  --glass-bg: rgba(255, 255, 255, 0.68);
+  --glass-quiet-bg: rgba(255, 255, 255, 0.48);
+  --glass-strong-bg: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.82);
+  --glass-border-highlight: rgba(255, 255, 255, 0.94);
+  --soft-divider: rgba(165, 137, 154, 0.28);
+  --empty-state-bg: rgba(255, 255, 255, 0.46);
 
-  /* 缓动曲线 */
   --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
   --fluent-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* 柔和阴影 */
-  --glow-primary: 0 0 24px rgba(243, 154, 181, 0.14);
-  --shadow-glass: 0 14px 32px rgba(214, 188, 205, 0.18);
+  --glow-primary: 0 0 24px rgba(243, 154, 181, 0.16);
+  --shadow-glass: 0 14px 32px rgba(214, 188, 205, 0.2);
+  --shadow-soft: 0 10rpx 28rpx rgba(214, 188, 205, 0.16);
 
-  /* 背景渐变遮罩 */
   background:
     radial-gradient(circle at 12% 12%, rgba(243, 154, 181, 0.24), transparent 34%),
     radial-gradient(circle at 88% 18%, rgba(142, 202, 230, 0.22), transparent 30%),
@@ -54,25 +55,95 @@ picker {
     linear-gradient(180deg, #fffaf7 0%, #fffefb 42%, #fdf7f5 100%);
 }
 
-/* 针对不同主题的光影变体 */
+@media (prefers-color-scheme: dark) {
+  .page {
+    --bg-base: #151327;
+    --ink-primary: #fff4fb;
+    --ink-secondary: #e4d7ea;
+    --ink-tertiary: #bcaecb;
+    --ink-soft: rgba(228, 215, 234, 0.78);
+    --accent-ink: #ff9ec6;
+    --neon-primary: #ff78ad;
+    --neon-secondary: #75d8ff;
+    --neon-accent: #ffd27a;
+    --glass-bg: rgba(42, 34, 64, 0.66);
+    --glass-quiet-bg: rgba(46, 38, 70, 0.5);
+    --glass-strong-bg: rgba(58, 47, 82, 0.78);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-border-highlight: rgba(255, 255, 255, 0.26);
+    --soft-divider: rgba(255, 235, 249, 0.18);
+    --empty-state-bg: rgba(255, 255, 255, 0.08);
+    --glow-primary: 0 0 32px rgba(255, 120, 173, 0.28);
+    --shadow-glass: 0 18px 38px rgba(5, 4, 18, 0.34);
+    --shadow-soft: 0 12rpx 30rpx rgba(5, 4, 18, 0.26);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255, 120, 173, 0.3), transparent 34%),
+      radial-gradient(circle at 86% 18%, rgba(117, 216, 255, 0.24), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(255, 210, 122, 0.16), transparent 34%),
+      linear-gradient(180deg, #171429 0%, #201936 46%, #120f20 100%);
+  }
+
+  .page.theme-blush {
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255, 120, 173, 0.3), transparent 34%),
+      radial-gradient(circle at 86% 18%, rgba(117, 216, 255, 0.24), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(255, 210, 122, 0.16), transparent 34%),
+      linear-gradient(180deg, #171429 0%, #201936 46%, #120f20 100%);
+  }
+
+  .ambient-orb {
+    opacity: 0.46;
+    mix-blend-mode: screen;
+  }
+
+  .btn-neon {
+    background: linear-gradient(135deg, rgba(255, 120, 173, 0.94) 0%, rgba(255, 210, 122, 0.9) 100%);
+    color: #22162b;
+    box-shadow: 0 12px 24px rgba(255, 120, 173, 0.22);
+  }
+
+  .gradient-border-wrap {
+    background: linear-gradient(135deg, rgba(255, 120, 173, 0.52), rgba(255, 210, 122, 0.42), rgba(117, 216, 255, 0.48));
+    box-shadow: 0 10px 24px rgba(5, 4, 18, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+}
+
 .theme-blush {
-  --neon-primary: #eba7bb;
-  --neon-secondary: #f2c6aa;
-  --neon-accent: #f9dde7;
+  --neon-primary: #e994b0;
+  --neon-secondary: #edbd9d;
+  --neon-accent: #f7d4e1;
+  --accent-ink: #b45e82;
   background:
     radial-gradient(circle at top left, rgba(238, 155, 180, 0.26), transparent 34%),
     radial-gradient(circle at bottom right, rgba(247, 195, 161, 0.2), transparent 30%),
     linear-gradient(180deg, #fff8f8 0%, #fffdfb 45%, #fef6f6 100%);
 }
 
-.theme-ocean {
-  --neon-primary: #92c5e0;
-  --neon-secondary: #abd7c8;
-  --neon-accent: #deeff7;
+.theme-midnight {
+  --bg-base: #151327;
+  --ink-primary: #fff4fb;
+  --ink-secondary: #e4d7ea;
+  --ink-tertiary: #bcaecb;
+  --ink-soft: rgba(228, 215, 234, 0.78);
+  --accent-ink: #ff9ec6;
+  --neon-primary: #ff78ad;
+  --neon-secondary: #75d8ff;
+  --neon-accent: #ffd27a;
+  --glass-bg: rgba(42, 34, 64, 0.66);
+  --glass-quiet-bg: rgba(46, 38, 70, 0.5);
+  --glass-strong-bg: rgba(58, 47, 82, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-highlight: rgba(255, 255, 255, 0.26);
+  --soft-divider: rgba(255, 235, 249, 0.18);
+  --empty-state-bg: rgba(255, 255, 255, 0.08);
+  --glow-primary: 0 0 32px rgba(255, 120, 173, 0.28);
+  --shadow-glass: 0 18px 38px rgba(5, 4, 18, 0.34);
+  --shadow-soft: 0 12rpx 30rpx rgba(5, 4, 18, 0.26);
   background:
-    radial-gradient(circle at top left, rgba(137, 200, 232, 0.22), transparent 34%),
-    radial-gradient(circle at bottom right, rgba(159, 216, 195, 0.22), transparent 30%),
-    linear-gradient(180deg, #f6fbff 0%, #fcfffe 45%, #f4fbf8 100%);
+    radial-gradient(circle at 12% 8%, rgba(255, 120, 173, 0.3), transparent 34%),
+    radial-gradient(circle at 86% 18%, rgba(117, 216, 255, 0.24), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(255, 210, 122, 0.16), transparent 34%),
+    linear-gradient(180deg, #171429 0%, #201936 46%, #120f20 100%);
 }
 
 .ambient-orb {
@@ -85,6 +156,11 @@ picker {
   mix-blend-mode: multiply;
   animation: fluent-flow 18s var(--apple-ease) infinite alternate;
   will-change: transform;
+}
+
+.theme-midnight .ambient-orb {
+  opacity: 0.46;
+  mix-blend-mode: screen;
 }
 
 .orb-1 {
@@ -134,7 +210,7 @@ picker {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.72), transparent);
+  background: linear-gradient(90deg, transparent, var(--glass-border-highlight), transparent);
   z-index: 1;
 }
 
@@ -178,7 +254,7 @@ picker {
 }
 
 .text-gradient {
-  background: linear-gradient(120deg, #f1a3bc 0%, #f6b28d 48%, #8fcbe8 100%);
+  background: linear-gradient(120deg, var(--neon-primary) 0%, var(--neon-accent) 48%, var(--neon-secondary) 100%);
   background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -226,14 +302,20 @@ picker {
 }
 
 .btn-neon {
-  background: linear-gradient(135deg, #f5c6d2 0%, #f4d4bb 100%);
-  color: #5b4d5f;
-  box-shadow: 0 10px 20px rgba(243, 154, 181, 0.16);
+  background: linear-gradient(135deg, rgba(245, 188, 208, 0.96) 0%, rgba(244, 210, 180, 0.96) 100%);
+  color: #523f55;
+  box-shadow: 0 10px 20px rgba(243, 154, 181, 0.18);
+}
+
+.theme-midnight .btn-neon {
+  background: linear-gradient(135deg, rgba(255, 120, 173, 0.94) 0%, rgba(255, 210, 122, 0.9) 100%);
+  color: #22162b;
+  box-shadow: 0 12px 24px rgba(255, 120, 173, 0.22);
 }
 
 .btn-glass {
-  background: rgba(255, 255, 255, 0.46);
-  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: var(--glass-quiet-bg);
+  border: 1px solid var(--glass-border);
   color: var(--ink-primary);
   backdrop-filter: blur(16px);
 }
@@ -245,23 +327,24 @@ picker {
 .glass-tag {
   padding: 10rpx 22rpx;
   border-radius: 38rpx;
-  background: rgba(255, 255, 255, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   color: var(--ink-primary);
   font-size: 22rpx;
   font-weight: 500;
   backdrop-filter: blur(8px);
-  box-shadow: 0 8rpx 18rpx rgba(225, 201, 213, 0.12);
+  box-shadow: var(--shadow-soft);
 }
 
 .empty-glass {
   padding: 60rpx 40rpx;
   text-align: center;
-  border: 1px dashed rgba(197, 176, 191, 0.45);
+  border: 1px dashed var(--soft-divider);
   border-radius: 32rpx;
   color: var(--ink-secondary);
   font-size: 28rpx;
-  background: rgba(255, 255, 255, 0.36);
+  line-height: 1.65;
+  background: var(--empty-state-bg);
 }
 
 .gradient-border-wrap {
@@ -272,6 +355,11 @@ picker {
   background-size: 220% 220%;
   animation: border-flow 13s ease infinite alternate;
   box-shadow: 0 8px 18px rgba(232, 205, 215, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.theme-midnight .gradient-border-wrap {
+  background: linear-gradient(135deg, rgba(255, 120, 173, 0.52), rgba(255, 210, 122, 0.42), rgba(117, 216, 255, 0.48));
+  box-shadow: 0 10px 24px rgba(5, 4, 18, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 @keyframes border-flow {

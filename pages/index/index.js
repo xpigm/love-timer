@@ -77,6 +77,37 @@ function buildSpotlight(notes) {
   };
 }
 
+const NAVIGATION_THEME = {
+  midnight: {
+    frontColor: "#ffffff",
+    backgroundColor: "#151327"
+  },
+  blush: {
+    frontColor: "#000000",
+    backgroundColor: "#fff7f4"
+  }
+};
+
+function tapFeedback() {
+  if (wx.vibrateShort) {
+    wx.vibrateShort({ type: "light" });
+  }
+}
+
+function syncNavigationBar(theme) {
+  if (!wx.setNavigationBarColor) {
+    return;
+  }
+
+  const systemInfo = wx.getSystemInfoSync();
+  if (systemInfo.theme === "dark") {
+    wx.setNavigationBarColor(NAVIGATION_THEME.midnight);
+  } else {
+    const navigationTheme = NAVIGATION_THEME[theme] || NAVIGATION_THEME.blush;
+    wx.setNavigationBarColor(navigationTheme);
+  }
+}
+
 function buildHeroMilestone(milestoneBadge) {
   if (!milestoneBadge || !milestoneBadge.visible) {
     return {
@@ -177,6 +208,12 @@ Page({
       menus: ["shareAppMessage", "shareTimeline"]
     });
     this.loadPageData();
+
+    if (wx.onThemeChange) {
+      wx.onThemeChange(() => {
+        this.loadPageData(true);
+      });
+    }
   },
 
   onShow() {
@@ -224,6 +261,7 @@ Page({
   loadPageData(keepQuote = false) {
     const { profile, notes, duration, scene, milestoneBadge } = this.getBaseData();
     const quote = keepQuote && this.data.quote ? this.data.quote : this.pickQuote();
+    syncNavigationBar(profile.theme);
     const memoryPrompt = keepQuote && this.data.memoryPrompt ? this.data.memoryPrompt : pickMemoryPrompt(this.data.memoryPrompt);
 
     this.setData({
@@ -291,6 +329,7 @@ Page({
   },
 
   refreshQuote() {
+    tapFeedback();
     const quote = this.pickQuote();
 
     this.setData({

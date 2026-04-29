@@ -77,7 +77,10 @@
         </view>
       </view>
 
-      <view wx:else class="wall-stream-empty">{{wallMeta.empty}}</view>
+      <view wx:else class="wall-stream-empty">
+        <view class="wall-stream-empty-title">{{wallMeta.empty}}</view>
+        <view class="wall-stream-empty-helper">写下第一句，留言墙就开始有了温度。</view>
+      </view>
     </view>
   </view>
 </view>
