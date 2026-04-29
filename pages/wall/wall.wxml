@@ -4,138 +4,80 @@
   <view class="ambient-orb orb-3" style="width: 420rpx; height: 420rpx; bottom: 10%; right: 12%; background: var(--neon-accent); opacity: 0.24; animation-delay: -5s;"></view>
 
   <view class="container wall-shell">
-    <view class="wall-page-head animate-enter delay-1">
-      <view>
-        <view class="page-kicker">留言墙</view>
-        <view class="page-title">把想说的话慢慢留下来</view>
+    <view class="wall-topline animate-enter delay-1">
+      <view class="wall-tags">
+        <view class="glass-tag wall-special-tag" wx:if="{{wallMeta.badge}}">{{wallMeta.badge}}</view>
       </view>
-      <view class="page-meta">共 {{noteCount}} 条</view>
-    </view>
-
-    <view class="gradient-border-wrap wall-header-wrap animate-enter delay-1">
-      <view class="glass-card wall-header">
-        <view class="wall-summary-row">
-          <view class="wall-summary-main">
-            <view class="wall-title-row">
-              <view class="wall-title">记忆储藏室</view>
-              <view class="glass-tag wall-name-tag">{{profile.personA}} · {{profile.personB}}</view>
-            </view>
-            <view class="text-muted wall-subcopy">{{latestNoteLabel}}</view>
-          </view>
-          <view class="wall-side-meta">
-            <view class="wall-date">{{todayLabel}}</view>
-            <view class="wall-count-chip">{{noteCount}} 条收藏</view>
-          </view>
-        </view>
-
-        <view class="hero-tags wall-tags">
-          <text class="glass-tag" wx:for="{{boardTags}}" wx:key="*this">{{item}}</text>
-        </view>
+      <view class="wall-topside">
+        <view class="wall-date">{{wallMeta.date}}</view>
+        <view class="wall-kicker">{{wallMeta.kicker}}</view>
       </view>
     </view>
 
-    <view class="wall-story animate-enter delay-2">
-      <view class="gradient-border-wrap wall-cover-wrap">
-        <view class="glass-card wall-cover-card">
-          <view class="wall-cover-glow wall-cover-glow-a"></view>
-          <view class="wall-cover-glow wall-cover-glow-b"></view>
+    <view class="wall-hero animate-enter delay-2">
+      <view class="wall-nameplate">{{profile.personA}} <text class="wall-name-sep">·</text> {{profile.personB}}</view>
+      <view class="wall-hero-title">{{wallHero.title}}</view>
+      <view class="wall-hero-body">{{wallHero.body}}</view>
+      <view class="wall-hero-meta">{{wallMeta.status}} <text class="wall-hero-meta-dot">·</text> {{wallHero.coverline}}</view>
+    </view>
 
-          <view class="wall-cover-top">
-            <view>
-              <view class="page-kicker">记忆墙</view>
-              <view class="wall-cover-title">{{wallSummary.title}}</view>
-            </view>
-            <view class="wall-cover-side">
-              <view class="glass-tag wall-cover-badge" wx:if="{{scene.badge}}">{{scene.badge}}</view>
-              <view class="wall-cover-date">{{todayLabel}}</view>
-            </view>
-          </view>
+    <view class="wall-composer animate-enter delay-3">
+      <view class="wall-composer-glow wall-composer-glow-a"></view>
+      <view class="wall-composer-glow wall-composer-glow-b"></view>
+      <view class="wall-composer-breathe"></view>
 
-          <view class="wall-cover-body">{{wallSummary.body}}</view>
-          <view class="wall-cover-footnote">{{wallSummary.footnote}}</view>
+      <view class="wall-composer-topline">
+        <view class="wall-composer-kicker">写留言</view>
+        <view class="wall-composer-counter">{{form.content.length}} / 300</view>
+      </view>
+      <view class="wall-composer-title">{{composerPanel.title}}</view>
+      <view class="wall-composer-copy">{{composerPanel.body}}</view>
 
-          <view class="wall-cover-stats">
-            <view class="wall-stat-chip" wx:for="{{wallStats}}" wx:key="label">
-              <view class="wall-stat-label">{{item.label}}</view>
-              <view class="wall-stat-value">{{item.value}}</view>
-            </view>
+      <view class="wall-author-row">
+        <view class="wall-author-label">署名</view>
+        <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
+          <view class="wall-author-chip">{{authorOptions[authorIndex]}}</view>
+        </picker>
+      </view>
+
+      <textarea
+        class="wall-composer-input"
+        maxlength="300"
+        placeholder="写一句话、一个心情，或者今天的小瞬间。"
+        placeholder-class="wall-input-placeholder"
+        value="{{form.content}}"
+        bindinput="onContentInput"
+      ></textarea>
+
+      <view class="wall-composer-actions">
+        <view class="wall-composer-link" bindtap="fillInspiration">随机一句</view>
+        <button class="btn btn-neon wall-save-btn" bindtap="submitNote">保存留言</button>
+      </view>
+
+      <view class="wall-composer-helper">{{composerPanel.helper}}</view>
+    </view>
+
+    <view class="wall-stream animate-enter delay-4">
+      <view class="wall-stream-topline">
+        <view>
+          <view class="wall-stream-kicker">最近留言</view>
+          <view class="wall-stream-title">把写过的话慢慢收起来</view>
+        </view>
+        <view class="wall-stream-meta">{{wallMeta.streamHint}}</view>
+      </view>
+
+      <view class="wall-stream-list" wx:if="{{notes.length}}">
+        <view class="wall-note-item {{item.isLatest ? 'is-latest' : ''}}" wx:for="{{notes}}" wx:key="id">
+          <view class="wall-note-meta">{{item.metaLine}}</view>
+          <view class="wall-note-content">“{{item.content}}”</view>
+          <view class="wall-note-actions">
+            <view class="action-link" data-content="{{item.content}}" bindtap="copyNote">复制</view>
+            <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteNote">删除</view>
           </view>
         </view>
       </view>
 
-      <view class="gradient-border-wrap composer-wrap">
-        <view class="glass-card composer-section memory-composer-card">
-          <view class="composer-shell">
-            <view class="composer-head compact-head">
-              <view>
-                <view class="page-kicker">写留言</view>
-                <view class="section-title">{{composerHint.title}}</view>
-              </view>
-              <view class="glass-tag composer-tag">{{form.content.length}} / 300</view>
-            </view>
-
-            <view class="composer-copy">{{composerHint.body}}</view>
-            <view class="composer-helper">{{composerHint.helper}}</view>
-
-            <view class="composer-form-card">
-              <view class="form-group">
-                <view class="form-label">这张卡片署名</view>
-                <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
-                  <view class="glass-input picker-box">{{authorOptions[authorIndex]}}</view>
-                </picker>
-              </view>
-
-              <view class="form-group composer-content-group">
-                <view class="form-label">今天想记下什么</view>
-                <textarea
-                  class="glass-input text-area"
-                  maxlength="300"
-                  placeholder="写一句话、一个心情，或者今天的小瞬间。"
-                  placeholder-class="input-placeholder"
-                  value="{{form.content}}"
-                  bindinput="onContentInput"
-                ></textarea>
-              </view>
-            </view>
-
-            <view class="btn-row composer-actions composer-action-row">
-              <button class="btn btn-glass flex-1" bindtap="fillInspiration">随机一句</button>
-              <button class="btn btn-neon flex-1" bindtap="submitNote">保存留言</button>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="memory-stream-section">
-        <view class="list-header compact-head memory-stream-head">
-          <view>
-            <view class="page-kicker">最近更新</view>
-            <view class="section-title">把写过的话一张张收起来</view>
-          </view>
-          <view class="memory-stream-meta">{{latestNoteLabel}}</view>
-        </view>
-
-        <view wx:if="{{notes.length}}" class="notes-grid memory-stream-grid">
-          <view class="glass-card note-card memory-note-card {{item.cardClass}}" wx:for="{{notes}}" wx:key="id">
-            <view class="note-stamp">{{item.stamp}}</view>
-            <view class="note-card-top">
-              <view class="note-author-block">
-                <view class="note-author">{{item.author}}</view>
-                <view class="note-time">{{item.createdAt}}</view>
-              </view>
-            </view>
-            <view class="note-content">{{item.content}}</view>
-            <view class="note-actions">
-              <view class="action-link" data-content="{{item.content}}" bindtap="copyNote">复制</view>
-              <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteNote">删除</view>
-            </view>
-          </view>
-        </view>
-
-        <view wx:else class="empty-glass wall-empty memory-empty-card">
-          还没有留下内容，写下第一条留言吧。
-        </view>
-      </view>
+      <view wx:else class="wall-stream-empty">{{wallMeta.empty}}</view>
     </view>
   </view>
 </view>
