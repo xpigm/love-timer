@@ -19,16 +19,26 @@
     </view>
 
     <view class="poster-hero animate-enter delay-2">
+      <view class="hero-eyebrow">{{scene.heroEyebrow || 'LOVE POSTER'}}</view>
       <view class="hero-nameplate">{{profile.personA}} <text class="name-sep">·</text> {{profile.personB}}</view>
-      <view class="hero-statement">{{scene.tag || coverLine}}</view>
+      <view class="hero-statement">{{scene.heroSubline || scene.tag || coverLine}}</view>
       <view class="hero-coverline">{{coverLine}}</view>
+      <view class="hero-chip-rail" wx:if="{{scene.chips.length}}">
+        <view class="glass-tag hero-chip hero-chip-{{scene.chipStyle || 'glass'}}" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</view>
+      </view>
 
       <view class="hero-timer-wrap hero-stage-wrap float-subtle">
+        <view class="hero-stage-aura"></view>
+        <view class="hero-stage-ring"></view>
         <view class="hero-timer-card hero-stage-card">
           <view class="hero-frame-lines hero-frame-top"></view>
           <view class="hero-frame-lines hero-frame-bottom"></view>
           <view class="hero-glow hero-glow-a"></view>
           <view class="hero-glow hero-glow-b"></view>
+          <view class="hero-stage-seal hero-stage-seal-{{scene.badgeStyle || 'glass'}}" wx:if="{{specialLabel}}">
+            <view class="hero-stage-seal-kicker">{{specialLabel}}</view>
+            <view class="hero-stage-seal-text">{{scene.metricValue}}</view>
+          </view>
           <view class="hero-timer-topline">
             <view class="hero-timer-caption">TOGETHER FOR</view>
             <view class="hero-milestone-pill {{heroMilestone.exact ? 'is-exact' : ''}}" wx:if="{{heroMilestone.visible}}">
@@ -62,8 +72,8 @@
 
       <view class="hero-moment-band">
         <view class="hero-moment-topline">
-          <view class="hero-moment-kicker">今日此刻</view>
-          <view class="glass-tag hero-moment-tag" wx:if="{{momentPanel.badge}}">{{momentPanel.badge}}</view>
+          <view class="hero-moment-kicker">{{momentPanel.kicker}}</view>
+          <view class="glass-tag hero-moment-tag hero-moment-tag-{{scene.badgeStyle || 'glass'}}" wx:if="{{momentPanel.badge}}">{{momentPanel.badge}}</view>
         </view>
         <view class="hero-moment-title" wx:if="{{momentPanel.title}}">{{momentPanel.title}}</view>
         <view class="hero-moment-body {{momentPanel.title ? '' : 'no-title'}}">{{momentPanel.body}}</view>
@@ -80,6 +90,10 @@
           <view class="lower-memory-band lower-memory-band-standalone" bindtap="openWall">
             <view class="lower-memory-breathe"></view>
             <view class="lower-memory-sheen"></view>
+            <view class="lower-memory-scene" wx:if="{{specialLabel}}">
+              <view class="lower-memory-scene-kicker">{{scene.wallKicker}}</view>
+              <view class="glass-tag lower-memory-scene-badge">{{specialLabel}}</view>
+            </view>
             <view class="lower-memory-topline">
               <view class="lower-memory-status">{{spotlight.status}}</view>
               <view class="lower-memory-entry">{{spotlight.entry}}</view>

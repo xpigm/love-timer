@@ -1,12 +1,15 @@
-<view class="page {{themeClass}} wall-poster-page">
+<view class="page {{themeClass}} {{sceneClass}} wall-poster-page">
   <view class="ambient-orb orb-1" style="width: 640rpx; height: 640rpx; top: -80rpx; right: -160rpx; background: var(--neon-secondary); opacity: 0.28;"></view>
   <view class="ambient-orb orb-2" style="width: 540rpx; height: 540rpx; top: 34%; left: -140rpx; background: var(--neon-primary); opacity: 0.3; animation-delay: -3s;"></view>
   <view class="ambient-orb orb-3" style="width: 420rpx; height: 420rpx; bottom: 10%; right: 12%; background: var(--neon-accent); opacity: 0.24; animation-delay: -5s;"></view>
 
+  <view wx:for="{{sceneDecorations}}" wx:key="id" class="{{item.className}} neon-spark"></view>
+
   <view class="container wall-shell">
     <view class="wall-topline animate-enter delay-1">
       <view class="wall-tags">
-        <view class="glass-tag wall-special-tag" wx:if="{{wallMeta.badge}}">{{wallMeta.badge}}</view>
+        <view class="glass-tag wall-special-tag wall-special-tag-{{scene.badgeStyle || 'glass'}}" wx:if="{{wallMeta.badge}}">{{wallMeta.badge}}</view>
+        <view class="glass-tag wall-scene-chip wall-scene-chip-{{scene.chipStyle || 'glass'}}" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</view>
       </view>
       <view class="wall-topside">
         <view class="wall-date">{{wallMeta.date}}</view>
@@ -15,6 +18,7 @@
     </view>
 
     <view class="wall-hero animate-enter delay-2">
+      <view class="wall-hero-eyebrow">{{scene.heroEyebrow || wallMeta.kicker}}</view>
       <view class="wall-nameplate">{{profile.personA}} <text class="wall-name-sep">·</text> {{profile.personB}}</view>
       <view class="wall-hero-title">{{wallHero.title}}</view>
       <view class="wall-hero-body">{{wallHero.body}}</view>
@@ -27,8 +31,12 @@
       <view class="wall-composer-breathe"></view>
 
       <view class="wall-composer-topline">
-        <view class="wall-composer-kicker">写留言</view>
+        <view class="wall-composer-kicker">{{scene.wallKicker || '写留言'}}</view>
         <view class="wall-composer-counter">{{form.content.length}} / 300</view>
+      </view>
+      <view class="wall-composer-scene" wx:if="{{wallMeta.badge}}">
+        <view class="wall-composer-scene-badge">{{wallMeta.badge}}</view>
+        <view class="wall-composer-scene-copy">{{scene.metricDesc}}</view>
       </view>
       <view class="wall-composer-title">{{composerPanel.title}}</view>
       <view class="wall-composer-copy">{{composerPanel.body}}</view>
@@ -60,8 +68,8 @@
     <view class="wall-stream animate-enter delay-4">
       <view class="wall-stream-topline">
         <view>
-          <view class="wall-stream-kicker">最近留言</view>
-          <view class="wall-stream-title">把写过的话慢慢收起来</view>
+          <view class="wall-stream-kicker">{{scene.wallKicker || '最近留言'}}</view>
+          <view class="wall-stream-title">{{scene.wallTitle || '把写过的话慢慢收起来'}}</view>
         </view>
         <view class="wall-stream-meta">{{wallMeta.streamHint}}</view>
       </view>

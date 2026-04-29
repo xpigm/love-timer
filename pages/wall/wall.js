@@ -7,35 +7,45 @@ function buildTodayLabel() {
   return time.formatDate(new Date()).replace(/-/g, ".");
 }
 
-function buildWallMeta(notes, scene) {
-  const hasSpecialScene = scene && scene.key && scene.key !== "default";
+function hasSpecialScene(scene) {
+  return Boolean(scene && scene.key && scene.key !== "default");
+}
 
+function buildWallMeta(notes, scene) {
   return {
-    badge: hasSpecialScene ? scene.badge || scene.title || "" : "",
+    badge: hasSpecialScene(scene) ? scene.badge || scene.title || "" : "",
     date: buildTodayLabel(),
-    kicker: "MEMORY WALL",
+    kicker: scene.wallKicker || "MEMORY WALL",
     status: notes.length ? `${notes.length} 条留言` : "还没有留言",
     streamHint: notes.length ? "新的在上面" : "等第一条出现",
-    empty: "还没有留下内容，写下第一条留言吧。"
+    empty: hasSpecialScene(scene)
+      ? "这一页还空着，先写下今天想认真留住的一句。"
+      : "还没有留下内容，写下第一条留言吧。"
   };
 }
 
 function buildWallHero(profile, notes, scene) {
+  const special = hasSpecialScene(scene);
+
   return {
-    title: notes.length ? "把想说的话慢慢留下来" : "从第一句话开始记录",
+    title: scene.wallTitle || (notes.length ? "把想说的话慢慢留下来" : "从第一句话开始记录"),
     body: notes.length
-      ? `这里收着 ${profile.personA} 和 ${profile.personB} 留下来的片段。${scene.tag || scene.description || "有些话写下来，会比当下更久。"}`
-      : `${scene.tag ? `${scene.tag} ` : ""}现在写下的第一句话，以后会变成最早的一张纪念卡。`,
-    coverline: notes.length ? `最近更新于 ${notes[0].createdAt}` : `${profile.personA} · ${profile.personB}`
+      ? scene.wallBody || `这里收着 ${profile.personA} 和 ${profile.personB} 留下来的片段。${scene.tag || scene.description || "有些话写下来，会比当下更久。"}`
+      : scene.wallBody || `${scene.tag ? `${scene.tag} ` : ""}现在写下的第一句话，以后会变成最早的一张纪念卡。`,
+    coverline: notes.length
+      ? `最近更新于 ${notes[0].createdAt}`
+      : special
+        ? scene.heroSubline || `${profile.personA} · ${profile.personB}`
+        : `${profile.personA} · ${profile.personB}`
   };
 }
 
 function buildComposerPanel(scene, notes) {
   return {
-    title: notes.length ? "继续写一条" : "写下第一条",
+    title: scene.composerTitle || (notes.length ? "继续写一条" : "写下第一条"),
     body: notes.length
-      ? "不需要很长，把这一刻想留住的话写下来就好。"
-      : `${scene.tag ? `${scene.tag} ` : ""}先记一句，留言墙就会从这里开始。`,
+      ? scene.composerBody || "不需要很长，把这一刻想留住的话写下来就好。"
+      : scene.composerBody || `${scene.tag ? `${scene.tag} ` : ""}先记一句，留言墙就会从这里开始。`,
     helper: "最多 300 字，适合写一句话、一个心情，或者今天的小瞬间。"
   };
 }
@@ -86,8 +96,10 @@ function buildWallViewData(profile, scene, notes, authorOptions, options = {}) {
 
   return {
     themeClass: `theme-${profile.theme || "blush"}`,
+    sceneClass: scene.sceneClass || "scene-default",
     profile,
     scene,
+    sceneDecorations: scene.decorations || [],
     authorOptions,
     authorIndex,
     form: {
@@ -105,7 +117,9 @@ function buildWallViewData(profile, scene, notes, authorOptions, options = {}) {
 Page({
   data: {
     themeClass: "theme-blush",
+    sceneClass: "scene-default",
     profile: {},
+    sceneDecorations: [],
     scene: {
       title: "",
       tag: "",

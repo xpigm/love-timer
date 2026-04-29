@@ -41,6 +41,20 @@ picker {
   --soft-divider: rgba(165, 137, 154, 0.28);
   --empty-state-bg: rgba(255, 255, 255, 0.46);
 
+  --scene-bg-top: #fffaf7;
+  --scene-bg-mid: #fffefb;
+  --scene-bg-bottom: #fdf7f5;
+  --scene-orb-a: rgba(243, 154, 181, 0.24);
+  --scene-orb-b: rgba(142, 202, 230, 0.22);
+  --scene-orb-c: rgba(247, 199, 166, 0.22);
+  --scene-card-tint: rgba(255, 248, 250, 0.22);
+  --scene-card-border: rgba(255, 255, 255, 0.82);
+  --scene-pill-bg: rgba(255, 255, 255, 0.56);
+  --scene-stage-shadow: 0 24rpx 66rpx rgba(214, 188, 205, 0.22);
+  --scene-highlight: rgba(243, 154, 181, 0.22);
+  --scene-highlight-soft: rgba(255, 255, 255, 0.34);
+  --scene-particle-opacity: 0.52;
+
   --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
   --fluent-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -49,10 +63,10 @@ picker {
   --shadow-soft: 0 10rpx 28rpx rgba(214, 188, 205, 0.16);
 
   background:
-    radial-gradient(circle at 12% 12%, rgba(243, 154, 181, 0.24), transparent 34%),
-    radial-gradient(circle at 88% 18%, rgba(142, 202, 230, 0.22), transparent 30%),
-    radial-gradient(circle at 50% 100%, rgba(247, 199, 166, 0.22), transparent 34%),
-    linear-gradient(180deg, #fffaf7 0%, #fffefb 42%, #fdf7f5 100%);
+    radial-gradient(circle at 12% 12%, var(--scene-orb-a), transparent 34%),
+    radial-gradient(circle at 88% 18%, var(--scene-orb-b), transparent 30%),
+    radial-gradient(circle at 50% 100%, var(--scene-orb-c), transparent 34%),
+    linear-gradient(180deg, var(--scene-bg-top) 0%, var(--scene-bg-mid) 42%, var(--scene-bg-bottom) 100%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,14 +87,27 @@ picker {
     --glass-border-highlight: rgba(255, 255, 255, 0.26);
     --soft-divider: rgba(255, 235, 249, 0.18);
     --empty-state-bg: rgba(255, 255, 255, 0.08);
+    --scene-bg-top: #171429;
+    --scene-bg-mid: #201936;
+    --scene-bg-bottom: #120f20;
+    --scene-orb-a: rgba(255, 120, 173, 0.3);
+    --scene-orb-b: rgba(117, 216, 255, 0.24);
+    --scene-orb-c: rgba(255, 210, 122, 0.16);
+    --scene-card-tint: rgba(255, 255, 255, 0.08);
+    --scene-card-border: rgba(255, 255, 255, 0.16);
+    --scene-pill-bg: rgba(58, 47, 82, 0.66);
+    --scene-stage-shadow: 0 24rpx 72rpx rgba(5, 4, 18, 0.38);
+    --scene-highlight: rgba(255, 120, 173, 0.26);
+    --scene-highlight-soft: rgba(255, 255, 255, 0.14);
+    --scene-particle-opacity: 0.62;
     --glow-primary: 0 0 32px rgba(255, 120, 173, 0.28);
     --shadow-glass: 0 18px 38px rgba(5, 4, 18, 0.34);
     --shadow-soft: 0 12rpx 30rpx rgba(5, 4, 18, 0.26);
     background:
-      radial-gradient(circle at 12% 8%, rgba(255, 120, 173, 0.3), transparent 34%),
-      radial-gradient(circle at 86% 18%, rgba(117, 216, 255, 0.24), transparent 32%),
-      radial-gradient(circle at 50% 100%, rgba(255, 210, 122, 0.16), transparent 34%),
-      linear-gradient(180deg, #171429 0%, #201936 46%, #120f20 100%);
+      radial-gradient(circle at 12% 8%, var(--scene-orb-a), transparent 34%),
+      radial-gradient(circle at 86% 18%, var(--scene-orb-b), transparent 32%),
+      radial-gradient(circle at 50% 100%, var(--scene-orb-c), transparent 34%),
+      linear-gradient(180deg, var(--scene-bg-top) 0%, var(--scene-bg-mid) 46%, var(--scene-bg-bottom) 100%);
   }
 
   .page.theme-blush {
@@ -113,10 +140,16 @@ picker {
   --neon-secondary: #edbd9d;
   --neon-accent: #f7d4e1;
   --accent-ink: #b45e82;
+  --scene-bg-top: #fff8f8;
+  --scene-bg-mid: #fffdfb;
+  --scene-bg-bottom: #fef6f6;
+  --scene-orb-a: rgba(238, 155, 180, 0.26);
+  --scene-orb-b: rgba(233, 189, 157, 0.18);
+  --scene-orb-c: rgba(247, 212, 225, 0.2);
   background:
-    radial-gradient(circle at top left, rgba(238, 155, 180, 0.26), transparent 34%),
-    radial-gradient(circle at bottom right, rgba(247, 195, 161, 0.2), transparent 30%),
-    linear-gradient(180deg, #fff8f8 0%, #fffdfb 45%, #fef6f6 100%);
+    radial-gradient(circle at top left, var(--scene-orb-a), transparent 34%),
+    radial-gradient(circle at bottom right, var(--scene-orb-b), transparent 30%),
+    linear-gradient(180deg, var(--scene-bg-top) 0%, var(--scene-bg-mid) 45%, var(--scene-bg-bottom) 100%);
 }
 
 .theme-midnight {
@@ -136,14 +169,27 @@ picker {
   --glass-border-highlight: rgba(255, 255, 255, 0.26);
   --soft-divider: rgba(255, 235, 249, 0.18);
   --empty-state-bg: rgba(255, 255, 255, 0.08);
+  --scene-bg-top: #171429;
+  --scene-bg-mid: #201936;
+  --scene-bg-bottom: #120f20;
+  --scene-orb-a: rgba(255, 120, 173, 0.3);
+  --scene-orb-b: rgba(117, 216, 255, 0.24);
+  --scene-orb-c: rgba(255, 210, 122, 0.16);
+  --scene-card-tint: rgba(255, 255, 255, 0.08);
+  --scene-card-border: rgba(255, 255, 255, 0.16);
+  --scene-pill-bg: rgba(58, 47, 82, 0.66);
+  --scene-stage-shadow: 0 24rpx 72rpx rgba(5, 4, 18, 0.38);
+  --scene-highlight: rgba(255, 120, 173, 0.26);
+  --scene-highlight-soft: rgba(255, 255, 255, 0.14);
+  --scene-particle-opacity: 0.62;
   --glow-primary: 0 0 32px rgba(255, 120, 173, 0.28);
   --shadow-glass: 0 18px 38px rgba(5, 4, 18, 0.34);
   --shadow-soft: 0 12rpx 30rpx rgba(5, 4, 18, 0.26);
   background:
-    radial-gradient(circle at 12% 8%, rgba(255, 120, 173, 0.3), transparent 34%),
-    radial-gradient(circle at 86% 18%, rgba(117, 216, 255, 0.24), transparent 32%),
-    radial-gradient(circle at 50% 100%, rgba(255, 210, 122, 0.16), transparent 34%),
-    linear-gradient(180deg, #171429 0%, #201936 46%, #120f20 100%);
+    radial-gradient(circle at 12% 8%, var(--scene-orb-a), transparent 34%),
+    radial-gradient(circle at 86% 18%, var(--scene-orb-b), transparent 32%),
+    radial-gradient(circle at 50% 100%, var(--scene-orb-c), transparent 34%),
+    linear-gradient(180deg, var(--scene-bg-top) 0%, var(--scene-bg-mid) 46%, var(--scene-bg-bottom) 100%);
 }
 
 .ambient-orb {
@@ -173,6 +219,257 @@ picker {
 
 .orb-3 {
   animation-duration: 28s;
+}
+
+.scene-default {
+  --scene-stage-shadow: 0 24rpx 66rpx rgba(214, 188, 205, 0.22);
+}
+
+.scene-anniversary {
+  --neon-primary: #f1be7b;
+  --neon-secondary: #f0a4bd;
+  --neon-accent: #f8dfad;
+  --accent-ink: #b27a35;
+  --scene-bg-top: #fff8f1;
+  --scene-bg-mid: #fffaf5;
+  --scene-bg-bottom: #fff3ee;
+  --scene-orb-a: rgba(241, 190, 123, 0.24);
+  --scene-orb-b: rgba(240, 164, 189, 0.18);
+  --scene-orb-c: rgba(248, 223, 173, 0.22);
+  --scene-card-tint: rgba(255, 241, 217, 0.26);
+  --scene-pill-bg: rgba(255, 247, 231, 0.72);
+  --scene-stage-shadow: 0 28rpx 80rpx rgba(221, 183, 119, 0.24);
+  --scene-highlight: rgba(241, 190, 123, 0.22);
+}
+
+.scene-birthday {
+  --neon-primary: #f6b5c8;
+  --neon-secondary: #9bd5ec;
+  --neon-accent: #f8d792;
+  --accent-ink: #b66b8a;
+  --scene-bg-top: #fff9fb;
+  --scene-bg-mid: #fffefa;
+  --scene-bg-bottom: #fff5f1;
+  --scene-orb-a: rgba(246, 181, 200, 0.24);
+  --scene-orb-b: rgba(155, 213, 236, 0.2);
+  --scene-orb-c: rgba(248, 215, 146, 0.18);
+  --scene-card-tint: rgba(255, 243, 247, 0.24);
+  --scene-highlight: rgba(246, 181, 200, 0.2);
+}
+
+.scene-valentine,
+.scene-520 {
+  --neon-primary: #ef7fa5;
+  --neon-secondary: #f3adbf;
+  --neon-accent: #f5c08d;
+  --accent-ink: #bd4d78;
+  --scene-bg-top: #fff7f9;
+  --scene-bg-mid: #fffaf8;
+  --scene-bg-bottom: #fff1f4;
+  --scene-orb-a: rgba(239, 127, 165, 0.26);
+  --scene-orb-b: rgba(243, 173, 191, 0.2);
+  --scene-orb-c: rgba(245, 192, 141, 0.18);
+  --scene-card-tint: rgba(255, 237, 243, 0.26);
+  --scene-stage-shadow: 0 28rpx 84rpx rgba(239, 127, 165, 0.22);
+  --scene-highlight: rgba(239, 127, 165, 0.24);
+}
+
+.scene-520 {
+  --scene-bg-top: #fff4f7;
+  --scene-bg-mid: #fff9f6;
+  --scene-bg-bottom: #ffeff3;
+  --scene-stage-shadow: 0 30rpx 88rpx rgba(239, 127, 165, 0.24);
+}
+
+.scene-521 {
+  --neon-primary: #ee9fc0;
+  --neon-secondary: #b9c9ff;
+  --neon-accent: #f2d0e1;
+  --accent-ink: #a95f91;
+  --scene-bg-top: #fff8fb;
+  --scene-bg-mid: #fffbff;
+  --scene-bg-bottom: #f8f2ff;
+  --scene-orb-a: rgba(238, 159, 192, 0.22);
+  --scene-orb-b: rgba(185, 201, 255, 0.18);
+  --scene-orb-c: rgba(242, 208, 225, 0.18);
+  --scene-card-tint: rgba(252, 243, 250, 0.24);
+  --scene-highlight: rgba(238, 159, 192, 0.18);
+}
+
+.scene-christmas {
+  --neon-primary: #8ec8e8;
+  --neon-secondary: #f5c375;
+  --neon-accent: #d7eef8;
+  --accent-ink: #4d88a0;
+  --scene-bg-top: #f7fbff;
+  --scene-bg-mid: #fbfeff;
+  --scene-bg-bottom: #f3f9fc;
+  --scene-orb-a: rgba(142, 200, 232, 0.22);
+  --scene-orb-b: rgba(245, 195, 117, 0.18);
+  --scene-orb-c: rgba(215, 238, 248, 0.24);
+  --scene-card-tint: rgba(241, 249, 255, 0.26);
+  --scene-highlight: rgba(142, 200, 232, 0.18);
+}
+
+.scene-newyear {
+  --neon-primary: #ff8ba8;
+  --neon-secondary: #ffd277;
+  --neon-accent: #85d7ff;
+  --accent-ink: #bf6c3f;
+  --scene-bg-top: #221731;
+  --scene-bg-mid: #171d32;
+  --scene-bg-bottom: #110f21;
+  --scene-orb-a: rgba(255, 139, 168, 0.3);
+  --scene-orb-b: rgba(255, 210, 119, 0.2);
+  --scene-orb-c: rgba(133, 215, 255, 0.22);
+  --scene-card-tint: rgba(255, 255, 255, 0.08);
+  --scene-card-border: rgba(255, 255, 255, 0.16);
+  --scene-pill-bg: rgba(51, 37, 78, 0.68);
+  --scene-stage-shadow: 0 28rpx 84rpx rgba(9, 8, 20, 0.42);
+  --scene-highlight: rgba(255, 210, 119, 0.18);
+  --scene-highlight-soft: rgba(255, 255, 255, 0.12);
+  --scene-particle-opacity: 0.64;
+}
+
+.scene-milestone {
+  --neon-primary: #efbf79;
+  --neon-secondary: #f3aac1;
+  --neon-accent: #ffe1a4;
+  --accent-ink: #a8722e;
+  --scene-bg-top: #fff9f1;
+  --scene-bg-mid: #fffaf6;
+  --scene-bg-bottom: #fff3ea;
+  --scene-orb-a: rgba(239, 191, 121, 0.26);
+  --scene-orb-b: rgba(243, 170, 193, 0.18);
+  --scene-orb-c: rgba(255, 225, 164, 0.2);
+  --scene-card-tint: rgba(255, 244, 223, 0.28);
+  --scene-pill-bg: rgba(255, 247, 231, 0.72);
+  --scene-stage-shadow: 0 28rpx 82rpx rgba(239, 191, 121, 0.24);
+  --scene-highlight: rgba(239, 191, 121, 0.2);
+}
+
+.scene-fx {
+  z-index: 2;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 999rpx;
+  background: transparent;
+  box-shadow: none;
+  opacity: var(--scene-particle-opacity);
+  pointer-events: none;
+  filter: blur(0);
+  --scene-fx-rotate: 0deg;
+  animation: scene-float 12s var(--apple-ease) infinite alternate;
+}
+
+.fx-top-left { top: 120rpx; left: 24rpx; }
+.fx-top-right { top: 96rpx; right: 20rpx; }
+.fx-hero-left { top: 460rpx; left: 4rpx; }
+.fx-hero-right { top: 520rpx; right: 8rpx; }
+.fx-lower-left { bottom: 320rpx; left: 16rpx; }
+.fx-lower-right { bottom: 160rpx; right: 16rpx; }
+
+.fx-orbit {
+  width: 22rpx;
+  height: 22rpx;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 0 24rpx var(--scene-highlight), 0 0 48rpx rgba(255, 255, 255, 0.22);
+  animation-duration: 9s;
+}
+
+.fx-heart,
+.fx-petal,
+.fx-confetti,
+.fx-snow,
+.fx-firework,
+.fx-ribbon,
+.fx-bubble,
+.fx-glow-bubble,
+.fx-frost,
+.fx-gold {
+  background: transparent;
+}
+
+.fx-heart {
+  --scene-fx-rotate: 45deg;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 8rpx 8rpx 2rpx 2rpx;
+  background: rgba(255, 124, 165, 0.88);
+  box-shadow: 0 0 20rpx rgba(255, 124, 165, 0.26);
+}
+
+.fx-petal {
+  --scene-fx-rotate: -18deg;
+  width: 16rpx;
+  height: 36rpx;
+  border-radius: 999rpx 999rpx 999rpx 10rpx;
+  background: rgba(233, 112, 143, 0.72);
+  box-shadow: 0 0 18rpx rgba(233, 112, 143, 0.24);
+}
+
+.fx-confetti {
+  --scene-fx-rotate: 18deg;
+  width: 18rpx;
+  height: 42rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(180deg, rgba(246, 181, 200, 0.94) 0%, rgba(248, 215, 146, 0.92) 100%);
+}
+
+.fx-snow {
+  width: 12rpx;
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 20rpx rgba(176, 220, 245, 0.32);
+}
+
+.fx-firework {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 210, 119, 0.84);
+  box-shadow: 0 0 0 10rpx rgba(255, 139, 168, 0.06), 0 0 24rpx rgba(255, 210, 119, 0.28);
+}
+
+.fx-ribbon {
+  --scene-fx-rotate: 12deg;
+  width: 22rpx;
+  height: 60rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(180deg, rgba(255, 229, 182, 0.94) 0%, rgba(241, 190, 123, 0.74) 100%);
+}
+
+.fx-bubble,
+.fx-glow-bubble {
+  width: 30rpx;
+  height: 30rpx;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 0 22rpx rgba(117, 216, 255, 0.18);
+}
+
+.fx-glow-bubble {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), 0 0 24rpx rgba(238, 159, 192, 0.2);
+}
+
+.fx-frost {
+  width: 60rpx;
+  height: 60rpx;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(215, 238, 248, 0.08) 62%, transparent 100%);
+}
+
+.fx-gold {
+  width: 18rpx;
+  height: 18rpx;
+  background: rgba(241, 190, 123, 0.92);
+  box-shadow: 0 0 20rpx rgba(241, 190, 123, 0.3);
+}
+
+@keyframes scene-float {
+  0% { transform: translate3d(0, 0, 0) scale(0.92) rotate(var(--scene-fx-rotate)); }
+  50% { transform: translate3d(12rpx, -22rpx, 0) scale(1.04) rotate(var(--scene-fx-rotate)); }
+  100% { transform: translate3d(-8rpx, 10rpx, 0) scale(0.96) rotate(var(--scene-fx-rotate)); }
 }
 
 @keyframes fluent-flow {

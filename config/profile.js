@@ -16,8 +16,8 @@ const PROFILE = {
     },
     {
       key: "valentine",
-      month: 4,
-      day: 29
+      month: 2,
+      day: 14
     },
     {
       key: "birthday",

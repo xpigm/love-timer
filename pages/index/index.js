@@ -48,6 +48,7 @@ function buildMomentPanel(profile, scene, quote, duration) {
 
   return {
     badge: buildSpecialLabel(scene),
+    kicker: scene.momentKicker || "今日此刻",
     title: hasSpecialScene ? scene.title || "" : "",
     body: sceneTag ? `${sceneTag} ${quoteText}` : quoteText,
     actionLabel: "换一句"
@@ -162,6 +163,7 @@ Page({
     dateMeta: [],
     momentPanel: {
       badge: "",
+      kicker: "",
       title: "",
       body: "",
       actionLabel: ""
