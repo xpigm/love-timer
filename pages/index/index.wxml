@@ -72,19 +72,21 @@
     </view>
 
     <view class="poster-lower animate-enter delay-3">
-      <view class="gradient-border-wrap lower-stage-wrap">
-        <view class="glass-card lower-stage-card">
+      <view class="lower-stage-wrap">
+        <view class="lower-stage-card">
           <view class="lower-stage-glow lower-stage-glow-a"></view>
           <view class="lower-stage-glow lower-stage-glow-b"></view>
 
           <view class="lower-memory-band lower-memory-band-standalone" bindtap="openWall">
+            <view class="lower-memory-breathe"></view>
+            <view class="lower-memory-sheen"></view>
             <view class="lower-memory-topline">
               <view class="lower-memory-status">{{spotlight.status}}</view>
               <view class="lower-memory-entry">{{spotlight.entry}}</view>
             </view>
             <view class="lower-memory-copy">{{memoryPrompt}}</view>
             <view class="lower-memory-list" wx:if="{{recentNotes.length}}">
-              <view class="lower-memory-item" wx:for="{{recentNotes}}" wx:key="id">
+              <view class="lower-memory-item memory-item-{{index}}" wx:for="{{recentNotes}}" wx:key="id">
                 <view class="lower-memory-item-meta">{{item.previewMeta}}</view>
                 <view class="lower-memory-item-content">“{{item.preview}}”</view>
               </view>
