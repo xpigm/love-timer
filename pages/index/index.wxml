@@ -23,8 +23,8 @@
       <view class="hero-statement">{{scene.tag || coverLine}}</view>
       <view class="hero-coverline">{{coverLine}}</view>
 
-      <view class="gradient-border-wrap hero-timer-wrap float-subtle">
-        <view class="glass-card hero-timer-card">
+      <view class="hero-timer-wrap hero-stage-wrap float-subtle">
+        <view class="hero-timer-card hero-stage-card">
           <view class="hero-frame-lines hero-frame-top"></view>
           <view class="hero-frame-lines hero-frame-bottom"></view>
           <view class="hero-glow hero-glow-a"></view>
