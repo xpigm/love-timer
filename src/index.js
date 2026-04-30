@@ -21,10 +21,14 @@ function buildNoteId() {
 }
 
 function mapNote(row = {}) {
+  const avatarBase64 = row.avatar_base64 || "";
+  const avatarUrl = row.avatar_url || "";
+
   return {
     id: row.id,
     author: row.author,
-    avatarUrl: row.avatar_url || "",
+    avatarBase64,
+    avatarUrl: avatarBase64 || avatarUrl,
     content: row.content,
     createdAt: row.created_at,
     timestamp: row.created_ts
@@ -47,7 +51,7 @@ async function listNotes(request, env) {
   const url = new URL(request.url);
   const { limit, cursor } = parseListParams(url.searchParams);
   const bindings = [];
-  let sql = "SELECT id, author, avatar_url, content, created_at, created_ts FROM notes WHERE status = 'published'";
+  let sql = "SELECT id, author, avatar_base64, avatar_url, content, created_at, created_ts FROM notes WHERE status = 'published'";
 
   if (cursor != null) {
     sql += " AND created_ts < ?";
@@ -77,7 +81,8 @@ async function createNote(request, env) {
   const note = {
     id: buildNoteId(),
     author: payload.author,
-    avatarUrl: payload.avatarUrl,
+    avatarBase64: payload.avatarBase64,
+    avatarUrl: payload.avatarBase64 || payload.avatarUrl,
     content: payload.content,
     createdAt: formatDateTime(now),
     timestamp: now.getTime()
@@ -86,12 +91,13 @@ async function createNote(request, env) {
   const userAgent = String(request.headers.get("User-Agent") || "").slice(0, 500);
 
   await env.DB.prepare(
-    "INSERT INTO notes (id, author, avatar_url, content, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
+    "INSERT INTO notes (id, author, avatar_base64, avatar_url, content, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
   )
     .bind(
       note.id,
       note.author,
-      note.avatarUrl,
+      note.avatarBase64,
+      payload.avatarUrl,
       note.content,
       note.createdAt,
       note.timestamp,
