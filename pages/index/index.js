@@ -1,8 +1,8 @@
 const { DEFAULT_QUOTES, MEMORY_PROMPTS } = require("../../utils/default-data");
 const milestone = require("../../utils/milestone");
+const noteService = require("../../utils/note-service");
 const profileUtils = require("../../utils/profile-config");
 const specialScene = require("../../utils/special-scene");
-const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
 function formatStartDateLabel(startTime) {
@@ -247,25 +247,31 @@ Page({
 
   getBaseData() {
     const profile = profileUtils.getProfile();
-    const notes = storage.getNotes();
     const duration = time.getDuration(profile.startTime);
     const scene = specialScene.getSpecialScene(profile);
     const milestoneBadge = milestone.getMilestoneBadgeData(profile.startTime);
 
     return {
       profile,
-      notes,
       duration,
       scene,
       milestoneBadge
     };
   },
 
-  loadPageData(keepQuote = false) {
-    const { profile, notes, duration, scene, milestoneBadge } = this.getBaseData();
+  async loadPageData(keepQuote = false) {
+    const { profile, duration, scene, milestoneBadge } = this.getBaseData();
     const quote = keepQuote && this.data.quote ? this.data.quote : this.pickQuote();
-    syncNavigationBar(profile.theme);
     const memoryPrompt = keepQuote && this.data.memoryPrompt ? this.data.memoryPrompt : pickMemoryPrompt(this.data.memoryPrompt);
+    let notes = [];
+
+    try {
+      notes = await noteService.fetchNotes();
+    } catch (error) {
+      notes = [];
+    }
+
+    syncNavigationBar(profile.theme);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
@@ -308,7 +314,6 @@ Page({
   updateTimer() {
     const profile = this.data.profile.personA ? this.data.profile : profileUtils.getProfile();
     const duration = time.getDuration(profile.startTime);
-    const notes = storage.getNotes();
     const scene = specialScene.getSpecialScene(profile);
     const milestoneBadge = milestone.getMilestoneBadgeData(profile.startTime);
 
@@ -322,8 +327,6 @@ Page({
       dateMeta: buildDateMeta(profile),
       momentPanel: buildMomentPanel(profile, scene, this.data.quote, duration),
       specialLabel: buildSpecialLabel(scene),
-      spotlight: buildSpotlight(notes),
-      recentNotes: decorateRecentNotes(notes),
       scene,
       milestoneBadge,
       heroMilestone: buildHeroMilestone(milestoneBadge),

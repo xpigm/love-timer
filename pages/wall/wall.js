@@ -1,4 +1,5 @@
 const { DEFAULT_QUOTES } = require("../../utils/default-data");
+const noteService = require("../../utils/note-service");
 const profileUtils = require("../../utils/profile-config");
 const specialScene = require("../../utils/special-scene");
 const storage = require("../../utils/storage");
@@ -168,12 +169,19 @@ Page({
     this.loadData();
   },
 
-  loadData() {
+  async loadData() {
     const profile = profileUtils.getProfile();
     const scene = specialScene.getSpecialScene(profile);
-    syncNavigationBar(profile.theme);
-    const notes = storage.getNotes();
     const cachedUserInfo = storage.getUserInfo();
+    let notes = [];
+
+    syncNavigationBar(profile.theme);
+
+    try {
+      notes = await noteService.fetchNotes();
+    } catch (error) {
+      notes = [];
+    }
 
     this.setData(
       buildWallViewData(profile, scene, notes, {
@@ -213,7 +221,7 @@ Page({
     if (author || avatarUrl) {
       storage.saveUserInfo({
         nickName: author,
-        avatarUrl: avatarUrl
+        avatarUrl
       });
     }
   },
@@ -234,7 +242,7 @@ Page({
     });
   },
 
-  submitNote() {
+  async submitNote() {
     const author = this.data.form.author || "匿名";
     const avatarUrl = this.data.form.avatarUrl || "";
     const content = (this.data.form.content || "").trim();
@@ -247,67 +255,47 @@ Page({
       return;
     }
 
-    const note = {
-      id: storage.createId("note"),
-      author,
-      avatarUrl,
-      content,
-      createdAt: time.formatDateTime(new Date()),
-      timestamp: Date.now()
-    };
-
-    const notes = storage.appendNote(note);
-
-    // 保存当前用户信息到缓存，方便下次直接使用
-    this.updateCachedUserInfo();
-
-    this.setData(
-      buildWallViewData(this.data.profile, this.data.scene, notes, {
-        author: this.data.form.author,
-        avatarUrl: this.data.form.avatarUrl,
-        content: ""
-      })
-    );
-
-    tapFeedback();
-
-    wx.showToast({
-      title: "留言已保存",
-      icon: "success"
+    wx.showLoading({
+      title: "正在保存"
     });
+
+    try {
+      await noteService.createNote({
+        author,
+        avatarUrl,
+        content
+      });
+      this.updateCachedUserInfo();
+      const notes = await noteService.fetchNotes();
+
+      this.setData(
+        buildWallViewData(this.data.profile, this.data.scene, notes, {
+          author: this.data.form.author,
+          avatarUrl: this.data.form.avatarUrl,
+          content: ""
+        })
+      );
+
+      tapFeedback();
+
+      wx.showToast({
+        title: "留言已保存",
+        icon: "success"
+      });
+    } catch (error) {
+      wx.showToast({
+        title: error && error.message ? error.message : "留言保存失败",
+        icon: "none"
+      });
+    } finally {
+      wx.hideLoading();
+    }
   },
 
   copyNote(event) {
     const { content } = event.currentTarget.dataset;
     wx.setClipboardData({
       data: content
-    });
-  },
-
-  deleteNote(event) {
-    const { id } = event.currentTarget.dataset;
-
-    wx.showModal({
-      title: "删除留言",
-      content: "删除后无法恢复，确认继续吗？",
-      success: ({ confirm }) => {
-        if (!confirm) {
-          return;
-        }
-
-        const notes = storage.deleteNote(id);
-        this.setData(
-          buildWallViewData(this.data.profile, this.data.scene, notes, this.data.authorOptions, {
-            authorIndex: this.data.authorIndex,
-            content: this.data.form.content
-          })
-        );
-
-        wx.showToast({
-          title: "已删除",
-          icon: "success"
-        });
-      }
     });
   },
 

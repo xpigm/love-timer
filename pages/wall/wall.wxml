@@ -95,7 +95,6 @@
           <view class="wall-note-content">“{{item.content}}”</view>
           <view class="wall-note-actions">
             <view class="action-link" data-content="{{item.content}}" bindtap="copyNote">复制</view>
-            <view class="action-link danger" data-id="{{item.id}}" bindtap="deleteNote">删除</view>
           </view>
         </view>
       </view>
