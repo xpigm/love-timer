@@ -7,8 +7,8 @@
     {
       "binding": "DB",
       "database_name": "love-timer-wall",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
-      "preview_database_id": "REPLACE_WITH_D1_PREVIEW_DATABASE_ID",
+      "database_id": "ec430a69-4ddb-4bc9-ac3a-71573efcdff4",
+      "preview_database_id": "ec430a69-4ddb-4bc9-ac3a-71573efcdff4",
       "migrations_dir": "migrations"
     }
   ]
