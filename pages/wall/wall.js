@@ -181,6 +181,10 @@ Page({
       notes = await noteService.fetchNotes();
     } catch (error) {
       notes = [];
+      wx.showToast({
+        title: error && error.message ? error.message : "留言加载失败",
+        icon: "none"
+      });
     }
 
     this.setData(

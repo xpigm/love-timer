@@ -1,7 +1,5 @@
 const api = require("./api");
 const serviceConfig = require("../config/service");
-const storage = require("./storage");
-const time = require("./time");
 
 function isCloudEnabled() {
   return Boolean(serviceConfig.notesApiBaseUrl);
@@ -22,37 +20,16 @@ function normalizeNotes(notes) {
   return (Array.isArray(notes) ? notes : []).map(normalizeNote);
 }
 
-function buildLocalNote(payload = {}) {
-  return {
-    id: storage.createId("note"),
-    author: payload.author || "匿名",
-    avatarUrl: payload.avatarUrl || "",
-    content: payload.content || "",
-    createdAt: time.formatDateTime(new Date()),
-    timestamp: Date.now()
-  };
-}
-
 async function fetchNotes() {
   if (!isCloudEnabled()) {
-    return storage.getNotes();
+    throw new Error("未配置留言服务地址");
   }
 
-  try {
-    const response = await api.request({
-      path: "/api/notes",
-      method: "GET"
-    });
-    const notes = normalizeNotes(response && response.data ? response.data.items : []);
-    storage.saveNotes(notes);
-    return notes;
-  } catch (error) {
-    const cachedNotes = storage.getNotes();
-    if (cachedNotes.length) {
-      return cachedNotes;
-    }
-    throw error;
-  }
+  const response = await api.request({
+    path: "/api/notes",
+    method: "GET"
+  });
+  return normalizeNotes(response && response.data ? response.data.items : []);
 }
 
 async function createNote(payload = {}) {
@@ -63,7 +40,7 @@ async function createNote(payload = {}) {
   };
 
   if (!isCloudEnabled()) {
-    return storage.appendNote(buildLocalNote(trimmedPayload))[0];
+    throw new Error("未配置留言服务地址");
   }
 
   const response = await api.request({
@@ -71,9 +48,7 @@ async function createNote(payload = {}) {
     method: "POST",
     data: trimmedPayload
   });
-  const note = normalizeNote(response && response.data ? response.data : {});
-  storage.appendNote(note);
-  return note;
+  return normalizeNote(response && response.data ? response.data : {});
 }
 
 module.exports = {

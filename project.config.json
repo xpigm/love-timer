@@ -18,7 +18,7 @@
     "ignoreUploadUnusedFiles": true,
     "compileWorklet": false,
     "uglifyFileName": false,
-    "uploadWithSourceMap": true,
+    "uploadWithSourceMap": false,
     "packNpmManually": true,
     "minifyWXSS": true,
     "minifyWXML": true,
