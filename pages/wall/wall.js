@@ -1,5 +1,6 @@
 const { DEFAULT_QUOTES } = require("../../utils/default-data");
 const profileUtils = require("../../utils/profile-config");
+const specialScene = require("../../utils/special-scene");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
@@ -125,7 +126,6 @@ Page({
       tag: "",
       badge: "",
       description: "",
-      chips: [],
       metricValue: "",
       metricDesc: ""
     },
@@ -171,7 +171,7 @@ Page({
 
   loadData() {
     const profile = profileUtils.getProfile();
-    const scene = time.getSpecialScene(profile);
+    const scene = specialScene.getSpecialScene(profile);
     syncNavigationBar(profile.theme);
     const authorOptions = [profile.personA, profile.personB, "匿名"].filter(Boolean);
     const notes = storage.getNotes();

@@ -4,7 +4,6 @@ const PROFILE = {
   startTime: "2020-07-04 22:54:00",
   title: "我们已经相恋",
   city: "北京",
-  promise: "今天也想和你一起好好过。",
   theme: "blush",
   specialDates: [
     {

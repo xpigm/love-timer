@@ -507,7 +507,7 @@
 .hero-days {
   font-family: var(--display-font);
   font-size: 220rpx;
-  line-height: 0.84;
+  line-height: 1.1;
   font-weight: 800;
   letter-spacing: -9rpx;
   font-variant-numeric: tabular-nums lining-nums;

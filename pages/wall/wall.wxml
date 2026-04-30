@@ -7,10 +7,7 @@
 
   <view class="container wall-shell">
     <view class="wall-topline animate-enter delay-1">
-      <view class="wall-tags">
-        <view class="glass-tag wall-special-tag wall-special-tag-{{scene.badgeStyle || 'glass'}}" wx:if="{{wallMeta.badge}}">{{wallMeta.badge}}</view>
-        <view class="glass-tag wall-scene-chip wall-scene-chip-{{scene.chipStyle || 'glass'}}" wx:for="{{scene.chips}}" wx:key="*this">{{item}}</view>
-      </view>
+
       <view class="wall-topside">
         <view class="wall-date">{{wallMeta.date}}</view>
         <view class="wall-kicker">{{wallMeta.kicker}}</view>
@@ -34,8 +31,7 @@
         <view class="wall-composer-kicker">{{scene.wallKicker || '写留言'}}</view>
         <view class="wall-composer-counter">{{form.content.length}} / 300</view>
       </view>
-      <view class="wall-composer-scene" wx:if="{{wallMeta.badge}}">
-        <view class="wall-composer-scene-badge">{{wallMeta.badge}}</view>
+      <view class="wall-composer-scene" wx:if="{{scene.metricDesc}}">
         <view class="wall-composer-scene-copy">{{scene.metricDesc}}</view>
       </view>
       <view class="wall-composer-title">{{composerPanel.title}}</view>

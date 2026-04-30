@@ -1,5 +1,7 @@
 const { DEFAULT_QUOTES, MEMORY_PROMPTS } = require("../../utils/default-data");
+const milestone = require("../../utils/milestone");
 const profileUtils = require("../../utils/profile-config");
+const specialScene = require("../../utils/special-scene");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
 
@@ -181,7 +183,6 @@ Page({
       tag: "",
       badge: "",
       description: "",
-      chips: [],
       metricValue: "",
       metricDesc: ""
     },
@@ -248,8 +249,8 @@ Page({
     const profile = profileUtils.getProfile();
     const notes = storage.getNotes();
     const duration = time.getDuration(profile.startTime);
-    const scene = time.getSpecialScene(profile);
-    const milestoneBadge = time.getMilestoneBadgeData(profile.startTime);
+    const scene = specialScene.getSpecialScene(profile);
+    const milestoneBadge = milestone.getMilestoneBadgeData(profile.startTime);
 
     return {
       profile,
@@ -308,8 +309,8 @@ Page({
     const profile = this.data.profile.personA ? this.data.profile : profileUtils.getProfile();
     const duration = time.getDuration(profile.startTime);
     const notes = storage.getNotes();
-    const scene = time.getSpecialScene(profile);
-    const milestoneBadge = time.getMilestoneBadgeData(profile.startTime);
+    const scene = specialScene.getSpecialScene(profile);
+    const milestoneBadge = milestone.getMilestoneBadgeData(profile.startTime);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
@@ -374,7 +375,7 @@ Page({
   onShareTimeline() {
     const { profile, timer, scene } = this.data;
     return {
-      title: `${profile.personA}和${profile.personB}的恋爱纪念册 · 第 ${timer.days} 天 · ${scene.badge}`
+      title: `${profile.personA}和${profile.personB}的恋爱纪念册 · 第 ${timer.days} 天 · ${scene.title}`
     };
   }
 });
