@@ -45,11 +45,21 @@ function createId(prefix) {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 }
 
+function getUserInfo() {
+  return wx.getStorageSync(STORAGE_KEYS.userInfo) || null;
+}
+
+function saveUserInfo(userInfo) {
+  return write(STORAGE_KEYS.userInfo, userInfo);
+}
+
 module.exports = {
   getNotes,
   saveNotes,
   appendNote,
   deleteNote,
   clearNotes,
-  createId
+  createId,
+  getUserInfo,
+  saveUserInfo
 };

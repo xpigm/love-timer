@@ -86,14 +86,15 @@ function decorateNotes(notes) {
   return notes.map((note, index) => ({
     ...note,
     isLatest: index === 0,
-    metaLine: note.author ? `${note.author} · ${note.createdAt}` : note.createdAt
+    metaLine: note.author ? `${note.author} · ${note.createdAt}` : note.createdAt,
+    avatarUrl: note.avatarUrl || ""
   }));
 }
 
-function buildWallViewData(profile, scene, notes, authorOptions, options = {}) {
-  const authorIndex = Number.isInteger(options.authorIndex) ? options.authorIndex : 0;
+function buildWallViewData(profile, scene, notes, options = {}) {
   const content = options.content == null ? "" : options.content;
-  const nextAuthor = authorOptions[authorIndex] || authorOptions[0] || "";
+  const avatarUrl = options.avatarUrl || "";
+  const author = options.author || "";
 
   return {
     themeClass: `theme-${profile.theme || "blush"}`,
@@ -101,10 +102,9 @@ function buildWallViewData(profile, scene, notes, authorOptions, options = {}) {
     profile,
     scene,
     sceneDecorations: scene.decorations || [],
-    authorOptions,
-    authorIndex,
     form: {
-      author: nextAuthor,
+      author,
+      avatarUrl,
       content
     },
     notes: decorateNotes(notes),
@@ -129,10 +129,9 @@ Page({
       metricValue: "",
       metricDesc: ""
     },
-    authorOptions: [],
-    authorIndex: 0,
     form: {
       author: "",
+      avatarUrl: "",
       content: ""
     },
     notes: [],
@@ -173,20 +172,50 @@ Page({
     const profile = profileUtils.getProfile();
     const scene = specialScene.getSpecialScene(profile);
     syncNavigationBar(profile.theme);
-    const authorOptions = [profile.personA, profile.personB, "匿名"].filter(Boolean);
     const notes = storage.getNotes();
+    const cachedUserInfo = storage.getUserInfo();
 
-    this.setData(buildWallViewData(profile, scene, notes, authorOptions));
+    this.setData(
+      buildWallViewData(profile, scene, notes, {
+        author: cachedUserInfo ? cachedUserInfo.nickName : "",
+        avatarUrl: cachedUserInfo ? cachedUserInfo.avatarUrl : "",
+        content: this.data.form.content
+      })
+    );
   },
 
-  onAuthorChange(event) {
+  onChooseAvatar(event) {
     tapFeedback();
-    const authorIndex = Number(event.detail.value);
-
+    const { avatarUrl } = event.detail;
     this.setData({
-      authorIndex,
-      "form.author": this.data.authorOptions[authorIndex]
+      "form.avatarUrl": avatarUrl
     });
+    this.updateCachedUserInfo();
+  },
+
+  onNicknameInput(event) {
+    const { value } = event.detail;
+    this.setData({
+      "form.author": value
+    });
+  },
+
+  onNicknameBlur(event) {
+    const { value } = event.detail;
+    this.setData({
+      "form.author": value
+    });
+    this.updateCachedUserInfo();
+  },
+
+  updateCachedUserInfo() {
+    const { author, avatarUrl } = this.data.form;
+    if (author || avatarUrl) {
+      storage.saveUserInfo({
+        nickName: author,
+        avatarUrl: avatarUrl
+      });
+    }
   },
 
   onContentInput(event) {
@@ -206,7 +235,8 @@ Page({
   },
 
   submitNote() {
-    const author = this.data.form.author || this.data.authorOptions[0];
+    const author = this.data.form.author || "匿名";
+    const avatarUrl = this.data.form.avatarUrl || "";
     const content = (this.data.form.content || "").trim();
 
     if (!content) {
@@ -220,6 +250,7 @@ Page({
     const note = {
       id: storage.createId("note"),
       author,
+      avatarUrl,
       content,
       createdAt: time.formatDateTime(new Date()),
       timestamp: Date.now()
@@ -227,9 +258,13 @@ Page({
 
     const notes = storage.appendNote(note);
 
+    // 保存当前用户信息到缓存，方便下次直接使用
+    this.updateCachedUserInfo();
+
     this.setData(
-      buildWallViewData(this.data.profile, this.data.scene, notes, this.data.authorOptions, {
-        authorIndex: 0,
+      buildWallViewData(this.data.profile, this.data.scene, notes, {
+        author: this.data.form.author,
+        avatarUrl: this.data.form.avatarUrl,
         content: ""
       })
     );

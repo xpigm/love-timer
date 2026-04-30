@@ -38,10 +38,26 @@
       <view class="wall-composer-copy">{{composerPanel.body}}</view>
 
       <view class="wall-author-row">
-        <view class="wall-author-label">署名</view>
-        <picker mode="selector" range="{{authorOptions}}" value="{{authorIndex}}" bindchange="onAuthorChange">
-          <view class="wall-author-chip">{{authorOptions[authorIndex]}}</view>
-        </picker>
+        <view class="wall-author-left">
+          <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image class="wall-author-avatar" src="{{form.avatarUrl}}" wx:if="{{form.avatarUrl}}"></image>
+            <view class="wall-author-avatar-placeholder" wx:else></view>
+            <view class="wall-author-avatar-sync">
+              <view class="sync-icon"></view>
+            </view>
+          </button>
+          <view class="wall-author-label">署名</view>
+        </view>
+        <view class="wall-author-right">
+          <input 
+            type="nickname" 
+            class="wall-author-input" 
+            placeholder="点击同步昵称" 
+            value="{{form.author}}" 
+            bindblur="onNicknameBlur"
+            bindinput="onNicknameInput"
+          />
+        </view>
       </view>
 
       <textarea
@@ -72,7 +88,10 @@
 
       <view class="wall-stream-list" wx:if="{{notes.length}}">
         <view class="wall-note-item {{item.isLatest ? 'is-latest' : ''}}" wx:for="{{notes}}" wx:key="id">
-          <view class="wall-note-meta">{{item.metaLine}}</view>
+          <view class="wall-note-header">
+            <image class="wall-note-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+            <view class="wall-note-meta">{{item.metaLine}}</view>
+          </view>
           <view class="wall-note-content">“{{item.content}}”</view>
           <view class="wall-note-actions">
             <view class="action-link" data-content="{{item.content}}" bindtap="copyNote">复制</view>

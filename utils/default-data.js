@@ -1,5 +1,6 @@
 const STORAGE_KEYS = {
-  notes: "love-notes"
+  notes: "love-notes",
+  userInfo: "user-info"
 };
 
 const DEFAULT_QUOTES = [
