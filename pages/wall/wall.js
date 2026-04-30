@@ -88,13 +88,47 @@ function decorateNotes(notes) {
     ...note,
     isLatest: index === 0,
     metaLine: note.author ? `${note.author} · ${note.createdAt}` : note.createdAt,
-    avatarUrl: note.avatarUrl || ""
+    avatarUrl: note.avatarBase64 || note.avatarUrl || ""
   }));
+}
+
+function inferMimeType(filePath) {
+  const normalized = String(filePath || "").toLowerCase();
+
+  if (normalized.endsWith(".png")) {
+    return "image/png";
+  }
+
+  if (normalized.endsWith(".webp")) {
+    return "image/webp";
+  }
+
+  if (normalized.endsWith(".gif")) {
+    return "image/gif";
+  }
+
+  return "image/jpeg";
+}
+
+function readAvatarAsDataUrl(filePath) {
+  return new Promise((resolve, reject) => {
+    wx.getFileSystemManager().readFile({
+      filePath,
+      encoding: "base64",
+      success: ({ data }) => {
+        resolve(`data:${inferMimeType(filePath)};base64,${data}`);
+      },
+      fail: (error) => {
+        reject(new Error((error && error.errMsg) || "头像读取失败"));
+      }
+    });
+  });
 }
 
 function buildWallViewData(profile, scene, notes, options = {}) {
   const content = options.content == null ? "" : options.content;
   const avatarUrl = options.avatarUrl || "";
+  const avatarBase64 = options.avatarBase64 || "";
   const author = options.author || "";
 
   return {
@@ -106,6 +140,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
     form: {
       author,
       avatarUrl,
+      avatarBase64,
       content
     },
     notes: decorateNotes(notes),
@@ -133,6 +168,7 @@ Page({
     form: {
       author: "",
       avatarUrl: "",
+      avatarBase64: "",
       content: ""
     },
     notes: [],
@@ -190,19 +226,30 @@ Page({
     this.setData(
       buildWallViewData(profile, scene, notes, {
         author: cachedUserInfo ? cachedUserInfo.nickName : "",
-        avatarUrl: cachedUserInfo ? cachedUserInfo.avatarUrl : "",
+        avatarUrl: cachedUserInfo ? (cachedUserInfo.avatarBase64 || cachedUserInfo.avatarUrl || "") : "",
+        avatarBase64: cachedUserInfo ? cachedUserInfo.avatarBase64 || "" : "",
         content: this.data.form.content
       })
     );
   },
 
-  onChooseAvatar(event) {
+  async onChooseAvatar(event) {
     tapFeedback();
     const { avatarUrl } = event.detail;
-    this.setData({
-      "form.avatarUrl": avatarUrl
-    });
-    this.updateCachedUserInfo();
+
+    try {
+      const avatarBase64 = await readAvatarAsDataUrl(avatarUrl);
+      this.setData({
+        "form.avatarUrl": avatarBase64,
+        "form.avatarBase64": avatarBase64
+      });
+      this.updateCachedUserInfo();
+    } catch (error) {
+      wx.showToast({
+        title: error && error.message ? error.message : "头像处理失败",
+        icon: "none"
+      });
+    }
   },
 
   onNicknameInput(event) {
@@ -221,11 +268,12 @@ Page({
   },
 
   updateCachedUserInfo() {
-    const { author, avatarUrl } = this.data.form;
-    if (author || avatarUrl) {
+    const { author, avatarUrl, avatarBase64 } = this.data.form;
+    if (author || avatarUrl || avatarBase64) {
       storage.saveUserInfo({
         nickName: author,
-        avatarUrl
+        avatarUrl: avatarBase64 || avatarUrl,
+        avatarBase64
       });
     }
   },
@@ -248,7 +296,7 @@ Page({
 
   async submitNote() {
     const author = this.data.form.author || "匿名";
-    const avatarUrl = this.data.form.avatarUrl || "";
+    const avatarBase64 = this.data.form.avatarBase64 || "";
     const content = (this.data.form.content || "").trim();
 
     if (!content) {
@@ -266,7 +314,7 @@ Page({
     try {
       await noteService.createNote({
         author,
-        avatarUrl,
+        avatarBase64,
         content
       });
       this.updateCachedUserInfo();
@@ -276,6 +324,7 @@ Page({
         buildWallViewData(this.data.profile, this.data.scene, notes, {
           author: this.data.form.author,
           avatarUrl: this.data.form.avatarUrl,
+          avatarBase64: this.data.form.avatarBase64,
           content: ""
         })
       );
