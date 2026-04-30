@@ -5,3 +5,5 @@ private.*.key
 *.log
 .DS_Store
 .claude/
+server/worker/node_modules/
+server/worker/.wrangler/
