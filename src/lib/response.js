@@ -1,7 +1,7 @@
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Token"
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Token, X-Client-Id"
 };
 
 function json(body, init = {}) {

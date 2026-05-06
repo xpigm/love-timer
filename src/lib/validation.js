@@ -18,6 +18,22 @@ function parseListParams(searchParams) {
   };
 }
 
+function validateAuthor(author) {
+  if (author.length > 20) {
+    throw new Error("署名不能超过 20 个字");
+  }
+}
+
+function validateAvatar(avatarBase64, avatarUrl) {
+  if (avatarBase64.length > 500000) {
+    throw new Error("头像数据过大");
+  }
+
+  if (avatarUrl.length > 500) {
+    throw new Error("头像地址过长");
+  }
+}
+
 function parseCreateNotePayload(payload = {}) {
   const author = String(payload.author || "").trim() || "匿名";
   const avatarBase64 = String(payload.avatarBase64 || "").trim();
@@ -33,17 +49,8 @@ function parseCreateNotePayload(payload = {}) {
     throw new Error("留言内容不能超过 300 字");
   }
 
-  if (author.length > 20) {
-    throw new Error("署名不能超过 20 个字");
-  }
-
-  if (avatarBase64.length > 500000) {
-    throw new Error("头像数据过大");
-  }
-
-  if (avatarUrl.length > 500) {
-    throw new Error("头像地址过长");
-  }
+  validateAuthor(author);
+  validateAvatar(avatarBase64, avatarUrl);
 
   if (clientRequestId.length > 100) {
     throw new Error("请求标识过长");
@@ -58,7 +65,33 @@ function parseCreateNotePayload(payload = {}) {
   };
 }
 
+function parseCreateReplyPayload(payload = {}) {
+  const author = String(payload.author || "").trim() || "匿名";
+  const avatarBase64 = String(payload.avatarBase64 || "").trim();
+  const avatarUrl = String(payload.avatarUrl || "").trim();
+  const content = String(payload.content || "").trim();
+
+  if (!content) {
+    throw new Error("回复内容不能为空");
+  }
+
+  if (content.length > 180) {
+    throw new Error("回复内容不能超过 180 字");
+  }
+
+  validateAuthor(author);
+  validateAvatar(avatarBase64, avatarUrl);
+
+  return {
+    author,
+    avatarBase64,
+    avatarUrl,
+    content
+  };
+}
+
 export {
   parseCreateNotePayload,
+  parseCreateReplyPayload,
   parseListParams
 };
