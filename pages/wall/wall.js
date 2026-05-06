@@ -83,7 +83,19 @@ function syncNavigationBar(theme) {
   }
 }
 
-function decorateNotes(notes) {
+function decorateReply(reply, now) {
+  const author = reply.author || "匿名";
+
+  return {
+    ...reply,
+    author,
+    authorInitial: author.slice(0, 1),
+    avatarUrl: reply.avatarBase64 || reply.avatarUrl || "",
+    displayTime: time.formatRelativeTime(reply.timestamp, now) || reply.createdAt
+  };
+}
+
+function decorateNotes(notes, now = new Date()) {
   return notes.map((note, index) => {
     const author = note.author || "匿名";
 
@@ -93,7 +105,9 @@ function decorateNotes(notes) {
       authorInitial: author.slice(0, 1),
       isLatest: index === 0,
       metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
-      avatarUrl: note.avatarBase64 || note.avatarUrl || ""
+      avatarUrl: note.avatarBase64 || note.avatarUrl || "",
+      displayTime: time.formatRelativeTime(note.timestamp, now) || note.createdAt,
+      replies: (Array.isArray(note.replies) ? note.replies : []).map((reply) => decorateReply(reply, now))
     };
   });
 }
@@ -149,7 +163,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
       avatarBase64,
       content
     },
-    notes: decorateNotes(notes),
+    notes: decorateNotes(notes, options.now || new Date()),
     noteCount: notes.length,
     wallMeta: buildWallMeta(notes, scene),
     wallHero: buildWallHero(profile, notes, scene),
@@ -203,7 +217,14 @@ Page({
     contentError: "",
     composerError: "",
     copySuccessId: "",
-    contentFocus: false
+    contentFocus: false,
+    likeLoadingId: "",
+    activeReplyNoteId: "",
+    replyForm: {
+      content: ""
+    },
+    replySubmitting: false,
+    replyError: ""
   },
 
   onLoad() {
@@ -216,6 +237,35 @@ Page({
 
   onShow() {
     this.loadData();
+    this.startRelativeTimer();
+  },
+
+  onHide() {
+    this.stopRelativeTimer();
+  },
+
+  onUnload() {
+    this.stopRelativeTimer();
+  },
+
+  startRelativeTimer() {
+    this.stopRelativeTimer();
+    this.relativeTimer = setInterval(() => {
+      this.refreshRelativeTimes();
+    }, 60000);
+  },
+
+  stopRelativeTimer() {
+    if (this.relativeTimer) {
+      clearInterval(this.relativeTimer);
+      this.relativeTimer = null;
+    }
+  },
+
+  refreshRelativeTimes() {
+    this.setData({
+      notes: decorateNotes(this.data.notes)
+    });
   },
 
   async loadData() {
@@ -329,6 +379,131 @@ Page({
       contentError: "",
       composerError: ""
     });
+  },
+
+  updateNote(noteId, updater) {
+    const notes = this.data.notes.map((note) => (
+      note.id === noteId ? updater(note) : note
+    ));
+
+    this.setData({
+      notes: decorateNotes(notes)
+    });
+  },
+
+  async toggleLike(event) {
+    const { id } = event.currentTarget.dataset;
+    const note = this.data.notes.find((item) => item.id === id);
+
+    if (!note || this.data.likeLoadingId === id) {
+      return;
+    }
+
+    const previous = {
+      likedByMe: note.likedByMe,
+      likesCount: note.likesCount
+    };
+    const optimisticLiked = !note.likedByMe;
+
+    this.setData({
+      likeLoadingId: id
+    });
+    this.updateNote(id, (item) => ({
+      ...item,
+      likedByMe: optimisticLiked,
+      likesCount: Math.max(0, Number(item.likesCount || 0) + (optimisticLiked ? 1 : -1))
+    }));
+
+    try {
+      const result = await noteService.toggleLike(id);
+      this.updateNote(id, (item) => ({
+        ...item,
+        likedByMe: Boolean(result.likedByMe),
+        likesCount: Number(result.likesCount || 0)
+      }));
+      tapFeedback();
+    } catch (error) {
+      this.updateNote(id, (item) => ({
+        ...item,
+        likedByMe: previous.likedByMe,
+        likesCount: previous.likesCount
+      }));
+      wx.showToast({
+        title: error && error.message ? error.message : "喜欢失败",
+        icon: "none"
+      });
+    } finally {
+      this.setData({
+        likeLoadingId: ""
+      });
+    }
+  },
+
+  openReply(event) {
+    const { id } = event.currentTarget.dataset;
+
+    this.setData({
+      activeReplyNoteId: this.data.activeReplyNoteId === id ? "" : id,
+      replyForm: {
+        content: ""
+      },
+      replyError: ""
+    });
+  },
+
+  onReplyInput(event) {
+    this.setData({
+      "replyForm.content": event.detail.value,
+      replyError: ""
+    });
+  },
+
+  async submitReply(event) {
+    const { id } = event.currentTarget.dataset;
+    const content = (this.data.replyForm.content || "").trim();
+
+    if (this.data.replySubmitting) {
+      return;
+    }
+
+    if (!content) {
+      this.setData({
+        replyError: "先写一句回复。"
+      });
+      return;
+    }
+
+    this.setData({
+      replySubmitting: true,
+      replyError: ""
+    });
+
+    try {
+      const reply = await noteService.createReply(id, {
+        author: this.data.form.author || "匿名",
+        avatarBase64: this.data.form.avatarBase64 || "",
+        content
+      });
+
+      this.updateCachedUserInfo();
+      this.updateNote(id, (note) => ({
+        ...note,
+        replies: [...(Array.isArray(note.replies) ? note.replies : []), reply]
+      }));
+      this.setData({
+        activeReplyNoteId: "",
+        replyForm: {
+          content: ""
+        },
+        replySubmitting: false
+      });
+      tapFeedback();
+    } catch (error) {
+      this.setData({
+        replySubmitting: false,
+        replyError: error && error.message ? error.message : "回复失败，请稍后重试。"
+      });
+    }
   },
 
   async submitNote() {

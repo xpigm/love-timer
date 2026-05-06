@@ -107,13 +107,41 @@
             <view class="wall-note-avatar-placeholder" wx:else>{{item.authorInitial}}</view>
             <view class="wall-note-meta">
               <view class="wall-note-author">{{item.author}}</view>
-              <view class="wall-note-time">{{item.createdAt}}</view>
+              <view class="wall-note-time">{{item.displayTime}}<text wx:if="{{item.city}}"> · {{item.city}}</text></view>
             </view>
             <view class="wall-note-latest" wx:if="{{item.isLatest}}">最新</view>
           </view>
           <view class="wall-note-content">“{{item.content}}”</view>
           <view class="wall-note-actions">
+            <view class="action-link wall-like-link {{item.likedByMe ? 'is-liked' : ''}} {{likeLoadingId === item.id ? 'is-loading' : ''}}" data-id="{{item.id}}" bindtap="toggleLike">{{item.likedByMe ? '已喜欢' : '喜欢'}}<text wx:if="{{item.likesCount}}"> · {{item.likesCount}}</text></view>
+            <view class="action-link" data-id="{{item.id}}" bindtap="openReply">{{activeReplyNoteId === item.id ? '收起' : '回复'}}</view>
             <view class="action-link {{copySuccessId === item.id ? 'is-copied' : ''}}" data-id="{{item.id}}" data-content="{{item.content}}" bindtap="copyNote">{{copySuccessId === item.id ? '已复制' : '复制'}}</view>
+          </view>
+
+          <view class="wall-reply-list" wx:if="{{item.replies.length}}">
+            <view class="wall-reply-item" wx:for="{{item.replies}}" wx:for-item="reply" wx:key="id">
+              <image class="wall-reply-avatar" src="{{reply.avatarUrl}}" wx:if="{{reply.avatarUrl}}"></image>
+              <view class="wall-reply-avatar-placeholder" wx:else>{{reply.authorInitial}}</view>
+              <view class="wall-reply-main">
+                <view class="wall-reply-meta">{{reply.author}} · {{reply.displayTime}}<text wx:if="{{reply.city}}"> · {{reply.city}}</text></view>
+                <view class="wall-reply-content">{{reply.content}}</view>
+              </view>
+            </view>
+          </view>
+
+          <view class="wall-reply-composer" wx:if="{{activeReplyNoteId === item.id}}">
+            <textarea
+              class="wall-reply-input"
+              maxlength="180"
+              placeholder="回复一句话"
+              placeholder-class="wall-input-placeholder"
+              value="{{replyForm.content}}"
+              bindinput="onReplyInput"
+            ></textarea>
+            <view class="wall-reply-error" wx:if="{{replyError}}">{{replyError}}</view>
+            <view class="wall-reply-actions">
+              <button class="wall-reply-submit" loading="{{replySubmitting}}" disabled="{{replySubmitting}}" data-id="{{item.id}}" bindtap="submitReply">{{replySubmitting ? '发送中' : '发送回复'}}</button>
+            </view>
           </view>
         </view>
       </view>

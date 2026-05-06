@@ -53,6 +53,15 @@ function saveUserInfo(userInfo) {
   return write(STORAGE_KEYS.userInfo, userInfo);
 }
 
+function getClientId() {
+  const existing = wx.getStorageSync(STORAGE_KEYS.clientId);
+  if (existing) {
+    return existing;
+  }
+
+  return write(STORAGE_KEYS.clientId, createId("client"));
+}
+
 module.exports = {
   getNotes,
   saveNotes,
@@ -61,5 +70,6 @@ module.exports = {
   clearNotes,
   createId,
   getUserInfo,
-  saveUserInfo
+  saveUserInfo,
+  getClientId
 };

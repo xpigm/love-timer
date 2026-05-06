@@ -1,6 +1,7 @@
 const STORAGE_KEYS = {
   notes: "love-notes",
-  userInfo: "user-info"
+  userInfo: "user-info",
+  clientId: "love-client-id"
 };
 
 const DEFAULT_QUOTES = [
