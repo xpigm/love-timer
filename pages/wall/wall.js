@@ -46,7 +46,7 @@ function buildComposerPanel(scene, notes) {
   return {
     title: scene.composerTitle || (notes.length ? "写一张小纸条" : "写下第一张小纸条"),
     body: notes.length
-      ? scene.composerBody || "头像和署名可以以后再改，先把这一刻想留住的话写下来。"
+      ? scene.composerBody || "先把这一刻想留住的话写下来。"
       : scene.composerBody || `${scene.tag ? `${scene.tag} ` : ""}先记一句，留言墙就会从这里开始。`,
     helper: "最多 300 字，适合写一句话、一个心情，或者今天的小瞬间。"
   };

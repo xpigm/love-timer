@@ -38,27 +38,30 @@
       <view class="wall-composer-copy">{{composerPanel.body}}</view>
 
       <view class="wall-author-row">
-        <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-          <image class="wall-author-avatar" src="{{form.avatarUrl}}" wx:if="{{form.avatarUrl}}"></image>
-          <view class="wall-author-avatar-placeholder" wx:else></view>
-          <view class="wall-author-avatar-sync">
-            <view class="sync-icon"></view>
-          </view>
-        </button>
+        <view class="wall-avatar-column">
+          <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <view class="wall-author-avatar-frame">
+              <image class="wall-author-avatar" src="{{form.avatarUrl}}" mode="aspectFill" wx:if="{{form.avatarUrl}}"></image>
+              <view class="wall-author-avatar-placeholder" wx:else></view>
+            </view>
+            <view class="wall-author-avatar-action">换</view>
+          </button>
+        </view>
         <view class="wall-author-main">
           <view class="wall-author-topline">
-            <view class="wall-author-title">留言身份</view>
+            <view class="wall-author-title">署名</view>
             <view class="wall-author-badge">可选</view>
           </view>
-          <input
-            type="nickname"
-            class="wall-author-input"
-            placeholder="署名，不填就是匿名"
-            value="{{form.author}}"
-            bindblur="onNicknameBlur"
-            bindinput="onNicknameInput"
-          />
-          <view class="wall-author-helper">头像和署名是低频设置，想直接写也可以。</view>
+          <view class="wall-author-input-card">
+            <input
+              type="nickname"
+              class="wall-author-input"
+              placeholder="不填就是匿名"
+              value="{{form.author}}"
+              bindblur="onNicknameBlur"
+              bindinput="onNicknameInput"
+            />
+          </view>
         </view>
       </view>
 

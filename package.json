@@ -1,6 +1,6 @@
 {
   "name": "love-miniprogram",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "情侣纪念与情感记录微信小程序",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "miniprogram": {
     "robot": 1,
-    "uploadDescription": "2.0 留言墙体验优化：轻量身份设置、便签卡片流与完整状态反馈。"
+    "uploadDescription": "2.1 留言墙体验微调：优化留言卡片密度、署名头像布局与互动反馈。"
   },
   "dependencies": {
     "miniprogram-ci": "^2.1.31"
