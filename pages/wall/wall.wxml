@@ -29,7 +29,7 @@
 
       <view class="wall-composer-topline">
         <view class="wall-composer-kicker">{{scene.wallKicker || '写留言'}}</view>
-        <view class="wall-composer-counter">{{form.content.length}} / 300</view>
+        <view class="wall-composer-counter {{form.content.length > 240 ? 'is-warning' : ''}}">{{form.content.length}} / 300</view>
       </view>
       <view class="wall-composer-scene" wx:if="{{scene.metricDesc}}">
         <view class="wall-composer-scene-copy">{{scene.metricDesc}}</view>
@@ -38,41 +38,47 @@
       <view class="wall-composer-copy">{{composerPanel.body}}</view>
 
       <view class="wall-author-row">
-        <view class="wall-author-left">
-          <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-            <image class="wall-author-avatar" src="{{form.avatarUrl}}" wx:if="{{form.avatarUrl}}"></image>
-            <view class="wall-author-avatar-placeholder" wx:else></view>
-            <view class="wall-author-avatar-sync">
-              <view class="sync-icon"></view>
-            </view>
-          </button>
-          <view class="wall-author-label">署名</view>
-        </view>
-        <view class="wall-author-right">
-          <input 
-            type="nickname" 
-            class="wall-author-input" 
-            placeholder="点击同步昵称" 
-            value="{{form.author}}" 
+        <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image class="wall-author-avatar" src="{{form.avatarUrl}}" wx:if="{{form.avatarUrl}}"></image>
+          <view class="wall-author-avatar-placeholder" wx:else></view>
+          <view class="wall-author-avatar-sync">
+            <view class="sync-icon"></view>
+          </view>
+        </button>
+        <view class="wall-author-main">
+          <view class="wall-author-topline">
+            <view class="wall-author-title">留言身份</view>
+            <view class="wall-author-badge">可选</view>
+          </view>
+          <input
+            type="nickname"
+            class="wall-author-input"
+            placeholder="署名，不填就是匿名"
+            value="{{form.author}}"
             bindblur="onNicknameBlur"
             bindinput="onNicknameInput"
           />
+          <view class="wall-author-helper">头像和署名是低频设置，想直接写也可以。</view>
         </view>
       </view>
 
       <textarea
-        class="wall-composer-input"
+        class="wall-composer-input {{contentError ? 'has-error' : ''}}"
         maxlength="300"
-        placeholder="写一句话、一个心情，或者今天的小瞬间。"
+        placeholder="今天想说点什么？"
         placeholder-class="wall-input-placeholder"
         value="{{form.content}}"
+        focus="{{contentFocus}}"
+        bindfocus="onContentFocus"
         bindinput="onContentInput"
       ></textarea>
+      <view class="wall-content-error" wx:if="{{contentError}}">{{contentError}}</view>
 
       <view class="wall-composer-actions">
         <view class="wall-composer-link" bindtap="fillInspiration">随机一句</view>
-        <button class="btn btn-neon wall-save-btn" bindtap="submitNote">保存留言</button>
+        <button class="btn btn-neon wall-save-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitNote">{{submitting ? '保存中' : '保存留言'}}</button>
       </view>
+      <view class="wall-composer-status" wx:if="{{composerError}}">{{composerError}}</view>
 
       <view class="wall-composer-helper">{{composerPanel.helper}}</view>
     </view>
@@ -86,15 +92,28 @@
         <view class="wall-stream-meta">{{wallMeta.streamHint}}</view>
       </view>
 
-      <view class="wall-stream-list" wx:if="{{notes.length}}">
-        <view class="wall-note-item {{item.isLatest ? 'is-latest' : ''}}" wx:for="{{notes}}" wx:key="id">
+      <view class="wall-stream-error" wx:if="{{loadError}}">
+        <view class="wall-stream-empty-title">留言暂时没有加载出来</view>
+        <view class="wall-stream-empty-helper">{{loadError}}</view>
+        <button class="wall-state-action" bindtap="loadData">重试</button>
+      </view>
+
+      <view class="wall-stream-loading" wx:elif="{{loadingNotes}}">正在整理留言…</view>
+
+      <view class="wall-stream-list" wx:elif="{{notes.length}}">
+        <view class="wall-note-card {{item.isLatest ? 'is-latest' : ''}}" wx:for="{{notes}}" wx:key="id">
           <view class="wall-note-header">
             <image class="wall-note-avatar" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
-            <view class="wall-note-meta">{{item.metaLine}}</view>
+            <view class="wall-note-avatar-placeholder" wx:else>{{item.authorInitial}}</view>
+            <view class="wall-note-meta">
+              <view class="wall-note-author">{{item.author}}</view>
+              <view class="wall-note-time">{{item.createdAt}}</view>
+            </view>
+            <view class="wall-note-latest" wx:if="{{item.isLatest}}">最新</view>
           </view>
           <view class="wall-note-content">“{{item.content}}”</view>
           <view class="wall-note-actions">
-            <view class="action-link" data-content="{{item.content}}" bindtap="copyNote">复制</view>
+            <view class="action-link {{copySuccessId === item.id ? 'is-copied' : ''}}" data-id="{{item.id}}" data-content="{{item.content}}" bindtap="copyNote">{{copySuccessId === item.id ? '已复制' : '复制'}}</view>
           </view>
         </view>
       </view>
@@ -102,6 +121,7 @@
       <view wx:else class="wall-stream-empty">
         <view class="wall-stream-empty-title">{{wallMeta.empty}}</view>
         <view class="wall-stream-empty-helper">写下第一句，留言墙就开始有了温度。</view>
+        <view class="wall-state-action" bindtap="focusComposer">去写第一句</view>
       </view>
     </view>
   </view>

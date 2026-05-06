@@ -44,9 +44,9 @@ function buildWallHero(profile, notes, scene) {
 
 function buildComposerPanel(scene, notes) {
   return {
-    title: scene.composerTitle || (notes.length ? "继续写一条" : "写下第一条"),
+    title: scene.composerTitle || (notes.length ? "写一张小纸条" : "写下第一张小纸条"),
     body: notes.length
-      ? scene.composerBody || "不需要很长，把这一刻想留住的话写下来就好。"
+      ? scene.composerBody || "头像和署名可以以后再改，先把这一刻想留住的话写下来。"
       : scene.composerBody || `${scene.tag ? `${scene.tag} ` : ""}先记一句，留言墙就会从这里开始。`,
     helper: "最多 300 字，适合写一句话、一个心情，或者今天的小瞬间。"
   };
@@ -84,12 +84,18 @@ function syncNavigationBar(theme) {
 }
 
 function decorateNotes(notes) {
-  return notes.map((note, index) => ({
-    ...note,
-    isLatest: index === 0,
-    metaLine: note.author ? `${note.author} · ${note.createdAt}` : note.createdAt,
-    avatarUrl: note.avatarBase64 || note.avatarUrl || ""
-  }));
+  return notes.map((note, index) => {
+    const author = note.author || "匿名";
+
+    return {
+      ...note,
+      author,
+      authorInitial: author.slice(0, 1),
+      isLatest: index === 0,
+      metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
+      avatarUrl: note.avatarBase64 || note.avatarUrl || ""
+    };
+  });
 }
 
 function inferMimeType(filePath) {
@@ -190,7 +196,14 @@ Page({
       title: "",
       body: "",
       helper: ""
-    }
+    },
+    loadingNotes: false,
+    loadError: "",
+    submitting: false,
+    contentError: "",
+    composerError: "",
+    copySuccessId: "",
+    contentFocus: false
   },
 
   onLoad() {
@@ -210,27 +223,31 @@ Page({
     const scene = specialScene.getSpecialScene(profile);
     const cachedUserInfo = storage.getUserInfo();
     let notes = [];
+    let loadError = "";
 
     syncNavigationBar(profile.theme);
+    this.setData({
+      loadingNotes: true,
+      loadError: ""
+    });
 
     try {
       notes = await noteService.fetchNotes();
     } catch (error) {
       notes = [];
-      wx.showToast({
-        title: error && error.message ? error.message : "留言加载失败",
-        icon: "none"
-      });
+      loadError = error && error.message ? error.message : "留言加载失败";
     }
 
-    this.setData(
-      buildWallViewData(profile, scene, notes, {
+    this.setData({
+      ...buildWallViewData(profile, scene, notes, {
         author: cachedUserInfo ? cachedUserInfo.nickName : "",
         avatarUrl: cachedUserInfo ? (cachedUserInfo.avatarBase64 || cachedUserInfo.avatarUrl || "") : "",
         avatarBase64: cachedUserInfo ? cachedUserInfo.avatarBase64 || "" : "",
         content: this.data.form.content
-      })
-    );
+      }),
+      loadingNotes: false,
+      loadError
+    });
   },
 
   async onChooseAvatar(event) {
@@ -279,8 +296,26 @@ Page({
   },
 
   onContentInput(event) {
+    const content = event.detail.value;
+
     this.setData({
-      "form.content": event.detail.value
+      "form.content": content,
+      contentError: content.trim() ? "" : this.data.contentError
+    });
+  },
+
+  onContentFocus() {
+    if (this.data.contentFocus) {
+      this.setData({
+        contentFocus: false
+      });
+    }
+  },
+
+  focusComposer() {
+    tapFeedback();
+    this.setData({
+      contentFocus: true
     });
   },
 
@@ -290,25 +325,32 @@ Page({
     const content = this.data.form.content ? `${this.data.form.content}\n${text}` : text;
 
     this.setData({
-      "form.content": content
+      "form.content": content,
+      contentError: "",
+      composerError: ""
     });
   },
 
   async submitNote() {
+    if (this.data.submitting) {
+      return;
+    }
+
     const author = this.data.form.author || "匿名";
     const avatarBase64 = this.data.form.avatarBase64 || "";
     const content = (this.data.form.content || "").trim();
 
     if (!content) {
-      wx.showToast({
-        title: "先写点内容吧",
-        icon: "none"
+      this.setData({
+        contentError: "先写一句想留下的话。"
       });
       return;
     }
 
-    wx.showLoading({
-      title: "正在保存"
+    this.setData({
+      submitting: true,
+      contentError: "",
+      composerError: ""
     });
 
     try {
@@ -320,14 +362,18 @@ Page({
       this.updateCachedUserInfo();
       const notes = await noteService.fetchNotes();
 
-      this.setData(
-        buildWallViewData(this.data.profile, this.data.scene, notes, {
+      this.setData({
+        ...buildWallViewData(this.data.profile, this.data.scene, notes, {
           author: this.data.form.author,
           avatarUrl: this.data.form.avatarUrl,
           avatarBase64: this.data.form.avatarBase64,
           content: ""
-        })
-      );
+        }),
+        submitting: false,
+        contentError: "",
+        composerError: "",
+        loadError: ""
+      });
 
       tapFeedback();
 
@@ -336,19 +382,34 @@ Page({
         icon: "success"
       });
     } catch (error) {
-      wx.showToast({
-        title: error && error.message ? error.message : "留言保存失败",
-        icon: "none"
+      this.setData({
+        submitting: false,
+        composerError: error && error.message ? error.message : "留言保存失败，请稍后重试。"
       });
-    } finally {
-      wx.hideLoading();
     }
   },
 
   copyNote(event) {
-    const { content } = event.currentTarget.dataset;
+    const { content, id } = event.currentTarget.dataset;
     wx.setClipboardData({
-      data: content
+      data: content,
+      success: () => {
+        this.setData({
+          copySuccessId: id
+        });
+
+        if (this.copySuccessTimer) {
+          clearTimeout(this.copySuccessTimer);
+        }
+
+        this.copySuccessTimer = setTimeout(() => {
+          if (this.data.copySuccessId === id) {
+            this.setData({
+              copySuccessId: ""
+            });
+          }
+        }, 1600);
+      }
     });
   },
 
