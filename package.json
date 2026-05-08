@@ -11,7 +11,7 @@
     "uploadDescription": "2.2 留言墙头像存储升级：使用稳定头像链接，优化历史留言头像展示。"
   },
   "dependencies": {
-    "miniprogram-ci": "^2.1.31"
+    "solarlunar": "^2.0.7"
   },
   "devDependencies": {
     "miniprogram-ci": "^2.1.31"

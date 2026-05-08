@@ -1,4 +1,5 @@
-const solarlunar = require("./solarlunar.js");
+const solarlunarPackage = require("solarlunar");
+const solarlunar = solarlunarPackage.default || solarlunarPackage;
 const { getTogetherDays, getLoveYears } = require("./time");
 const { getMilestoneLabel, isMilestoneDay } = require("./milestone");
 
