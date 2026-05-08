@@ -3,7 +3,8 @@ import { corsHeaders, error, handleOptions, json } from "./lib/response.js";
 import { parseCreateNotePayload, parseCreateReplyPayload, parseListParams } from "./lib/validation.js";
 
 const AVATAR_MAX_BYTES = 512 * 1024;
-const AVATAR_CONTENT_TYPES = new Map([
+const NOTE_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
+const IMAGE_CONTENT_TYPES = new Map([
   ["image/jpeg", "jpg"],
   ["image/png", "png"],
   ["image/webp", "webp"],
@@ -32,7 +33,7 @@ function buildReplyId() {
   return `reply-${Date.now()}-${crypto.randomUUID()}`;
 }
 
-function buildAvatarId() {
+function buildObjectId() {
   return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
 }
 
@@ -42,6 +43,7 @@ function mapReply(row = {}) {
     noteId: row.note_id,
     author: row.author,
     avatarUrl: row.avatar_url || "",
+    imageUrl: row.image_url || "",
     content: row.content,
     city: row.city || "",
     createdAt: row.created_at,
@@ -54,6 +56,7 @@ function mapNote(row = {}, replies = []) {
     id: row.id,
     author: row.author,
     avatarUrl: row.avatar_url || "",
+    imageUrl: row.image_url || "",
     content: row.content,
     city: row.city || "",
     createdAt: row.created_at,
@@ -101,24 +104,24 @@ function getCity(request) {
   return String((request.cf && request.cf.city) || request.headers.get("CF-IPCity") || "").trim().slice(0, 50);
 }
 
-function assertAvatarBucket(env) {
+function assertImageBucket(env) {
   if (!env.AVATARS) {
-    throw new Error("头像存储未配置");
+    throw new Error("图片存储未配置");
   }
 }
 
-function buildAvatarUrl(request, key) {
+function buildImageUrl(request, key) {
   const url = new URL(request.url);
   return `${url.origin}/${key.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-function normalizeAvatarContentType(value) {
+function normalizeImageContentType(value) {
   const contentType = String(value || "").split(";")[0].trim().toLowerCase();
-  return AVATAR_CONTENT_TYPES.has(contentType) ? contentType : "";
+  return IMAGE_CONTENT_TYPES.has(contentType) ? contentType : "";
 }
 
-function inferAvatarContentType(file, bytes) {
-  const contentType = normalizeAvatarContentType(file && file.type);
+function inferImageContentType(file, bytes) {
+  const contentType = normalizeImageContentType(file && file.type);
   if (contentType) {
     return contentType;
   }
@@ -160,23 +163,26 @@ function inferAvatarContentType(file, bytes) {
   return "";
 }
 
-async function putAvatarObject(request, env, bytes, contentType) {
-  assertAvatarBucket(env);
+async function putImageObject(request, env, bytes, contentType, options = {}) {
+  assertImageBucket(env);
+
+  const label = options.label || "图片";
+  const maxBytes = options.maxBytes || NOTE_IMAGE_MAX_BYTES;
 
   if (!bytes || !bytes.byteLength) {
-    throw new Error("头像文件为空");
+    throw new Error(`${label}文件为空`);
   }
 
-  if (bytes.byteLength > AVATAR_MAX_BYTES) {
-    throw new Error("头像文件不能超过 512KB");
+  if (bytes.byteLength > maxBytes) {
+    throw new Error(`${label}文件不能超过 ${Math.floor(maxBytes / 1024)}KB`);
   }
 
-  const ext = AVATAR_CONTENT_TYPES.get(contentType);
+  const ext = IMAGE_CONTENT_TYPES.get(contentType);
   if (!ext) {
-    throw new Error("头像只支持 JPG、PNG、WebP 或 GIF");
+    throw new Error(`${label}只支持 JPG、PNG、WebP 或 GIF`);
   }
 
-  const key = `a/${buildAvatarId()}.${ext}`;
+  const key = `${options.prefix || "i"}/${buildObjectId()}.${ext}`;
   await env.AVATARS.put(key, bytes, {
     httpMetadata: {
       contentType
@@ -184,40 +190,73 @@ async function putAvatarObject(request, env, bytes, contentType) {
   });
 
   return {
-    avatarKey: key,
-    avatarUrl: buildAvatarUrl(request, key)
+    key,
+    url: buildImageUrl(request, key)
+  };
+}
+
+async function readUploadImageFile(request, label) {
+  const form = await request.formData();
+  const file = form.get("file");
+
+  if (!file || typeof file.arrayBuffer !== "function") {
+    throw new Error(`缺少${label}文件`);
+  }
+
+  const bytes = await file.arrayBuffer();
+  const contentType = inferImageContentType(file, bytes);
+  if (!contentType) {
+    throw new Error(`${label}只支持 JPG、PNG、WebP 或 GIF`);
+  }
+
+  return {
+    bytes,
+    contentType
   };
 }
 
 async function uploadAvatar(request, env) {
   await getClientHash(request, env, true);
-  const form = await request.formData();
-  const file = form.get("file");
-
-  if (!file || typeof file.arrayBuffer !== "function") {
-    throw new Error("缺少头像文件");
-  }
-
-  const bytes = await file.arrayBuffer();
-  const contentType = inferAvatarContentType(file, bytes);
-  if (!contentType) {
-    throw new Error("头像只支持 JPG、PNG、WebP 或 GIF");
-  }
-
-  const avatar = await putAvatarObject(request, env, bytes, contentType);
+  const file = await readUploadImageFile(request, "头像");
+  const avatar = await putImageObject(request, env, file.bytes, file.contentType, {
+    prefix: "a",
+    label: "头像",
+    maxBytes: AVATAR_MAX_BYTES
+  });
 
   return json({
     success: true,
-    data: avatar
+    data: {
+      avatarKey: avatar.key,
+      avatarUrl: avatar.url
+    }
   }, { status: 201 });
 }
 
-async function getAvatar(request, env, key) {
-  assertAvatarBucket(env);
+async function uploadNoteImage(request, env) {
+  await getClientHash(request, env, true);
+  const file = await readUploadImageFile(request, "图片");
+  const image = await putImageObject(request, env, file.bytes, file.contentType, {
+    prefix: "i",
+    label: "图片",
+    maxBytes: NOTE_IMAGE_MAX_BYTES
+  });
+
+  return json({
+    success: true,
+    data: {
+      imageKey: image.key,
+      imageUrl: image.url
+    }
+  }, { status: 201 });
+}
+
+async function getImageObject(request, env, key) {
+  assertImageBucket(env);
 
   const object = await env.AVATARS.get(key);
   if (!object) {
-    return error(404, "头像不存在");
+    return error(404, "图片不存在");
   }
 
   const headers = new Headers(corsHeaders);
@@ -237,7 +276,7 @@ async function loadReplies(env, noteIds) {
 
   const placeholders = noteIds.map(() => "?").join(", ");
   const result = await env.DB.prepare(
-    `SELECT id, note_id, author, avatar_url, content, city, created_at, created_ts
+    `SELECT id, note_id, author, avatar_url, image_url, content, city, created_at, created_ts
      FROM note_replies
      WHERE status = 'published' AND note_id IN (${placeholders})
      ORDER BY created_ts ASC`
@@ -259,7 +298,7 @@ async function listNotes(request, env) {
   const { limit, cursor } = parseListParams(url.searchParams);
   const clientHash = await getClientHash(request, env);
   const bindings = [];
-  let sql = `SELECT id, author, avatar_url, content, city, created_at, created_ts,
+  let sql = `SELECT id, author, avatar_url, image_url, content, city, created_at, created_ts,
     (SELECT COUNT(*) FROM note_likes WHERE note_id = notes.id) AS likes_count`;
 
   if (clientHash) {
@@ -301,6 +340,7 @@ async function createNote(request, env) {
     id: buildNoteId(),
     author: payload.author,
     avatarUrl: payload.avatarUrl,
+    imageUrl: payload.imageUrl,
     content: payload.content,
     city: getCity(request),
     createdAt: formatDateTime(now),
@@ -313,12 +353,13 @@ async function createNote(request, env) {
   const userAgent = String(request.headers.get("User-Agent") || "").slice(0, 500);
 
   await env.DB.prepare(
-    "INSERT INTO notes (id, author, avatar_url, content, city, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
+    "INSERT INTO notes (id, author, avatar_url, image_url, content, city, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
   )
     .bind(
       note.id,
       note.author,
       note.avatarUrl,
+      note.imageUrl,
       note.content,
       note.city,
       note.createdAt,
@@ -389,6 +430,7 @@ async function createReply(request, env, noteId) {
     noteId,
     author: payload.author,
     avatarUrl: payload.avatarUrl,
+    imageUrl: payload.imageUrl,
     content: payload.content,
     city: getCity(request),
     createdAt: formatDateTime(now),
@@ -398,13 +440,14 @@ async function createReply(request, env, noteId) {
   const userAgent = String(request.headers.get("User-Agent") || "").slice(0, 500);
 
   await env.DB.prepare(
-    "INSERT INTO note_replies (id, note_id, author, avatar_url, content, city, status, created_at, created_ts, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)"
+    "INSERT INTO note_replies (id, note_id, author, avatar_url, image_url, content, city, status, created_at, created_ts, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)"
   )
     .bind(
       reply.id,
       reply.noteId,
       reply.author,
       reply.avatarUrl,
+      reply.imageUrl,
       reply.content,
       reply.city,
       reply.createdAt,
@@ -468,9 +511,18 @@ export default {
         return await uploadAvatar(request, env);
       }
 
+      if (request.method === "POST" && pathname === "/api/note-images") {
+        return await uploadNoteImage(request, env);
+      }
+
       const avatarMatch = pathname.match(/^\/a\/([^/]+)$/);
       if (request.method === "GET" && avatarMatch) {
-        return await getAvatar(request, env, `a/${decodeURIComponent(avatarMatch[1])}`);
+        return await getImageObject(request, env, `a/${decodeURIComponent(avatarMatch[1])}`);
+      }
+
+      const noteImageMatch = pathname.match(/^\/i\/([^/]+)$/);
+      if (request.method === "GET" && noteImageMatch) {
+        return await getImageObject(request, env, `i/${decodeURIComponent(noteImageMatch[1])}`);
       }
 
       if (request.method === "GET" && pathname === "/api/notes") {

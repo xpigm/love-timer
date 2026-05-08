@@ -1,0 +1,3 @@
+ALTER TABLE notes ADD COLUMN image_url TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE note_replies ADD COLUMN image_url TEXT NOT NULL DEFAULT '';

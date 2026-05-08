@@ -24,24 +24,33 @@ function validateAuthor(author) {
   }
 }
 
-function validateAvatarUrl(avatarUrl) {
-  if (avatarUrl.length > 500) {
-    throw new Error("头像地址过长");
+function validateStableImageUrl(value, label) {
+  if (value.length > 500) {
+    throw new Error(`${label}地址过长`);
   }
 
-  if (/^(data:|wxfile:)/i.test(avatarUrl)) {
-    throw new Error("头像地址必须是已上传后的稳定地址");
+  if (/^(data:|wxfile:)/i.test(value)) {
+    throw new Error(`${label}地址必须是已上传后的稳定地址`);
   }
+}
+
+function validateAvatarUrl(avatarUrl) {
+  validateStableImageUrl(avatarUrl, "头像");
+}
+
+function validateImageUrl(imageUrl) {
+  validateStableImageUrl(imageUrl, "图片");
 }
 
 function parseCreateNotePayload(payload = {}) {
   const author = String(payload.author || "").trim() || "匿名";
   const avatarUrl = String(payload.avatarUrl || "").trim();
+  const imageUrl = String(payload.imageUrl || "").trim();
   const content = String(payload.content || "").trim();
   const clientRequestId = String(payload.clientRequestId || "").trim();
 
-  if (!content) {
-    throw new Error("留言内容不能为空");
+  if (!content && !imageUrl) {
+    throw new Error("留言内容或图片不能为空");
   }
 
   if (content.length > 300) {
@@ -50,6 +59,7 @@ function parseCreateNotePayload(payload = {}) {
 
   validateAuthor(author);
   validateAvatarUrl(avatarUrl);
+  validateImageUrl(imageUrl);
 
   if (clientRequestId.length > 100) {
     throw new Error("请求标识过长");
@@ -58,6 +68,7 @@ function parseCreateNotePayload(payload = {}) {
   return {
     author,
     avatarUrl,
+    imageUrl,
     content,
     clientRequestId
   };
@@ -66,10 +77,11 @@ function parseCreateNotePayload(payload = {}) {
 function parseCreateReplyPayload(payload = {}) {
   const author = String(payload.author || "").trim() || "匿名";
   const avatarUrl = String(payload.avatarUrl || "").trim();
+  const imageUrl = String(payload.imageUrl || "").trim();
   const content = String(payload.content || "").trim();
 
-  if (!content) {
-    throw new Error("回复内容不能为空");
+  if (!content && !imageUrl) {
+    throw new Error("回复内容或图片不能为空");
   }
 
   if (content.length > 180) {
@@ -78,10 +90,12 @@ function parseCreateReplyPayload(payload = {}) {
 
   validateAuthor(author);
   validateAvatarUrl(avatarUrl);
+  validateImageUrl(imageUrl);
 
   return {
     author,
     avatarUrl,
+    imageUrl,
     content
   };
 }
