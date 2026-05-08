@@ -12,6 +12,7 @@ function normalizeReply(reply = {}) {
     noteId: String(reply.noteId || ""),
     author: String(reply.author || "匿名"),
     avatarUrl: String(reply.avatarUrl || ""),
+    imageUrl: String(reply.imageUrl || ""),
     content: String(reply.content || ""),
     city: String(reply.city || ""),
     createdAt: String(reply.createdAt || ""),
@@ -24,6 +25,7 @@ function normalizeNote(note = {}) {
     id: String(note.id || ""),
     author: String(note.author || "匿名"),
     avatarUrl: String(note.avatarUrl || ""),
+    imageUrl: String(note.imageUrl || ""),
     content: String(note.content || ""),
     city: String(note.city || ""),
     createdAt: String(note.createdAt || ""),
@@ -61,6 +63,7 @@ async function createNote(payload = {}) {
   const trimmedPayload = {
     author: String(payload.author || "").trim(),
     avatarUrl: String(payload.avatarUrl || "").trim(),
+    imageUrl: String(payload.imageUrl || "").trim(),
     content: String(payload.content || "").trim()
   };
 
@@ -95,6 +98,7 @@ async function createReply(noteId, payload = {}) {
   const trimmedPayload = {
     author: String(payload.author || "").trim(),
     avatarUrl: String(payload.avatarUrl || "").trim(),
+    imageUrl: String(payload.imageUrl || "").trim(),
     content: String(payload.content || "").trim()
   };
 
@@ -126,11 +130,26 @@ async function uploadAvatar(filePath) {
   return response && response.data ? response.data : {};
 }
 
+async function uploadNoteImage(filePath) {
+  if (!isCloudEnabled()) {
+    throw new Error("未配置留言服务地址");
+  }
+
+  const response = await api.uploadFile({
+    path: "/api/note-images",
+    filePath,
+    headers: buildClientHeaders()
+  });
+
+  return response && response.data ? response.data : {};
+}
+
 module.exports = {
   fetchNotes,
   createNote,
   toggleLike,
   createReply,
   uploadAvatar,
+  uploadNoteImage,
   isCloudEnabled
 };

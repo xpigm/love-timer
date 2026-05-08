@@ -75,11 +75,19 @@
         bindfocus="onContentFocus"
         bindinput="onContentInput"
       ></textarea>
+      <view class="wall-image-panel" wx:if="{{form.imageUrl}}">
+        <image class="wall-image-preview" src="{{form.imageUrl}}" mode="aspectFill" data-src="{{form.imageUrl}}" bindtap="previewImage"></image>
+        <view class="wall-image-panel-meta">
+          <view class="wall-image-title">{{imageUploading ? '图片上传中' : '已添加图片'}}</view>
+          <view class="wall-image-action" bindtap="removeNoteImage" wx:if="{{!imageUploading}}">移除</view>
+        </view>
+      </view>
       <view class="wall-content-error" wx:if="{{contentError}}">{{contentError}}</view>
 
       <view class="wall-composer-actions">
         <view class="wall-composer-link" bindtap="fillInspiration">随机一句</view>
-        <button class="btn btn-neon wall-save-btn" loading="{{submitting}}" disabled="{{submitting || avatarUploading}}" bindtap="submitNote">{{submitting ? '保存中' : '保存留言'}}</button>
+        <view class="wall-composer-link" bindtap="chooseNoteImage">{{form.imageUrl ? '换图' : '配图'}}</view>
+        <button class="btn btn-neon wall-save-btn" loading="{{submitting}}" disabled="{{submitting || avatarUploading || imageUploading}}" bindtap="submitNote">{{submitting ? '保存中' : '保存留言'}}</button>
       </view>
       <view class="wall-composer-status" wx:if="{{composerError}}">{{composerError}}</view>
 
@@ -114,7 +122,8 @@
             </view>
             <view class="wall-note-latest" wx:if="{{item.isLatest}}">最新</view>
           </view>
-          <view class="wall-note-content">“{{item.content}}”</view>
+          <view class="wall-note-content" wx:if="{{item.content}}">“{{item.content}}”</view>
+          <image class="wall-note-image" src="{{item.imageUrl}}" mode="aspectFill" data-src="{{item.imageUrl}}" bindtap="previewImage" wx:if="{{item.imageUrl}}"></image>
           <view class="wall-note-actions">
             <view class="action-link wall-like-link {{item.likedByMe ? 'is-liked' : ''}} {{likeLoadingId === item.id ? 'is-loading' : ''}}" data-id="{{item.id}}" bindtap="toggleLike">{{item.likedByMe ? '已喜欢' : '喜欢'}}<text wx:if="{{item.likesCount}}"> · {{item.likesCount}}</text></view>
             <view class="action-link" data-id="{{item.id}}" bindtap="openReply">{{activeReplyNoteId === item.id ? '收起' : '回复'}}</view>
@@ -127,7 +136,8 @@
               <view class="wall-reply-avatar-placeholder" wx:else>{{reply.authorInitial}}</view>
               <view class="wall-reply-main">
                 <view class="wall-reply-meta">{{reply.author}} · {{reply.displayTime}}<text wx:if="{{reply.city}}"> · {{reply.city}}</text></view>
-                <view class="wall-reply-content">{{reply.content}}</view>
+                <view class="wall-reply-content" wx:if="{{reply.content}}">{{reply.content}}</view>
+                <image class="wall-reply-image" src="{{reply.imageUrl}}" mode="aspectFill" data-src="{{reply.imageUrl}}" bindtap="previewImage" wx:if="{{reply.imageUrl}}"></image>
               </view>
             </view>
           </view>
@@ -141,9 +151,17 @@
               value="{{replyForm.content}}"
               bindinput="onReplyInput"
             ></textarea>
+            <view class="wall-image-panel wall-reply-image-panel" wx:if="{{replyForm.imageUrl}}">
+              <image class="wall-image-preview wall-reply-image-preview" src="{{replyForm.imageUrl}}" mode="aspectFill" data-src="{{replyForm.imageUrl}}" bindtap="previewImage"></image>
+              <view class="wall-image-panel-meta">
+                <view class="wall-image-title">{{replyImageUploading ? '图片上传中' : '已添加图片'}}</view>
+                <view class="wall-image-action" bindtap="removeReplyImage" wx:if="{{!replyImageUploading}}">移除</view>
+              </view>
+            </view>
             <view class="wall-reply-error" wx:if="{{replyError}}">{{replyError}}</view>
             <view class="wall-reply-actions">
-              <button class="wall-reply-submit" loading="{{replySubmitting}}" disabled="{{replySubmitting || avatarUploading}}" data-id="{{item.id}}" bindtap="submitReply">{{replySubmitting ? '发送中' : '发送回复'}}</button>
+              <view class="wall-reply-link" bindtap="chooseReplyImage">{{replyForm.imageUrl ? '换图' : '配图'}}</view>
+              <button class="wall-reply-submit" loading="{{replySubmitting}}" disabled="{{replySubmitting || avatarUploading || replyImageUploading}}" data-id="{{item.id}}" bindtap="submitReply">{{replySubmitting ? '发送中' : '发送回复'}}</button>
             </view>
           </view>
         </view>

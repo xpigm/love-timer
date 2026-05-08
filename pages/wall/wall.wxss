@@ -225,6 +225,7 @@
 .wall-composer-copy,
 .wall-author-row,
 .wall-composer-input,
+.wall-image-panel,
 .wall-composer-actions,
 .wall-composer-helper {
   position: relative;
@@ -466,6 +467,50 @@
   color: var(--ink-tertiary);
 }
 
+.wall-image-panel {
+  margin-top: 16rpx;
+  padding: 14rpx;
+  border-radius: 26rpx;
+  background: var(--glass-strong-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 var(--glass-border-highlight);
+}
+
+.wall-image-preview {
+  display: block;
+  width: 100%;
+  height: 260rpx;
+  border-radius: 22rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.wall-image-panel-meta {
+  margin-top: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.wall-image-title {
+  font-size: 21rpx;
+  color: var(--ink-tertiary);
+}
+
+.wall-image-action {
+  min-height: 46rpx;
+  padding: 0 18rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--accent-ink);
+  font-size: 20rpx;
+}
+
 .wall-content-error,
 .wall-composer-status {
   margin-top: 10rpx;
@@ -672,6 +717,19 @@
   white-space: pre-wrap;
 }
 
+.wall-note-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 340rpx;
+  margin-top: 14rpx;
+  border-radius: 24rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  box-shadow: 0 10rpx 22rpx rgba(214, 188, 205, 0.13);
+}
+
 .wall-note-actions {
   position: relative;
   z-index: 1;
@@ -777,6 +835,17 @@
   white-space: pre-wrap;
 }
 
+.wall-reply-image {
+  display: block;
+  width: 320rpx;
+  max-width: 100%;
+  height: 190rpx;
+  margin-top: 8rpx;
+  border-radius: 18rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+}
+
 .wall-reply-composer {
   position: relative;
   z-index: 1;
@@ -809,7 +878,33 @@
 .wall-reply-actions {
   margin-top: 14rpx;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14rpx;
+}
+
+.wall-reply-link {
+  min-height: 56rpx;
+  padding: 0 20rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--accent-ink);
+  font-size: 21rpx;
+}
+
+.wall-reply-image-panel {
+  margin-top: 12rpx;
+  padding: 12rpx;
+  border-radius: 22rpx;
+}
+
+.wall-reply-image-preview {
+  height: 180rpx;
+  border-radius: 18rpx;
 }
 
 .wall-reply-submit {
@@ -923,6 +1018,7 @@ button.wall-state-action::after {
 
   .wall-author-row,
   .wall-note-card,
+  .wall-image-panel,
   .wall-reply-list,
   .wall-reply-composer {
     background: linear-gradient(145deg, rgba(54, 43, 78, 0.76) 0%, rgba(35, 28, 54, 0.58) 100%);
@@ -951,11 +1047,20 @@ button.wall-state-action::after {
   }
 
   .action-link,
+  .wall-image-action,
+  .wall-reply-link,
   .wall-reply-submit,
   .wall-state-action {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(255, 235, 249, 0.13);
     box-shadow: none;
+  }
+
+  .wall-image-preview,
+  .wall-note-image,
+  .wall-reply-image {
+    border-color: rgba(255, 235, 249, 0.13);
+    box-shadow: 0 10rpx 24rpx rgba(5, 4, 18, 0.22);
   }
 
   .action-link.is-liked {
@@ -977,6 +1082,7 @@ button.wall-state-action::after {
 
 .theme-midnight .wall-author-row,
 .theme-midnight .wall-note-card,
+.theme-midnight .wall-image-panel,
 .theme-midnight .wall-reply-list,
 .theme-midnight .wall-reply-composer {
   background: linear-gradient(145deg, rgba(54, 43, 78, 0.76) 0%, rgba(35, 28, 54, 0.58) 100%);
@@ -1005,11 +1111,20 @@ button.wall-state-action::after {
 }
 
 .theme-midnight .action-link,
+.theme-midnight .wall-image-action,
+.theme-midnight .wall-reply-link,
 .theme-midnight .wall-reply-submit,
 .theme-midnight .wall-state-action {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 235, 249, 0.13);
   box-shadow: none;
+}
+
+.theme-midnight .wall-image-preview,
+.theme-midnight .wall-note-image,
+.theme-midnight .wall-reply-image {
+  border-color: rgba(255, 235, 249, 0.13);
+  box-shadow: 0 10rpx 24rpx rgba(5, 4, 18, 0.22);
 }
 
 .theme-midnight .action-link.is-liked {

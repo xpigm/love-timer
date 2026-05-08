@@ -83,6 +83,38 @@ function syncNavigationBar(theme) {
   }
 }
 
+function isImageChooseCancel(error) {
+  return /cancel/i.test((error && error.errMsg) || (error && error.message) || "");
+}
+
+function chooseSingleImage() {
+  return new Promise((resolve, reject) => {
+    if (wx.chooseMedia) {
+      wx.chooseMedia({
+        count: 1,
+        mediaType: ["image"],
+        sizeType: ["compressed"],
+        success: (result) => {
+          const file = result.tempFiles && result.tempFiles[0];
+          resolve(file ? file.tempFilePath : "");
+        },
+        fail: reject
+      });
+      return;
+    }
+
+    wx.chooseImage({
+      count: 1,
+      sizeType: ["compressed"],
+      sourceType: ["album", "camera"],
+      success: (result) => {
+        resolve(result.tempFilePaths && result.tempFilePaths[0] ? result.tempFilePaths[0] : "");
+      },
+      fail: reject
+    });
+  });
+}
+
 function decorateReply(reply, now) {
   const author = reply.author || "匿名";
 
@@ -91,6 +123,7 @@ function decorateReply(reply, now) {
     author,
     authorInitial: author.slice(0, 1),
     avatarUrl: reply.avatarUrl || "",
+    imageUrl: reply.imageUrl || "",
     displayTime: time.formatRelativeTime(reply.timestamp, now) || reply.createdAt
   };
 }
@@ -106,6 +139,7 @@ function decorateNotes(notes, now = new Date()) {
       isLatest: index === 0,
       metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
       avatarUrl: note.avatarUrl || "",
+      imageUrl: note.imageUrl || "",
       displayTime: time.formatRelativeTime(note.timestamp, now) || note.createdAt,
       replies: (Array.isArray(note.replies) ? note.replies : []).map((reply) => decorateReply(reply, now))
     };
@@ -115,6 +149,7 @@ function decorateNotes(notes, now = new Date()) {
 function buildWallViewData(profile, scene, notes, options = {}) {
   const content = options.content == null ? "" : options.content;
   const avatarUrl = options.avatarUrl || "";
+  const imageUrl = options.imageUrl || "";
   const author = options.author || "";
 
   return {
@@ -126,6 +161,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
     form: {
       author,
       avatarUrl,
+      imageUrl,
       content
     },
     notes: decorateNotes(notes, options.now || new Date()),
@@ -153,6 +189,7 @@ Page({
     form: {
       author: "",
       avatarUrl: "",
+      imageUrl: "",
       content: ""
     },
     notes: [],
@@ -179,6 +216,7 @@ Page({
     loadError: "",
     submitting: false,
     avatarUploading: false,
+    imageUploading: false,
     contentError: "",
     composerError: "",
     copySuccessId: "",
@@ -186,9 +224,11 @@ Page({
     likeLoadingId: "",
     activeReplyNoteId: "",
     replyForm: {
-      content: ""
+      content: "",
+      imageUrl: ""
     },
     replySubmitting: false,
+    replyImageUploading: false,
     replyError: ""
   },
 
@@ -257,6 +297,7 @@ Page({
       ...buildWallViewData(profile, scene, notes, {
         author: cachedUserInfo ? cachedUserInfo.nickName : "",
         avatarUrl: cachedUserInfo ? cachedUserInfo.avatarUrl || "" : "",
+        imageUrl: this.data.form.imageUrl,
         content: this.data.form.content
       }),
       loadingNotes: false,
@@ -296,6 +337,118 @@ Page({
         icon: "none"
       });
     }
+  },
+
+  async chooseNoteImage() {
+    tapFeedback();
+
+    if (this.data.imageUploading) {
+      return;
+    }
+
+    const previousImageUrl = this.data.form.imageUrl;
+
+    try {
+      const filePath = await chooseSingleImage();
+      if (!filePath) {
+        return;
+      }
+
+      this.setData({
+        "form.imageUrl": filePath,
+        imageUploading: true,
+        composerError: ""
+      });
+      const uploaded = await noteService.uploadNoteImage(filePath);
+      this.setData({
+        "form.imageUrl": uploaded.imageUrl || "",
+        imageUploading: false
+      });
+    } catch (error) {
+      if (isImageChooseCancel(error)) {
+        return;
+      }
+
+      this.setData({
+        "form.imageUrl": previousImageUrl,
+        imageUploading: false,
+        composerError: error && error.message ? error.message : "图片上传失败"
+      });
+    }
+  },
+
+  removeNoteImage() {
+    if (this.data.imageUploading) {
+      return;
+    }
+
+    tapFeedback();
+    this.setData({
+      "form.imageUrl": "",
+      composerError: ""
+    });
+  },
+
+  async chooseReplyImage() {
+    tapFeedback();
+
+    if (this.data.replyImageUploading) {
+      return;
+    }
+
+    const previousImageUrl = this.data.replyForm.imageUrl;
+
+    try {
+      const filePath = await chooseSingleImage();
+      if (!filePath) {
+        return;
+      }
+
+      this.setData({
+        "replyForm.imageUrl": filePath,
+        replyImageUploading: true,
+        replyError: ""
+      });
+      const uploaded = await noteService.uploadNoteImage(filePath);
+      this.setData({
+        "replyForm.imageUrl": uploaded.imageUrl || "",
+        replyImageUploading: false
+      });
+    } catch (error) {
+      if (isImageChooseCancel(error)) {
+        return;
+      }
+
+      this.setData({
+        "replyForm.imageUrl": previousImageUrl,
+        replyImageUploading: false,
+        replyError: error && error.message ? error.message : "图片上传失败"
+      });
+    }
+  },
+
+  removeReplyImage() {
+    if (this.data.replyImageUploading) {
+      return;
+    }
+
+    tapFeedback();
+    this.setData({
+      "replyForm.imageUrl": "",
+      replyError: ""
+    });
+  },
+
+  previewImage(event) {
+    const { src } = event.currentTarget.dataset;
+    if (!src) {
+      return;
+    }
+
+    wx.previewImage({
+      urls: [src],
+      current: src
+    });
   },
 
   onNicknameInput(event) {
@@ -423,8 +576,10 @@ Page({
     this.setData({
       activeReplyNoteId: this.data.activeReplyNoteId === id ? "" : id,
       replyForm: {
-        content: ""
+        content: "",
+        imageUrl: ""
       },
+      replyImageUploading: false,
       replyError: ""
     });
   },
@@ -439,21 +594,22 @@ Page({
   async submitReply(event) {
     const { id } = event.currentTarget.dataset;
     const content = (this.data.replyForm.content || "").trim();
+    const imageUrl = this.data.replyForm.imageUrl || "";
 
     if (this.data.replySubmitting) {
       return;
     }
 
-    if (this.data.avatarUploading) {
+    if (this.data.avatarUploading || this.data.replyImageUploading) {
       this.setData({
-        replyError: "头像还在上传，稍等一下。"
+        replyError: this.data.replyImageUploading ? "图片还在上传，稍等一下。" : "头像还在上传，稍等一下。"
       });
       return;
     }
 
-    if (!content) {
+    if (!content && !imageUrl) {
       this.setData({
-        replyError: "先写一句回复。"
+        replyError: "先写一句回复，或添加一张图片。"
       });
       return;
     }
@@ -467,6 +623,7 @@ Page({
       const reply = await noteService.createReply(id, {
         author: this.data.form.author || "匿名",
         avatarUrl: this.data.form.avatarUrl || "",
+        imageUrl,
         content
       });
 
@@ -478,7 +635,8 @@ Page({
       this.setData({
         activeReplyNoteId: "",
         replyForm: {
-          content: ""
+          content: "",
+          imageUrl: ""
         },
         replySubmitting: false
       });
@@ -498,18 +656,19 @@ Page({
 
     const author = this.data.form.author || "匿名";
     const avatarUrl = this.data.form.avatarUrl || "";
+    const imageUrl = this.data.form.imageUrl || "";
     const content = (this.data.form.content || "").trim();
 
-    if (this.data.avatarUploading) {
+    if (this.data.avatarUploading || this.data.imageUploading) {
       this.setData({
-        composerError: "头像还在上传，稍等一下。"
+        composerError: this.data.imageUploading ? "图片还在上传，稍等一下。" : "头像还在上传，稍等一下。"
       });
       return;
     }
 
-    if (!content) {
+    if (!content && !imageUrl) {
       this.setData({
-        contentError: "先写一句想留下的话。"
+        contentError: "先写一句想留下的话，或添加一张图片。"
       });
       return;
     }
@@ -524,6 +683,7 @@ Page({
       await noteService.createNote({
         author,
         avatarUrl,
+        imageUrl,
         content
       });
       this.updateCachedUserInfo();
@@ -533,6 +693,7 @@ Page({
         ...buildWallViewData(this.data.profile, this.data.scene, notes, {
           author: this.data.form.author,
           avatarUrl: this.data.form.avatarUrl,
+          imageUrl: "",
           content: ""
         }),
         submitting: false,
