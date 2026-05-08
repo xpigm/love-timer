@@ -925,7 +925,42 @@ button.wall-state-action::after {
   .wall-note-card,
   .wall-reply-list,
   .wall-reply-composer {
-    background: linear-gradient(145deg, rgba(58, 47, 82, 0.72) 0%, rgba(46, 38, 70, 0.52) 100%);
+    background: linear-gradient(145deg, rgba(54, 43, 78, 0.76) 0%, rgba(35, 28, 54, 0.58) 100%);
+    border-color: rgba(255, 235, 249, 0.14);
+    box-shadow: 0 14rpx 34rpx rgba(5, 4, 18, 0.3), inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .wall-note-card {
+    background:
+      radial-gradient(circle at 92% 12%, rgba(255, 120, 173, 0.12), transparent 30%),
+      linear-gradient(145deg, rgba(54, 43, 78, 0.78) 0%, rgba(35, 28, 54, 0.58) 100%);
+  }
+
+  .wall-note-card::before {
+    background: linear-gradient(90deg, rgba(255, 120, 173, 0.46), rgba(117, 216, 255, 0.24));
+    opacity: 0.68;
+  }
+
+  .wall-note-card.is-latest {
+    border-color: rgba(255, 158, 198, 0.32);
+    box-shadow: 0 16rpx 38rpx rgba(5, 4, 18, 0.36), inset 0 1rpx 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .wall-note-actions {
+    border-top-color: rgba(255, 235, 249, 0.12);
+  }
+
+  .action-link,
+  .wall-reply-submit,
+  .wall-state-action {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 235, 249, 0.13);
+    box-shadow: none;
+  }
+
+  .action-link.is-liked {
+    background: linear-gradient(135deg, rgba(255, 120, 173, 0.18), rgba(255, 210, 122, 0.1));
+    border-color: rgba(255, 158, 198, 0.28);
   }
 }
 
@@ -944,7 +979,42 @@ button.wall-state-action::after {
 .theme-midnight .wall-note-card,
 .theme-midnight .wall-reply-list,
 .theme-midnight .wall-reply-composer {
-  background: linear-gradient(145deg, rgba(58, 47, 82, 0.72) 0%, rgba(46, 38, 70, 0.52) 100%);
+  background: linear-gradient(145deg, rgba(54, 43, 78, 0.76) 0%, rgba(35, 28, 54, 0.58) 100%);
+  border-color: rgba(255, 235, 249, 0.14);
+  box-shadow: 0 14rpx 34rpx rgba(5, 4, 18, 0.3), inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-midnight .wall-note-card {
+  background:
+    radial-gradient(circle at 92% 12%, rgba(255, 120, 173, 0.12), transparent 30%),
+    linear-gradient(145deg, rgba(54, 43, 78, 0.78) 0%, rgba(35, 28, 54, 0.58) 100%);
+}
+
+.theme-midnight .wall-note-card::before {
+  background: linear-gradient(90deg, rgba(255, 120, 173, 0.46), rgba(117, 216, 255, 0.24));
+  opacity: 0.68;
+}
+
+.theme-midnight .wall-note-card.is-latest {
+  border-color: rgba(255, 158, 198, 0.32);
+  box-shadow: 0 16rpx 38rpx rgba(5, 4, 18, 0.36), inset 0 1rpx 0 rgba(255, 255, 255, 0.1);
+}
+
+.theme-midnight .wall-note-actions {
+  border-top-color: rgba(255, 235, 249, 0.12);
+}
+
+.theme-midnight .action-link,
+.theme-midnight .wall-reply-submit,
+.theme-midnight .wall-state-action {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 235, 249, 0.13);
+  box-shadow: none;
+}
+
+.theme-midnight .action-link.is-liked {
+  background: linear-gradient(135deg, rgba(255, 120, 173, 0.18), rgba(255, 210, 122, 0.1));
+  border-color: rgba(255, 158, 198, 0.28);
 }
 
 .scene-anniversary .wall-composer-scene-badge,
@@ -962,6 +1032,34 @@ button.wall-state-action::after {
 .scene-christmas .wall-composer-scene-badge {
   background: linear-gradient(135deg, rgba(243, 251, 255, 0.94) 0%, rgba(228, 244, 251, 0.8) 100%);
   color: #4d88a0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .scene-anniversary .wall-composer-scene-badge,
+  .scene-milestone .wall-composer-scene-badge {
+    background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+    color: #ffd28d;
+    border-color: rgba(255, 226, 170, 0.18);
+  }
+
+  .scene-christmas .wall-composer-scene-badge {
+    background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+    color: #9ee5ff;
+    border-color: rgba(215, 238, 248, 0.18);
+  }
+}
+
+.theme-midnight.scene-anniversary .wall-composer-scene-badge,
+.theme-midnight.scene-milestone .wall-composer-scene-badge {
+  background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+  color: #ffd28d;
+  border-color: rgba(255, 226, 170, 0.18);
+}
+
+.theme-midnight.scene-christmas .wall-composer-scene-badge {
+  background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+  color: #9ee5ff;
+  border-color: rgba(215, 238, 248, 0.18);
 }
 
 .scene-newyear .wall-nameplate,

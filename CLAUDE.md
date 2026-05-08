@@ -5,3 +5,4 @@
 - Do not assume Worker files exist on the frontend branch. Inspect or edit the Worker branch explicitly when API, D1, R2, migration, or Worker deployment behavior is involved.
 - The note wall API is server-backed. Frontend calls go through `utils/note-service.js` and `utils/api.js`, using `config/service.js` for the API base URL.
 - Avatar design direction: WeChat `wxfile://tmp_` paths are temporary only. Do not persist them as avatars. Do not add base64 avatar payloads. Store durable avatar files through the Worker/R2 flow and persist stable avatar URLs with each note/reply so historical comments keep the avatar used when they were created.
+- UI theme note: Special-date scenes and wall effects must be checked in both light and dark modes. Scene classes can override global theme variables, so any new festival colors/effects need matching dark-mode overrides for background, orbs, particles, badges, cards, and contrast.
