@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS note_replies (
   id TEXT PRIMARY KEY,
   note_id TEXT NOT NULL,
   author TEXT NOT NULL,
-  avatar_base64 TEXT NOT NULL DEFAULT '',
   avatar_url TEXT NOT NULL DEFAULT '',
   content TEXT NOT NULL DEFAULT '',
   city TEXT NOT NULL DEFAULT '',

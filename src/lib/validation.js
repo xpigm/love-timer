@@ -24,19 +24,18 @@ function validateAuthor(author) {
   }
 }
 
-function validateAvatar(avatarBase64, avatarUrl) {
-  if (avatarBase64.length > 500000) {
-    throw new Error("头像数据过大");
-  }
-
+function validateAvatarUrl(avatarUrl) {
   if (avatarUrl.length > 500) {
     throw new Error("头像地址过长");
+  }
+
+  if (/^(data:|wxfile:)/i.test(avatarUrl)) {
+    throw new Error("头像地址必须是已上传后的稳定地址");
   }
 }
 
 function parseCreateNotePayload(payload = {}) {
   const author = String(payload.author || "").trim() || "匿名";
-  const avatarBase64 = String(payload.avatarBase64 || "").trim();
   const avatarUrl = String(payload.avatarUrl || "").trim();
   const content = String(payload.content || "").trim();
   const clientRequestId = String(payload.clientRequestId || "").trim();
@@ -50,7 +49,7 @@ function parseCreateNotePayload(payload = {}) {
   }
 
   validateAuthor(author);
-  validateAvatar(avatarBase64, avatarUrl);
+  validateAvatarUrl(avatarUrl);
 
   if (clientRequestId.length > 100) {
     throw new Error("请求标识过长");
@@ -58,7 +57,6 @@ function parseCreateNotePayload(payload = {}) {
 
   return {
     author,
-    avatarBase64,
     avatarUrl,
     content,
     clientRequestId
@@ -67,7 +65,6 @@ function parseCreateNotePayload(payload = {}) {
 
 function parseCreateReplyPayload(payload = {}) {
   const author = String(payload.author || "").trim() || "匿名";
-  const avatarBase64 = String(payload.avatarBase64 || "").trim();
   const avatarUrl = String(payload.avatarUrl || "").trim();
   const content = String(payload.content || "").trim();
 
@@ -80,11 +77,10 @@ function parseCreateReplyPayload(payload = {}) {
   }
 
   validateAuthor(author);
-  validateAvatar(avatarBase64, avatarUrl);
+  validateAvatarUrl(avatarUrl);
 
   return {
     author,
-    avatarBase64,
     avatarUrl,
     content
   };

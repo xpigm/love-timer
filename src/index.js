@@ -1,6 +1,14 @@
 import { isAuthorizedAdmin } from "./lib/admin-auth.js";
-import { error, handleOptions, json } from "./lib/response.js";
+import { corsHeaders, error, handleOptions, json } from "./lib/response.js";
 import { parseCreateNotePayload, parseCreateReplyPayload, parseListParams } from "./lib/validation.js";
+
+const AVATAR_MAX_BYTES = 512 * 1024;
+const AVATAR_CONTENT_TYPES = new Map([
+  ["image/jpeg", "jpg"],
+  ["image/png", "png"],
+  ["image/webp", "webp"],
+  ["image/gif", "gif"]
+]);
 
 function formatDateTime(date = new Date()) {
   const formatter = new Intl.DateTimeFormat("sv-SE", {
@@ -24,16 +32,16 @@ function buildReplyId() {
   return `reply-${Date.now()}-${crypto.randomUUID()}`;
 }
 
-function mapReply(row = {}) {
-  const avatarBase64 = row.avatar_base64 || "";
-  const avatarUrl = row.avatar_url || "";
+function buildAvatarId() {
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+}
 
+function mapReply(row = {}) {
   return {
     id: row.id,
     noteId: row.note_id,
     author: row.author,
-    avatarBase64,
-    avatarUrl: avatarBase64 || avatarUrl,
+    avatarUrl: row.avatar_url || "",
     content: row.content,
     city: row.city || "",
     createdAt: row.created_at,
@@ -42,14 +50,10 @@ function mapReply(row = {}) {
 }
 
 function mapNote(row = {}, replies = []) {
-  const avatarBase64 = row.avatar_base64 || "";
-  const avatarUrl = row.avatar_url || "";
-
   return {
     id: row.id,
     author: row.author,
-    avatarBase64,
-    avatarUrl: avatarBase64 || avatarUrl,
+    avatarUrl: row.avatar_url || "",
     content: row.content,
     city: row.city || "",
     createdAt: row.created_at,
@@ -97,6 +101,135 @@ function getCity(request) {
   return String((request.cf && request.cf.city) || request.headers.get("CF-IPCity") || "").trim().slice(0, 50);
 }
 
+function assertAvatarBucket(env) {
+  if (!env.AVATARS) {
+    throw new Error("头像存储未配置");
+  }
+}
+
+function buildAvatarUrl(request, key) {
+  const url = new URL(request.url);
+  return `${url.origin}/${key.split("/").map(encodeURIComponent).join("/")}`;
+}
+
+function normalizeAvatarContentType(value) {
+  const contentType = String(value || "").split(";")[0].trim().toLowerCase();
+  return AVATAR_CONTENT_TYPES.has(contentType) ? contentType : "";
+}
+
+function inferAvatarContentType(file, bytes) {
+  const contentType = normalizeAvatarContentType(file && file.type);
+  if (contentType) {
+    return contentType;
+  }
+
+  const name = String((file && file.name) || "").toLowerCase();
+  if (name.endsWith(".png")) {
+    return "image/png";
+  }
+
+  if (name.endsWith(".webp")) {
+    return "image/webp";
+  }
+
+  if (name.endsWith(".gif")) {
+    return "image/gif";
+  }
+
+  if (name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+    return "image/jpeg";
+  }
+
+  const signature = new Uint8Array(bytes || new ArrayBuffer(0));
+  if (signature[0] === 0xff && signature[1] === 0xd8 && signature[2] === 0xff) {
+    return "image/jpeg";
+  }
+
+  if (signature[0] === 0x89 && signature[1] === 0x50 && signature[2] === 0x4e && signature[3] === 0x47) {
+    return "image/png";
+  }
+
+  if (signature[0] === 0x47 && signature[1] === 0x49 && signature[2] === 0x46) {
+    return "image/gif";
+  }
+
+  if (signature[0] === 0x52 && signature[1] === 0x49 && signature[2] === 0x46 && signature[3] === 0x46 && signature[8] === 0x57 && signature[9] === 0x45 && signature[10] === 0x42 && signature[11] === 0x50) {
+    return "image/webp";
+  }
+
+  return "";
+}
+
+async function putAvatarObject(request, env, bytes, contentType) {
+  assertAvatarBucket(env);
+
+  if (!bytes || !bytes.byteLength) {
+    throw new Error("头像文件为空");
+  }
+
+  if (bytes.byteLength > AVATAR_MAX_BYTES) {
+    throw new Error("头像文件不能超过 512KB");
+  }
+
+  const ext = AVATAR_CONTENT_TYPES.get(contentType);
+  if (!ext) {
+    throw new Error("头像只支持 JPG、PNG、WebP 或 GIF");
+  }
+
+  const key = `a/${buildAvatarId()}.${ext}`;
+  await env.AVATARS.put(key, bytes, {
+    httpMetadata: {
+      contentType
+    }
+  });
+
+  return {
+    avatarKey: key,
+    avatarUrl: buildAvatarUrl(request, key)
+  };
+}
+
+async function uploadAvatar(request, env) {
+  await getClientHash(request, env, true);
+  const form = await request.formData();
+  const file = form.get("file");
+
+  if (!file || typeof file.arrayBuffer !== "function") {
+    throw new Error("缺少头像文件");
+  }
+
+  const bytes = await file.arrayBuffer();
+  const contentType = inferAvatarContentType(file, bytes);
+  if (!contentType) {
+    throw new Error("头像只支持 JPG、PNG、WebP 或 GIF");
+  }
+
+  const avatar = await putAvatarObject(request, env, bytes, contentType);
+
+  return json({
+    success: true,
+    data: avatar
+  }, { status: 201 });
+}
+
+async function getAvatar(request, env, key) {
+  assertAvatarBucket(env);
+
+  const object = await env.AVATARS.get(key);
+  if (!object) {
+    return error(404, "头像不存在");
+  }
+
+  const headers = new Headers(corsHeaders);
+  object.writeHttpMetadata(headers);
+  headers.set("cache-control", "public, max-age=31536000, immutable");
+  headers.set("etag", object.httpEtag);
+
+  return new Response(object.body, {
+    headers
+  });
+}
+
 async function loadReplies(env, noteIds) {
   if (!noteIds.length) {
     return new Map();
@@ -104,7 +237,7 @@ async function loadReplies(env, noteIds) {
 
   const placeholders = noteIds.map(() => "?").join(", ");
   const result = await env.DB.prepare(
-    `SELECT id, note_id, author, avatar_base64, avatar_url, content, city, created_at, created_ts
+    `SELECT id, note_id, author, avatar_url, content, city, created_at, created_ts
      FROM note_replies
      WHERE status = 'published' AND note_id IN (${placeholders})
      ORDER BY created_ts ASC`
@@ -126,7 +259,7 @@ async function listNotes(request, env) {
   const { limit, cursor } = parseListParams(url.searchParams);
   const clientHash = await getClientHash(request, env);
   const bindings = [];
-  let sql = `SELECT id, author, avatar_base64, avatar_url, content, city, created_at, created_ts,
+  let sql = `SELECT id, author, avatar_url, content, city, created_at, created_ts,
     (SELECT COUNT(*) FROM note_likes WHERE note_id = notes.id) AS likes_count`;
 
   if (clientHash) {
@@ -167,8 +300,7 @@ async function createNote(request, env) {
   const note = {
     id: buildNoteId(),
     author: payload.author,
-    avatarBase64: payload.avatarBase64,
-    avatarUrl: payload.avatarBase64 || payload.avatarUrl,
+    avatarUrl: payload.avatarUrl,
     content: payload.content,
     city: getCity(request),
     createdAt: formatDateTime(now),
@@ -181,13 +313,12 @@ async function createNote(request, env) {
   const userAgent = String(request.headers.get("User-Agent") || "").slice(0, 500);
 
   await env.DB.prepare(
-    "INSERT INTO notes (id, author, avatar_base64, avatar_url, content, city, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
+    "INSERT INTO notes (id, author, avatar_url, content, city, status, created_at, created_ts, client_request_id, ip_hash, ua) VALUES (?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?)"
   )
     .bind(
       note.id,
       note.author,
-      note.avatarBase64,
-      payload.avatarUrl,
+      note.avatarUrl,
       note.content,
       note.city,
       note.createdAt,
@@ -257,8 +388,7 @@ async function createReply(request, env, noteId) {
     id: buildReplyId(),
     noteId,
     author: payload.author,
-    avatarBase64: payload.avatarBase64,
-    avatarUrl: payload.avatarBase64 || payload.avatarUrl,
+    avatarUrl: payload.avatarUrl,
     content: payload.content,
     city: getCity(request),
     createdAt: formatDateTime(now),
@@ -268,14 +398,13 @@ async function createReply(request, env, noteId) {
   const userAgent = String(request.headers.get("User-Agent") || "").slice(0, 500);
 
   await env.DB.prepare(
-    "INSERT INTO note_replies (id, note_id, author, avatar_base64, avatar_url, content, city, status, created_at, created_ts, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)"
+    "INSERT INTO note_replies (id, note_id, author, avatar_url, content, city, status, created_at, created_ts, ip_hash, ua) VALUES (?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)"
   )
     .bind(
       reply.id,
       reply.noteId,
       reply.author,
-      reply.avatarBase64,
-      payload.avatarUrl,
+      reply.avatarUrl,
       reply.content,
       reply.city,
       reply.createdAt,
@@ -333,6 +462,15 @@ export default {
           success: true,
           service: "love-timer-wall-api"
         });
+      }
+
+      if (request.method === "POST" && pathname === "/api/profile/avatar") {
+        return await uploadAvatar(request, env);
+      }
+
+      const avatarMatch = pathname.match(/^\/a\/([^/]+)$/);
+      if (request.method === "GET" && avatarMatch) {
+        return await getAvatar(request, env, `a/${decodeURIComponent(avatarMatch[1])}`);
       }
 
       if (request.method === "GET" && pathname === "/api/notes") {

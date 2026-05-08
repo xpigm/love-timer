@@ -11,5 +11,12 @@
       "preview_database_id": "ec430a69-4ddb-4bc9-ac3a-71573efcdff4",
       "migrations_dir": "migrations"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "AVATARS",
+      "bucket_name": "love-timer-wall-avatars",
+      "preview_bucket_name": "love-timer-wall-avatars"
+    }
   ]
 }
