@@ -7,15 +7,11 @@ function isCloudEnabled() {
 }
 
 function normalizeReply(reply = {}) {
-  const avatarBase64 = String(reply.avatarBase64 || "");
-  const avatarUrl = String(reply.avatarUrl || "");
-
   return {
     id: String(reply.id || ""),
     noteId: String(reply.noteId || ""),
     author: String(reply.author || "匿名"),
-    avatarBase64,
-    avatarUrl: avatarBase64 || avatarUrl,
+    avatarUrl: String(reply.avatarUrl || ""),
     content: String(reply.content || ""),
     city: String(reply.city || ""),
     createdAt: String(reply.createdAt || ""),
@@ -24,14 +20,10 @@ function normalizeReply(reply = {}) {
 }
 
 function normalizeNote(note = {}) {
-  const avatarBase64 = String(note.avatarBase64 || "");
-  const avatarUrl = String(note.avatarUrl || "");
-
   return {
     id: String(note.id || ""),
     author: String(note.author || "匿名"),
-    avatarBase64,
-    avatarUrl: avatarBase64 || avatarUrl,
+    avatarUrl: String(note.avatarUrl || ""),
     content: String(note.content || ""),
     city: String(note.city || ""),
     createdAt: String(note.createdAt || ""),
@@ -68,7 +60,7 @@ async function fetchNotes() {
 async function createNote(payload = {}) {
   const trimmedPayload = {
     author: String(payload.author || "").trim(),
-    avatarBase64: String(payload.avatarBase64 || ""),
+    avatarUrl: String(payload.avatarUrl || "").trim(),
     content: String(payload.content || "").trim()
   };
 
@@ -102,7 +94,7 @@ async function toggleLike(noteId) {
 async function createReply(noteId, payload = {}) {
   const trimmedPayload = {
     author: String(payload.author || "").trim(),
-    avatarBase64: String(payload.avatarBase64 || ""),
+    avatarUrl: String(payload.avatarUrl || "").trim(),
     content: String(payload.content || "").trim()
   };
 
@@ -120,10 +112,25 @@ async function createReply(noteId, payload = {}) {
   return normalizeReply(response && response.data ? response.data : {});
 }
 
+async function uploadAvatar(filePath) {
+  if (!isCloudEnabled()) {
+    throw new Error("未配置留言服务地址");
+  }
+
+  const response = await api.uploadFile({
+    path: "/api/profile/avatar",
+    filePath,
+    headers: buildClientHeaders()
+  });
+
+  return response && response.data ? response.data : {};
+}
+
 module.exports = {
   fetchNotes,
   createNote,
   toggleLike,
   createReply,
+  uploadAvatar,
   isCloudEnabled
 };

@@ -90,7 +90,7 @@ function decorateReply(reply, now) {
     ...reply,
     author,
     authorInitial: author.slice(0, 1),
-    avatarUrl: reply.avatarBase64 || reply.avatarUrl || "",
+    avatarUrl: reply.avatarUrl || "",
     displayTime: time.formatRelativeTime(reply.timestamp, now) || reply.createdAt
   };
 }
@@ -105,50 +105,16 @@ function decorateNotes(notes, now = new Date()) {
       authorInitial: author.slice(0, 1),
       isLatest: index === 0,
       metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
-      avatarUrl: note.avatarBase64 || note.avatarUrl || "",
+      avatarUrl: note.avatarUrl || "",
       displayTime: time.formatRelativeTime(note.timestamp, now) || note.createdAt,
       replies: (Array.isArray(note.replies) ? note.replies : []).map((reply) => decorateReply(reply, now))
     };
   });
 }
 
-function inferMimeType(filePath) {
-  const normalized = String(filePath || "").toLowerCase();
-
-  if (normalized.endsWith(".png")) {
-    return "image/png";
-  }
-
-  if (normalized.endsWith(".webp")) {
-    return "image/webp";
-  }
-
-  if (normalized.endsWith(".gif")) {
-    return "image/gif";
-  }
-
-  return "image/jpeg";
-}
-
-function readAvatarAsDataUrl(filePath) {
-  return new Promise((resolve, reject) => {
-    wx.getFileSystemManager().readFile({
-      filePath,
-      encoding: "base64",
-      success: ({ data }) => {
-        resolve(`data:${inferMimeType(filePath)};base64,${data}`);
-      },
-      fail: (error) => {
-        reject(new Error((error && error.errMsg) || "头像读取失败"));
-      }
-    });
-  });
-}
-
 function buildWallViewData(profile, scene, notes, options = {}) {
   const content = options.content == null ? "" : options.content;
   const avatarUrl = options.avatarUrl || "";
-  const avatarBase64 = options.avatarBase64 || "";
   const author = options.author || "";
 
   return {
@@ -160,7 +126,6 @@ function buildWallViewData(profile, scene, notes, options = {}) {
     form: {
       author,
       avatarUrl,
-      avatarBase64,
       content
     },
     notes: decorateNotes(notes, options.now || new Date()),
@@ -188,7 +153,6 @@ Page({
     form: {
       author: "",
       avatarUrl: "",
-      avatarBase64: "",
       content: ""
     },
     notes: [],
@@ -214,6 +178,7 @@ Page({
     loadingNotes: false,
     loadError: "",
     submitting: false,
+    avatarUploading: false,
     contentError: "",
     composerError: "",
     copySuccessId: "",
@@ -291,8 +256,7 @@ Page({
     this.setData({
       ...buildWallViewData(profile, scene, notes, {
         author: cachedUserInfo ? cachedUserInfo.nickName : "",
-        avatarUrl: cachedUserInfo ? (cachedUserInfo.avatarBase64 || cachedUserInfo.avatarUrl || "") : "",
-        avatarBase64: cachedUserInfo ? cachedUserInfo.avatarBase64 || "" : "",
+        avatarUrl: cachedUserInfo ? cachedUserInfo.avatarUrl || "" : "",
         content: this.data.form.content
       }),
       loadingNotes: false,
@@ -304,16 +268,31 @@ Page({
     tapFeedback();
     const { avatarUrl } = event.detail;
 
+    if (!avatarUrl || this.data.avatarUploading) {
+      return;
+    }
+
+    const previousAvatarUrl = this.data.form.avatarUrl;
+
+    this.setData({
+      "form.avatarUrl": avatarUrl,
+      avatarUploading: true
+    });
+
     try {
-      const avatarBase64 = await readAvatarAsDataUrl(avatarUrl);
+      const uploaded = await noteService.uploadAvatar(avatarUrl);
       this.setData({
-        "form.avatarUrl": avatarBase64,
-        "form.avatarBase64": avatarBase64
+        "form.avatarUrl": uploaded.avatarUrl || "",
+        avatarUploading: false
       });
       this.updateCachedUserInfo();
     } catch (error) {
+      this.setData({
+        "form.avatarUrl": previousAvatarUrl,
+        avatarUploading: false
+      });
       wx.showToast({
-        title: error && error.message ? error.message : "头像处理失败",
+        title: error && error.message ? error.message : "头像上传失败",
         icon: "none"
       });
     }
@@ -335,12 +314,11 @@ Page({
   },
 
   updateCachedUserInfo() {
-    const { author, avatarUrl, avatarBase64 } = this.data.form;
-    if (author || avatarUrl || avatarBase64) {
+    const { author, avatarUrl } = this.data.form;
+    if (author || avatarUrl) {
       storage.saveUserInfo({
         nickName: author,
-        avatarUrl: avatarBase64 || avatarUrl,
-        avatarBase64
+        avatarUrl
       });
     }
   },
@@ -466,6 +444,13 @@ Page({
       return;
     }
 
+    if (this.data.avatarUploading) {
+      this.setData({
+        replyError: "头像还在上传，稍等一下。"
+      });
+      return;
+    }
+
     if (!content) {
       this.setData({
         replyError: "先写一句回复。"
@@ -481,7 +466,7 @@ Page({
     try {
       const reply = await noteService.createReply(id, {
         author: this.data.form.author || "匿名",
-        avatarBase64: this.data.form.avatarBase64 || "",
+        avatarUrl: this.data.form.avatarUrl || "",
         content
       });
 
@@ -512,8 +497,15 @@ Page({
     }
 
     const author = this.data.form.author || "匿名";
-    const avatarBase64 = this.data.form.avatarBase64 || "";
+    const avatarUrl = this.data.form.avatarUrl || "";
     const content = (this.data.form.content || "").trim();
+
+    if (this.data.avatarUploading) {
+      this.setData({
+        composerError: "头像还在上传，稍等一下。"
+      });
+      return;
+    }
 
     if (!content) {
       this.setData({
@@ -531,7 +523,7 @@ Page({
     try {
       await noteService.createNote({
         author,
-        avatarBase64,
+        avatarUrl,
         content
       });
       this.updateCachedUserInfo();
@@ -541,7 +533,6 @@ Page({
         ...buildWallViewData(this.data.profile, this.data.scene, notes, {
           author: this.data.form.author,
           avatarUrl: this.data.form.avatarUrl,
-          avatarBase64: this.data.form.avatarBase64,
           content: ""
         }),
         submitting: false,

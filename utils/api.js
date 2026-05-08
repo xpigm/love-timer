@@ -56,6 +56,56 @@ function request(options = {}) {
   });
 }
 
+function parseUploadData(data) {
+  if (!data) {
+    return {};
+  }
+
+  if (typeof data === "object") {
+    return data;
+  }
+
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    return {};
+  }
+}
+
+function uploadFile(options = {}) {
+  const url = joinUrl(options.path);
+
+  if (!serviceConfig.notesApiBaseUrl) {
+    return Promise.reject(new Error("未配置留言服务地址"));
+  }
+
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url,
+      filePath: options.filePath,
+      name: options.name || "file",
+      formData: options.formData || {},
+      timeout: options.timeout || serviceConfig.notesRequestTimeout,
+      header: options.headers || {},
+      success: (response) => {
+        const { statusCode } = response;
+        const data = parseUploadData(response.data);
+
+        if (statusCode >= 200 && statusCode < 300) {
+          resolve(data);
+          return;
+        }
+
+        reject(new Error(resolveErrorMessage(data, `上传失败（${statusCode}）`)));
+      },
+      fail: (error) => {
+        reject(new Error((error && error.errMsg) || "上传失败"));
+      }
+    });
+  });
+}
+
 module.exports = {
-  request
+  request,
+  uploadFile
 };

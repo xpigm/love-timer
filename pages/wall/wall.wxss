@@ -366,6 +366,10 @@
     var(--glass-quiet-bg);
 }
 
+.wall-author-avatar-wrap.is-uploading {
+  opacity: 0.76;
+}
+
 .wall-author-avatar-action {
   position: absolute;
   right: 0;

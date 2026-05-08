@@ -45,12 +45,34 @@ function createId(prefix) {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 }
 
+function getStableAvatarUrl(avatarUrl) {
+  const value = String(avatarUrl || "").trim();
+  return /^(data:|wxfile:)/i.test(value) ? "" : value;
+}
+
 function getUserInfo() {
-  return wx.getStorageSync(STORAGE_KEYS.userInfo) || null;
+  const userInfo = wx.getStorageSync(STORAGE_KEYS.userInfo) || null;
+  if (!userInfo) {
+    return null;
+  }
+
+  const cleaned = {
+    nickName: userInfo.nickName || "",
+    avatarUrl: getStableAvatarUrl(userInfo.avatarUrl)
+  };
+
+  if (cleaned.nickName !== userInfo.nickName || cleaned.avatarUrl !== userInfo.avatarUrl || Object.keys(userInfo).length !== 2) {
+    return saveUserInfo(cleaned);
+  }
+
+  return cleaned;
 }
 
 function saveUserInfo(userInfo) {
-  return write(STORAGE_KEYS.userInfo, userInfo);
+  return write(STORAGE_KEYS.userInfo, {
+    nickName: userInfo.nickName || "",
+    avatarUrl: getStableAvatarUrl(userInfo.avatarUrl)
+  });
 }
 
 function getClientId() {

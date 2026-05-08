@@ -39,12 +39,12 @@
 
       <view class="wall-author-row">
         <view class="wall-avatar-column">
-          <button class="wall-author-avatar-wrap" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <button class="wall-author-avatar-wrap {{avatarUploading ? 'is-uploading' : ''}}" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" disabled="{{avatarUploading}}">
             <view class="wall-author-avatar-frame">
               <image class="wall-author-avatar" src="{{form.avatarUrl}}" mode="aspectFill" wx:if="{{form.avatarUrl}}"></image>
               <view class="wall-author-avatar-placeholder" wx:else></view>
             </view>
-            <view class="wall-author-avatar-action">换</view>
+            <view class="wall-author-avatar-action">{{avatarUploading ? '传' : '换'}}</view>
           </button>
         </view>
         <view class="wall-author-main">
@@ -79,7 +79,7 @@
 
       <view class="wall-composer-actions">
         <view class="wall-composer-link" bindtap="fillInspiration">随机一句</view>
-        <button class="btn btn-neon wall-save-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitNote">{{submitting ? '保存中' : '保存留言'}}</button>
+        <button class="btn btn-neon wall-save-btn" loading="{{submitting}}" disabled="{{submitting || avatarUploading}}" bindtap="submitNote">{{submitting ? '保存中' : '保存留言'}}</button>
       </view>
       <view class="wall-composer-status" wx:if="{{composerError}}">{{composerError}}</view>
 
@@ -143,7 +143,7 @@
             ></textarea>
             <view class="wall-reply-error" wx:if="{{replyError}}">{{replyError}}</view>
             <view class="wall-reply-actions">
-              <button class="wall-reply-submit" loading="{{replySubmitting}}" disabled="{{replySubmitting}}" data-id="{{item.id}}" bindtap="submitReply">{{replySubmitting ? '发送中' : '发送回复'}}</button>
+              <button class="wall-reply-submit" loading="{{replySubmitting}}" disabled="{{replySubmitting || avatarUploading}}" data-id="{{item.id}}" bindtap="submitReply">{{replySubmitting ? '发送中' : '发送回复'}}</button>
             </view>
           </view>
         </view>
