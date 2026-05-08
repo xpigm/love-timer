@@ -15,19 +15,56 @@ const PROFILE = {
       tag: "新的一年也继续把彼此放在心上。"
     },
     {
+      key: "springfestival",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 1,
+      day: 1,
+      title: "春节快乐",
+      tag: "新的一岁，也想继续一起认真生活。",
+      badge: "春节"
+    },
+    {
+      key: "lantern",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 1,
+      day: 15,
+      title: "今天是元宵节",
+      tag: "适合一起看灯，也适合把团圆留在今天。",
+      badge: "元宵"
+    },
+    {
       key: "valentine",
       month: 2,
       day: 14
     },
     {
-      key: "birthday",
-      calendar: "lunar",
+      key: "anniversary",
+      calendar: "solar",
       recurrence: "yearly",
-      month: 5,
-      day: 15,
-      title: "今天是张的生日",
-      tag: "今天适合认真庆祝，也适合把偏爱说得更明确。",
-      badge: "张的生日"
+      originYear: 2024,
+      month: 3,
+      day: 6,
+      title: "今天是领证纪念日",
+      tag: "海淀民政局的那天，正式把彼此写进了以后。",
+      badge: "领证纪念日"
+    },
+    {
+      key: "valentine",
+      month: 3,
+      day: 7,
+      title: "今天是女生节",
+      tag: "今天适合把偏爱说得更明显一点。",
+      badge: "女生节"
+    },
+    {
+      key: "valentine",
+      month: 3,
+      day: 8,
+      title: "今天是女神节",
+      tag: "今天适合认真宠爱，也适合认真感谢。",
+      badge: "女神节"
     },
     {
       key: "valentine",
@@ -38,12 +75,22 @@ const PROFILE = {
       badge: "白色情人节"
     },
     {
-      key: "anniversary",
-      month: 3,
-      day: 6,
-      title: "今天是领证纪念日",
-      tag: "海淀民政局的那天，正式把彼此写进了以后。",
-      badge: "领证纪念日"
+      key: "default",
+      month: 4,
+      day: 1,
+      title: "今天是愚人节",
+      tag: "玩笑可以轻一点，喜欢可以认真一点。",
+      badge: "愚人节"
+    },
+    {
+      key: "birthday",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 5,
+      day: 15,
+      title: "今天是张的生日",
+      tag: "今天适合认真庆祝，也适合把偏爱说得更明确。",
+      badge: "张的生日"
     },
     {
       key: "520",
@@ -63,7 +110,27 @@ const PROFILE = {
       tag: "今天适合认真庆祝一下。"
     },
     {
-      key: "anniversary",
+      key: "qixi",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 7,
+      day: 7,
+      title: "今天是七夕",
+      tag: "今天适合把喜欢说得更认真一点。",
+      badge: "七夕"
+    },
+    {
+      key: "midautumn",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 8,
+      day: 15,
+      title: "今天是中秋节",
+      tag: "月亮很好，想念和陪伴也都刚好。",
+      badge: "中秋"
+    },
+    {
+      key: "longlove",
       month: 9,
       day: 9,
       title: "今天是久久日",
@@ -105,6 +172,16 @@ const PROFILE = {
       day: 25,
       title: "今天是圣诞节",
       tag: "适合拥抱、拍照和认真庆祝。"
+    },
+    {
+      key: "winter",
+      calendar: "lunar",
+      recurrence: "yearly",
+      month: 12,
+      day: 8,
+      title: "今天是腊八",
+      tag: "冬天很长，但有你就会暖一点。",
+      badge: "腊八"
     },
     {
       key: "newyear",

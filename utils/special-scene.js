@@ -1,6 +1,6 @@
 const solarlunarPackage = require("solarlunar");
 const solarlunar = solarlunarPackage.default || solarlunarPackage;
-const { getTogetherDays, getLoveYears } = require("./time");
+const { getTogetherDays } = require("./time");
 const { getMilestoneLabel, isMilestoneDay } = require("./milestone");
 
 const SCENE_PRESETS = {
@@ -52,6 +52,30 @@ const SCENE_PRESETS = {
     chipStyle: "medal",
     badgeStyle: "seal"
   },
+  longlove: {
+    key: "longlove",
+    sceneClass: "scene-anniversary",
+    badge: "久久日",
+    title: "今天适合长久相爱",
+    tag: "把长久和偏爱都写进今天。",
+    description: "复用周年的金色仪式感，但不参与周年年数计算。",
+    metricValue: "久久日",
+    metricDesc: "适合许下长久",
+    heroEyebrow: "LONG LOVE DAY",
+    heroSubline: "把长长久久说得认真一点，也把今天好好收藏。",
+    momentKicker: "久久此刻",
+    wallKicker: "LONG LOVE NOTES",
+    wallTitle: "给长久留一张记录卡",
+    wallBody: "今天适合写下一句想一起走很久的话。",
+    composerTitle: "写一句长久偏爱",
+    composerBody: "把想一起慢慢走下去的心意，认真留在今天。",
+    sceneMood: "ceremony",
+    sceneIntensity: "special",
+    orbMode: "champagne",
+    particleMode: "ribbon",
+    chipStyle: "medal",
+    badgeStyle: "seal"
+  },
   birthday: {
     key: "birthday",
     sceneClass: "scene-birthday",
@@ -93,6 +117,30 @@ const SCENE_PRESETS = {
     wallBody: "有些喜欢适合当面说，也适合在今天认真写下来。",
     composerTitle: "写一句告白",
     composerBody: "今天适合偏爱、告白和把心动说得更完整。",
+    sceneMood: "rose",
+    sceneIntensity: "special",
+    orbMode: "bloom",
+    particleMode: "petal",
+    chipStyle: "rose",
+    badgeStyle: "glow"
+  },
+  qixi: {
+    key: "qixi",
+    sceneClass: "scene-valentine",
+    badge: "七夕",
+    title: "今天是七夕",
+    tag: "把喜欢写得更认真一点。",
+    description: "复用玫瑰色高光和花瓣粒子，让农历七夕更有告白氛围。",
+    metricValue: "七夕",
+    metricDesc: "适合认真说爱",
+    heroEyebrow: "QIXI LETTER",
+    heroSubline: "今天的喜欢，可以比平常更郑重一点。",
+    momentKicker: "七夕此刻",
+    wallKicker: "QIXI NOTES",
+    wallTitle: "把七夕的爱意写下来",
+    wallBody: "今天适合留一封更认真、更长久的告白。",
+    composerTitle: "写一句七夕告白",
+    composerBody: "把今晚的心动和想念，认真留在这一页。",
     sceneMood: "rose",
     sceneIntensity: "special",
     orbMode: "bloom",
@@ -172,6 +220,30 @@ const SCENE_PRESETS = {
     chipStyle: "frost",
     badgeStyle: "frost"
   },
+  winter: {
+    key: "winter",
+    sceneClass: "scene-christmas",
+    badge: "冬日篇",
+    title: "冬日温柔时刻",
+    tag: "冬天很长，但有你就会暖一点。",
+    description: "复用冬日冷调和暖光装饰，适合腊八等冬日日期。",
+    metricValue: "冬日篇",
+    metricDesc: "适合留住暖意",
+    heroEyebrow: "WINTER WARMTH",
+    heroSubline: "把冬天慢慢过暖，也把今天认真记下。",
+    momentKicker: "冬日此刻",
+    wallKicker: "WINTER NOTES",
+    wallTitle: "把今天的暖意写下来",
+    wallBody: "适合记录一碗热粥、一盏灯，和让人安心的陪伴。",
+    composerTitle: "留一句冬日暖意",
+    composerBody: "写下今天觉得温暖的瞬间，以后再读也会想靠近。",
+    sceneMood: "frost",
+    sceneIntensity: "special",
+    orbMode: "frost",
+    particleMode: "snow",
+    chipStyle: "frost",
+    badgeStyle: "frost"
+  },
   newyear: {
     key: "newyear",
     sceneClass: "scene-newyear",
@@ -196,22 +268,94 @@ const SCENE_PRESETS = {
     chipStyle: "festival",
     badgeStyle: "seal"
   },
+  springfestival: {
+    key: "springfestival",
+    sceneClass: "scene-newyear",
+    badge: "春节",
+    title: "春节快乐",
+    tag: "新的一岁，也想继续一起认真生活。",
+    description: "复用新年烟火和节庆深色氛围，适合农历新年。",
+    metricValue: "春节",
+    metricDesc: "适合团圆与许愿",
+    heroEyebrow: "SPRING FESTIVAL",
+    heroSubline: "把新年的第一份认真和偏爱，都留给彼此。",
+    momentKicker: "春节此刻",
+    wallKicker: "SPRING NOTES",
+    wallTitle: "给新的一岁留一句",
+    wallBody: "把祝福、愿望和想一起继续生活的心意写下来。",
+    composerTitle: "写一句新春心愿",
+    composerBody: "适合写下感谢、期待，和新一年也想继续的喜欢。",
+    sceneMood: "night-festival",
+    sceneIntensity: "exact",
+    orbMode: "firework",
+    particleMode: "firework",
+    chipStyle: "festival",
+    badgeStyle: "seal"
+  },
+  lantern: {
+    key: "lantern",
+    sceneClass: "scene-newyear",
+    badge: "元宵",
+    title: "今天是元宵节",
+    tag: "灯火和团圆，都适合留在今天。",
+    description: "延续新年灯火氛围，让元宵节多一点团圆感。",
+    metricValue: "元宵",
+    metricDesc: "适合团圆与灯火",
+    heroEyebrow: "LANTERN NIGHT",
+    heroSubline: "灯火亮起来的时候，也适合把心里的话写下来。",
+    momentKicker: "元宵此刻",
+    wallKicker: "LANTERN NOTES",
+    wallTitle: "把今晚的灯火写下来",
+    wallBody: "适合记录团圆、热闹，和想一起看灯的心情。",
+    composerTitle: "写一句元宵心愿",
+    composerBody: "把今天的圆满和暖意，认真留在这一页。",
+    sceneMood: "night-festival",
+    sceneIntensity: "special",
+    orbMode: "firework",
+    particleMode: "firework",
+    chipStyle: "festival",
+    badgeStyle: "seal"
+  },
+  midautumn: {
+    key: "midautumn",
+    sceneClass: "scene-newyear",
+    badge: "中秋",
+    title: "今天是中秋节",
+    tag: "月亮很好，想念和陪伴也都刚好。",
+    description: "使用暖光夜景氛围，让中秋更适合团圆和记录。",
+    metricValue: "中秋",
+    metricDesc: "适合月色与团圆",
+    heroEyebrow: "MID-AUTUMN MOON",
+    heroSubline: "月色很亮，适合把想念和偏爱都说清楚。",
+    momentKicker: "中秋此刻",
+    wallKicker: "MOON NOTES",
+    wallTitle: "把今天的月色写下来",
+    wallBody: "适合记录月亮、团圆，和想一起慢慢走的心情。",
+    composerTitle: "写一句中秋偏爱",
+    composerBody: "把今天的想念和陪伴，认真留在这张月色卡片里。",
+    sceneMood: "night-festival",
+    sceneIntensity: "special",
+    orbMode: "firework",
+    particleMode: "firework",
+    chipStyle: "festival",
+    badgeStyle: "seal"
+  },
   milestone: {
     key: "milestone",
     sceneClass: "scene-milestone",
-    badge: "纪念日",
-    title: "今天值得庆祝",
+    badge: "天数里程碑",
+    title: "今天是特别的第 N 天",
     tag: "重要天数会自动触发纪念特效。",
     description: "在关键天数自动切换高亮主题，让数字本身变成纪念感。",
-    metricValue: "纪念日",
-    metricDesc: "重要数字已抵达",
+    metricValue: "天数里程碑",
+    metricDesc: "重要天数已抵达",
     heroEyebrow: "MILESTONE UNLOCKED",
     heroSubline: "今天不是普通的一天，是值得被单独装订的一页。",
-    momentKicker: "纪念时刻",
-    wallKicker: "MILESTONE NOTES",
-    wallTitle: "给这个数字留一张记录卡",
+    momentKicker: "天数此刻",
+    wallKicker: "DAY MILESTONE",
+    wallTitle: "给这个特别天数留一张记录卡",
     wallBody: "有些天数天生值得单独收藏，今天就是其中一页。",
-    composerTitle: "给这个纪念日落款",
+    composerTitle: "给这个特别天数落款",
     composerBody: "写一句今天的感受，让这个数字真的被认真保存。",
     sceneMood: "unlock",
     sceneIntensity: "exact",
@@ -316,6 +460,75 @@ function getSolarDateParts(now) {
   };
 }
 
+function getStartDateParts(startTime) {
+  const start = new Date(String(startTime || "").trim().replace(/-/g, "/"));
+
+  if (Number.isNaN(start.getTime())) {
+    return null;
+  }
+
+  return getSolarDateParts(start);
+}
+
+function getAnniversaryOriginYear(profile, item) {
+  const configuredYear = Number(item.originYear);
+  if (configuredYear > 0) {
+    return configuredYear;
+  }
+
+  if (item.calendar !== "solar") {
+    return 0;
+  }
+
+  const startDate = getStartDateParts(profile.startTime);
+  if (!startDate) {
+    return 0;
+  }
+
+  const matchesStartDate = Number(item.month) === startDate.month && Number(item.day) === startDate.day;
+  return matchesStartDate ? startDate.year : 0;
+}
+
+function getAnniversaryYears(profile, item, now) {
+  const originYear = getAnniversaryOriginYear(profile, item);
+  return originYear > 0 ? Math.max(0, now.getFullYear() - originYear) : 0;
+}
+
+function getAnniversaryKind(item) {
+  const title = String(item.title || "");
+
+  if (title.includes("恋爱")) {
+    return "恋爱";
+  }
+
+  if (title.includes("结婚")) {
+    return "结婚";
+  }
+
+  if (title.includes("领证")) {
+    return "领证";
+  }
+
+  return "";
+}
+
+function getAnniversaryMetricLabel(item, years) {
+  const kind = getAnniversaryKind(item);
+  return kind ? `${kind} ${years} 周年` : `${years} 周年`;
+}
+
+function getAnniversaryTag(item, years) {
+  const baseTag = String(item.tag || "").trim();
+  const kind = getAnniversaryKind(item);
+  const yearText = kind ? `${kind}第 ${years} 周年` : `第 ${years} 周年`;
+
+  if (baseTag) {
+    return `${baseTag} ${yearText}准时抵达。`;
+  }
+
+  return `这是我们的${yearText}。`;
+}
+
 function getLunarDateParts(now) {
   return solarlunar.solar2lunar(now.getFullYear(), now.getMonth() + 1, now.getDate());
 }
@@ -386,7 +599,6 @@ function buildSceneFromPreset(presetKey, overrides = {}) {
 
 function getSpecialScene(profile, now = new Date()) {
   const togetherDays = getTogetherDays(profile.startTime, now);
-  const loveYears = getLoveYears(profile.startTime, now);
 
   const configuredScene = matchConfiguredScene(profile, now);
   if (configuredScene) {
@@ -395,8 +607,19 @@ function getSpecialScene(profile, now = new Date()) {
       ...configuredScene
     };
 
-    if (presetKey === "anniversary" && !sceneOverrides.tag && loveYears > 0) {
-      sceneOverrides.tag = `这是我们的第 ${loveYears} 个恋爱周年。`;
+    if (presetKey === "anniversary") {
+      const anniversaryYears = getAnniversaryYears(profile, configuredScene, now);
+
+      if (anniversaryYears > 0) {
+        const anniversaryLabel = getAnniversaryMetricLabel(configuredScene, anniversaryYears);
+        sceneOverrides.anniversaryYears = anniversaryYears;
+        sceneOverrides.tag = getAnniversaryTag(configuredScene, anniversaryYears);
+        sceneOverrides.badge = sceneOverrides.badge || anniversaryLabel;
+        sceneOverrides.metricValue = sceneOverrides.metricValue || anniversaryLabel;
+        sceneOverrides.metricDesc = sceneOverrides.metricDesc || "日期周年已抵达";
+        sceneOverrides.wallTitle = sceneOverrides.wallTitle || `给${anniversaryLabel}留一张纪念卡`;
+        sceneOverrides.composerTitle = sceneOverrides.composerTitle || `给${anniversaryLabel}落款`;
+      }
     }
 
     return buildSceneFromPreset(presetKey, sceneOverrides);
