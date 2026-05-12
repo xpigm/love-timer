@@ -68,7 +68,7 @@ function parseUploadData(data) {
   try {
     return JSON.parse(data);
   } catch (error) {
-    return {};
+    throw new Error("上传响应格式错误");
   }
 }
 
@@ -89,7 +89,16 @@ function uploadFile(options = {}) {
       header: options.headers || {},
       success: (response) => {
         const { statusCode } = response;
-        const data = parseUploadData(response.data);
+        let data = {};
+
+        try {
+          data = parseUploadData(response.data);
+        } catch (error) {
+          if (statusCode >= 200 && statusCode < 300) {
+            reject(error);
+            return;
+          }
+        }
 
         if (statusCode >= 200 && statusCode < 300) {
           resolve(data);

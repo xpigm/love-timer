@@ -912,6 +912,37 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  .hero-chip-medal,
+  .hero-chip-festival,
+  .hero-moment-tag-seal,
+  .hero-moment-tag-medal,
+  .hero-stage-seal-seal,
+  .hero-stage-seal-medal {
+    background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+    color: #ffd28d;
+    border-color: rgba(255, 226, 170, 0.18);
+  }
+
+  .hero-chip-rose,
+  .hero-chip-glow,
+  .hero-chip-soft,
+  .hero-moment-tag-glow,
+  .hero-moment-tag-spotlight,
+  .hero-stage-seal-glow,
+  .hero-stage-seal-spotlight {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ff9ec6;
+    border-color: rgba(255, 235, 249, 0.14);
+  }
+
+  .hero-chip-frost,
+  .hero-moment-tag-frost,
+  .hero-stage-seal-frost {
+    background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+    color: #9ee5ff;
+    border-color: rgba(215, 238, 248, 0.18);
+  }
+
   .hero-nameplate,
   .hero-statement {
     text-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.26);
@@ -927,6 +958,37 @@
       radial-gradient(circle at 16% 82%, rgba(117, 216, 255, 0.12), transparent 24%),
       linear-gradient(145deg, var(--glass-bg) 0%, var(--glass-quiet-bg) 100%);
   }
+}
+
+.theme-midnight .hero-chip-medal,
+.theme-midnight .hero-chip-festival,
+.theme-midnight .hero-moment-tag-seal,
+.theme-midnight .hero-moment-tag-medal,
+.theme-midnight .hero-stage-seal-seal,
+.theme-midnight .hero-stage-seal-medal {
+  background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+  color: #ffd28d;
+  border-color: rgba(255, 226, 170, 0.18);
+}
+
+.theme-midnight .hero-chip-rose,
+.theme-midnight .hero-chip-glow,
+.theme-midnight .hero-chip-soft,
+.theme-midnight .hero-moment-tag-glow,
+.theme-midnight .hero-moment-tag-spotlight,
+.theme-midnight .hero-stage-seal-glow,
+.theme-midnight .hero-stage-seal-spotlight {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ff9ec6;
+  border-color: rgba(255, 235, 249, 0.14);
+}
+
+.theme-midnight .hero-chip-frost,
+.theme-midnight .hero-moment-tag-frost,
+.theme-midnight .hero-stage-seal-frost {
+  background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+  color: #9ee5ff;
+  border-color: rgba(215, 238, 248, 0.18);
 }
 
 .theme-midnight .hero-nameplate,

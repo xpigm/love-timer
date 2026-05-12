@@ -958,7 +958,8 @@
   color: var(--ink-tertiary);
 }
 
-.wall-state-action {
+.wall-state-action,
+.wall-load-more {
   min-height: 64rpx;
   margin-top: 22rpx;
   padding: 0 26rpx;
@@ -971,6 +972,11 @@
   color: var(--accent-ink);
   font-size: 23rpx;
   line-height: 1;
+}
+
+.wall-load-more {
+  align-self: center;
+  margin-top: 30rpx;
 }
 
 button.wall-state-action {
@@ -1005,6 +1011,31 @@ button.wall-state-action::after {
 }
 
 @media (prefers-color-scheme: dark) {
+  .wall-special-tag-seal,
+  .wall-special-tag-medal,
+  .wall-scene-chip-medal,
+  .wall-scene-chip-festival {
+    background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+    color: #ffd28d;
+    border-color: rgba(255, 226, 170, 0.18);
+  }
+
+  .wall-special-tag-glow,
+  .wall-special-tag-spotlight,
+  .wall-scene-chip-rose,
+  .wall-scene-chip-soft {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ff9ec6;
+    border-color: rgba(255, 235, 249, 0.14);
+  }
+
+  .wall-special-tag-frost,
+  .wall-scene-chip-frost {
+    background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+    color: #9ee5ff;
+    border-color: rgba(215, 238, 248, 0.18);
+  }
+
   .wall-nameplate {
     text-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.28);
   }
@@ -1050,7 +1081,8 @@ button.wall-state-action::after {
   .wall-image-action,
   .wall-reply-link,
   .wall-reply-submit,
-  .wall-state-action {
+  .wall-state-action,
+  .wall-load-more {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(255, 235, 249, 0.13);
     box-shadow: none;
@@ -1067,6 +1099,31 @@ button.wall-state-action::after {
     background: linear-gradient(135deg, rgba(255, 120, 173, 0.18), rgba(255, 210, 122, 0.1));
     border-color: rgba(255, 158, 198, 0.28);
   }
+}
+
+.theme-midnight .wall-special-tag-seal,
+.theme-midnight .wall-special-tag-medal,
+.theme-midnight .wall-scene-chip-medal,
+.theme-midnight .wall-scene-chip-festival {
+  background: linear-gradient(135deg, rgba(255, 210, 141, 0.18) 0%, rgba(255, 158, 198, 0.1) 100%);
+  color: #ffd28d;
+  border-color: rgba(255, 226, 170, 0.18);
+}
+
+.theme-midnight .wall-special-tag-glow,
+.theme-midnight .wall-special-tag-spotlight,
+.theme-midnight .wall-scene-chip-rose,
+.theme-midnight .wall-scene-chip-soft {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ff9ec6;
+  border-color: rgba(255, 235, 249, 0.14);
+}
+
+.theme-midnight .wall-special-tag-frost,
+.theme-midnight .wall-scene-chip-frost {
+  background: linear-gradient(135deg, rgba(117, 216, 255, 0.16) 0%, rgba(215, 238, 248, 0.08) 100%);
+  color: #9ee5ff;
+  border-color: rgba(215, 238, 248, 0.18);
 }
 
 .theme-midnight .wall-nameplate {
@@ -1114,7 +1171,8 @@ button.wall-state-action::after {
 .theme-midnight .wall-image-action,
 .theme-midnight .wall-reply-link,
 .theme-midnight .wall-reply-submit,
-.theme-midnight .wall-state-action {
+.theme-midnight .wall-state-action,
+.theme-midnight .wall-load-more {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 235, 249, 0.13);
   box-shadow: none;

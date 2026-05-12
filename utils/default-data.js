@@ -1,5 +1,4 @@
 const STORAGE_KEYS = {
-  notes: "love-notes",
   userInfo: "user-info",
   clientId: "love-client-id"
 };
@@ -157,19 +156,8 @@ const MEMORY_PROMPTS = [
   "留言不是任务，是把喜欢慢慢存起来。"
 ];
 
-const DEFAULT_NOTES = [
-  {
-    id: "note-demo",
-    author: "我",
-    content: "欢迎来到我们的恋爱纪念册，今天也要记得好好吃饭。",
-    createdAt: "2026-03-26 10:00",
-    timestamp: 1774490400000
-  }
-];
-
 module.exports = {
   STORAGE_KEYS,
   DEFAULT_QUOTES,
-  MEMORY_PROMPTS,
-  DEFAULT_NOTES
+  MEMORY_PROMPTS
 };

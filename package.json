@@ -1,14 +1,15 @@
 {
   "name": "love-miniprogram",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "private": true,
   "description": "情侣纪念与情感记录微信小程序",
   "scripts": {
+    "check:scenes": "node scripts/check-scenes.js",
     "upload": "node --no-experimental-webstorage scripts/upload.js"
   },
   "miniprogram": {
     "robot": 1,
-    "uploadDescription": "2.5 留言墙支持图片留言与图片回复，接入 R2 稳定图片存储并优化预览体验。"
+    "uploadDescription": "2.5.1 优化首页与留言墙性能，补齐深色主题节日场景效果，并新增场景回归检查。"
   },
   "dependencies": {
     "solarlunar": "^2.0.7"

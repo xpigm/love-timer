@@ -165,6 +165,7 @@
             </view>
           </view>
         </view>
+        <view class="wall-load-more" wx:if="{{hasMoreNotes}}" bindtap="loadMoreNotes">再看 {{hiddenNoteCount}} 条留言</view>
       </view>
 
       <view wx:else class="wall-stream-empty">

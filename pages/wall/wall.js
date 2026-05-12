@@ -4,6 +4,10 @@ const profileUtils = require("../../utils/profile-config");
 const specialScene = require("../../utils/special-scene");
 const storage = require("../../utils/storage");
 const time = require("../../utils/time");
+const ui = require("../../utils/ui");
+
+const INITIAL_NOTES_LIMIT = 8;
+const NOTES_PAGE_SIZE = 8;
 
 function buildTodayLabel() {
   return time.formatDate(new Date()).replace(/-/g, ".");
@@ -52,37 +56,6 @@ function buildComposerPanel(scene, notes) {
   };
 }
 
-const NAVIGATION_THEME = {
-  midnight: {
-    frontColor: "#ffffff",
-    backgroundColor: "#151327"
-  },
-  blush: {
-    frontColor: "#000000",
-    backgroundColor: "#fff7f4"
-  }
-};
-
-function tapFeedback() {
-  if (wx.vibrateShort) {
-    wx.vibrateShort({ type: "light" });
-  }
-}
-
-function syncNavigationBar(theme) {
-  if (!wx.setNavigationBarColor) {
-    return;
-  }
-
-  const systemInfo = wx.getSystemInfoSync();
-  if (systemInfo.theme === "dark") {
-    wx.setNavigationBarColor(NAVIGATION_THEME.midnight);
-  } else {
-    const navigationTheme = NAVIGATION_THEME[theme] || NAVIGATION_THEME.blush;
-    wx.setNavigationBarColor(navigationTheme);
-  }
-}
-
 function isImageChooseCancel(error) {
   return /cancel/i.test((error && error.errMsg) || (error && error.message) || "");
 }
@@ -128,22 +101,41 @@ function decorateReply(reply, now) {
   };
 }
 
-function decorateNotes(notes, now = new Date()) {
-  return notes.map((note, index) => {
-    const author = note.author || "匿名";
+function getVisibleNotes(notes, visibleCount) {
+  return notes.slice(0, visibleCount);
+}
 
-    return {
-      ...note,
-      author,
-      authorInitial: author.slice(0, 1),
-      isLatest: index === 0,
-      metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
-      avatarUrl: note.avatarUrl || "",
-      imageUrl: note.imageUrl || "",
-      displayTime: time.formatRelativeTime(note.timestamp, now) || note.createdAt,
-      replies: (Array.isArray(note.replies) ? note.replies : []).map((reply) => decorateReply(reply, now))
-    };
-  });
+function decorateNote(note, index, now) {
+  const author = note.author || "匿名";
+
+  return {
+    ...note,
+    author,
+    authorInitial: author.slice(0, 1),
+    isLatest: index === 0,
+    metaLine: author ? `${author} · ${note.createdAt}` : note.createdAt,
+    avatarUrl: note.avatarUrl || "",
+    imageUrl: note.imageUrl || "",
+    displayTime: time.formatRelativeTime(note.timestamp, now) || note.createdAt,
+    replies: (Array.isArray(note.replies) ? note.replies : []).map((reply) => decorateReply(reply, now))
+  };
+}
+
+function decorateNotes(notes, now = new Date()) {
+  return notes.map((note, index) => decorateNote(note, index, now));
+}
+
+function buildVisibleNotesState(notes, visibleCount, now = new Date()) {
+  const nextVisibleCount = Math.min(visibleCount, notes.length);
+  const visibleNotes = getVisibleNotes(notes, nextVisibleCount);
+
+  return {
+    notes: decorateNotes(visibleNotes, now),
+    visibleNoteCount: visibleNotes.length,
+    hiddenNoteCount: Math.max(0, notes.length - visibleNotes.length),
+    hasMoreNotes: notes.length > visibleNotes.length,
+    noteCount: notes.length
+  };
 }
 
 function buildWallViewData(profile, scene, notes, options = {}) {
@@ -151,6 +143,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
   const avatarUrl = options.avatarUrl || "";
   const imageUrl = options.imageUrl || "";
   const author = options.author || "";
+  const visibleCount = options.visibleCount || Math.min(INITIAL_NOTES_LIMIT, notes.length);
 
   return {
     themeClass: `theme-${profile.theme || "blush"}`,
@@ -164,8 +157,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
       imageUrl,
       content
     },
-    notes: decorateNotes(notes, options.now || new Date()),
-    noteCount: notes.length,
+    ...buildVisibleNotesState(notes, visibleCount, options.now || new Date()),
     wallMeta: buildWallMeta(notes, scene),
     wallHero: buildWallHero(profile, notes, scene),
     composerPanel: buildComposerPanel(scene, notes)
@@ -193,6 +185,9 @@ Page({
       content: ""
     },
     notes: [],
+    visibleNoteCount: 0,
+    hiddenNoteCount: 0,
+    hasMoreNotes: false,
     noteCount: 0,
     wallMeta: {
       badge: "",
@@ -233,11 +228,9 @@ Page({
   },
 
   onLoad() {
-    if (wx.onThemeChange) {
-      wx.onThemeChange(() => {
-        this.loadData();
-      });
-    }
+    ui.bindThemeChange(this, () => {
+      this.loadData();
+    });
   },
 
   onShow() {
@@ -251,6 +244,7 @@ Page({
 
   onUnload() {
     this.stopRelativeTimer();
+    ui.unbindThemeChange(this);
   },
 
   startRelativeTimer() {
@@ -267,6 +261,22 @@ Page({
     }
   },
 
+  refreshVisibleNotes(visibleCount = this.data.visibleNoteCount || INITIAL_NOTES_LIMIT) {
+    const notes = Array.isArray(this.allNotes) ? this.allNotes : [];
+
+    this.setData({
+      ...buildVisibleNotesState(notes, visibleCount),
+      wallMeta: buildWallMeta(notes, this.data.scene),
+      wallHero: buildWallHero(this.data.profile, notes, this.data.scene),
+      composerPanel: buildComposerPanel(this.data.scene, notes)
+    });
+  },
+
+  loadMoreNotes() {
+    ui.tapFeedback();
+    this.refreshVisibleNotes((this.data.visibleNoteCount || 0) + NOTES_PAGE_SIZE);
+  },
+
   refreshRelativeTimes() {
     this.setData({
       notes: decorateNotes(this.data.notes)
@@ -280,7 +290,7 @@ Page({
     let notes = [];
     let loadError = "";
 
-    syncNavigationBar(profile.theme);
+    ui.syncNavigationBar(profile.theme);
     this.setData({
       loadingNotes: true,
       loadError: ""
@@ -293,12 +303,15 @@ Page({
       loadError = error && error.message ? error.message : "留言加载失败";
     }
 
+    this.allNotes = notes;
+
     this.setData({
       ...buildWallViewData(profile, scene, notes, {
         author: cachedUserInfo ? cachedUserInfo.nickName : "",
         avatarUrl: cachedUserInfo ? cachedUserInfo.avatarUrl || "" : "",
         imageUrl: this.data.form.imageUrl,
-        content: this.data.form.content
+        content: this.data.form.content,
+        visibleCount: Math.max(this.data.visibleNoteCount || 0, INITIAL_NOTES_LIMIT)
       }),
       loadingNotes: false,
       loadError
@@ -306,7 +319,7 @@ Page({
   },
 
   async onChooseAvatar(event) {
-    tapFeedback();
+    ui.tapFeedback();
     const { avatarUrl } = event.detail;
 
     if (!avatarUrl || this.data.avatarUploading) {
@@ -340,7 +353,7 @@ Page({
   },
 
   async chooseNoteImage() {
-    tapFeedback();
+    ui.tapFeedback();
 
     if (this.data.imageUploading) {
       return;
@@ -382,7 +395,7 @@ Page({
       return;
     }
 
-    tapFeedback();
+    ui.tapFeedback();
     this.setData({
       "form.imageUrl": "",
       composerError: ""
@@ -390,7 +403,7 @@ Page({
   },
 
   async chooseReplyImage() {
-    tapFeedback();
+    ui.tapFeedback();
 
     if (this.data.replyImageUploading) {
       return;
@@ -432,7 +445,7 @@ Page({
       return;
     }
 
-    tapFeedback();
+    ui.tapFeedback();
     this.setData({
       "replyForm.imageUrl": "",
       replyError: ""
@@ -494,14 +507,14 @@ Page({
   },
 
   focusComposer() {
-    tapFeedback();
+    ui.tapFeedback();
     this.setData({
       contentFocus: true
     });
   },
 
   fillInspiration() {
-    tapFeedback();
+    ui.tapFeedback();
     const text = DEFAULT_QUOTES[Math.floor(Math.random() * DEFAULT_QUOTES.length)].trim();
     const content = this.data.form.content ? `${this.data.form.content}\n${text}` : text;
 
@@ -512,19 +525,43 @@ Page({
     });
   },
 
-  updateNote(noteId, updater) {
-    const notes = this.data.notes.map((note) => (
-      note.id === noteId ? updater(note) : note
-    ));
+  findNoteIndex(noteId) {
+    return this.data.notes.findIndex((note) => note.id === noteId);
+  },
+
+  updateStoredNote(noteId, updater) {
+    const notes = Array.isArray(this.allNotes) ? this.allNotes : [];
+    const index = notes.findIndex((note) => note.id === noteId);
+    if (index === -1) {
+      return null;
+    }
+
+    const nextNote = updater(notes[index]);
+    this.allNotes = [
+      ...notes.slice(0, index),
+      nextNote,
+      ...notes.slice(index + 1)
+    ];
+
+    return nextNote;
+  },
+
+  updateVisibleNote(noteId, updater) {
+    const visibleIndex = this.findNoteIndex(noteId);
+    const nextNote = this.updateStoredNote(noteId, updater);
+
+    if (!nextNote || visibleIndex === -1) {
+      return;
+    }
 
     this.setData({
-      notes: decorateNotes(notes)
+      [`notes[${visibleIndex}]`]: decorateNote(nextNote, visibleIndex, new Date())
     });
   },
 
   async toggleLike(event) {
     const { id } = event.currentTarget.dataset;
-    const note = this.data.notes.find((item) => item.id === id);
+    const note = (Array.isArray(this.allNotes) ? this.allNotes : this.data.notes).find((item) => item.id === id);
 
     if (!note || this.data.likeLoadingId === id) {
       return;
@@ -539,7 +576,7 @@ Page({
     this.setData({
       likeLoadingId: id
     });
-    this.updateNote(id, (item) => ({
+    this.updateVisibleNote(id, (item) => ({
       ...item,
       likedByMe: optimisticLiked,
       likesCount: Math.max(0, Number(item.likesCount || 0) + (optimisticLiked ? 1 : -1))
@@ -547,14 +584,14 @@ Page({
 
     try {
       const result = await noteService.toggleLike(id);
-      this.updateNote(id, (item) => ({
+      this.updateVisibleNote(id, (item) => ({
         ...item,
         likedByMe: Boolean(result.likedByMe),
         likesCount: Number(result.likesCount || 0)
       }));
-      tapFeedback();
+      ui.tapFeedback();
     } catch (error) {
-      this.updateNote(id, (item) => ({
+      this.updateVisibleNote(id, (item) => ({
         ...item,
         likedByMe: previous.likedByMe,
         likesCount: previous.likesCount
@@ -628,7 +665,7 @@ Page({
       });
 
       this.updateCachedUserInfo();
-      this.updateNote(id, (note) => ({
+      this.updateVisibleNote(id, (note) => ({
         ...note,
         replies: [...(Array.isArray(note.replies) ? note.replies : []), reply]
       }));
@@ -640,7 +677,7 @@ Page({
         },
         replySubmitting: false
       });
-      tapFeedback();
+      ui.tapFeedback();
     } catch (error) {
       this.setData({
         replySubmitting: false,
@@ -680,21 +717,23 @@ Page({
     });
 
     try {
-      await noteService.createNote({
+      const createdNote = await noteService.createNote({
         author,
         avatarUrl,
         imageUrl,
         content
       });
       this.updateCachedUserInfo();
-      const notes = await noteService.fetchNotes();
+      const notes = [createdNote, ...(Array.isArray(this.allNotes) ? this.allNotes : [])];
+      this.allNotes = notes;
 
       this.setData({
         ...buildWallViewData(this.data.profile, this.data.scene, notes, {
           author: this.data.form.author,
           avatarUrl: this.data.form.avatarUrl,
           imageUrl: "",
-          content: ""
+          content: "",
+          visibleCount: Math.max(this.data.visibleNoteCount || 0, INITIAL_NOTES_LIMIT)
         }),
         submitting: false,
         contentError: "",
@@ -702,7 +741,7 @@ Page({
         loadError: ""
       });
 
-      tapFeedback();
+      ui.tapFeedback();
 
       wx.showToast({
         title: "留言已保存",

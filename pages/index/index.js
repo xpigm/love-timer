@@ -4,6 +4,7 @@ const noteService = require("../../utils/note-service");
 const profileUtils = require("../../utils/profile-config");
 const specialScene = require("../../utils/special-scene");
 const time = require("../../utils/time");
+const ui = require("../../utils/ui");
 
 function formatStartDateLabel(startTime) {
   return String(startTime || "")
@@ -80,35 +81,18 @@ function buildSpotlight(notes) {
   };
 }
 
-const NAVIGATION_THEME = {
-  midnight: {
-    frontColor: "#ffffff",
-    backgroundColor: "#151327"
-  },
-  blush: {
-    frontColor: "#000000",
-    backgroundColor: "#fff7f4"
-  }
-};
-
-function tapFeedback() {
-  if (wx.vibrateShort) {
-    wx.vibrateShort({ type: "light" });
-  }
+function buildTimerRefreshKey(duration) {
+  return `${duration.days}-${duration.hours}-${duration.minutes}`;
 }
 
-function syncNavigationBar(theme) {
-  if (!wx.setNavigationBarColor) {
-    return;
-  }
-
-  const systemInfo = wx.getSystemInfoSync();
-  if (systemInfo.theme === "dark") {
-    wx.setNavigationBarColor(NAVIGATION_THEME.midnight);
-  } else {
-    const navigationTheme = NAVIGATION_THEME[theme] || NAVIGATION_THEME.blush;
-    wx.setNavigationBarColor(navigationTheme);
-  }
+function buildSceneRefreshKey(scene, milestoneBadge, duration) {
+  return [
+    scene.key || "default",
+    scene.title || "",
+    milestoneBadge.badgeText || "",
+    milestoneBadge.label || "",
+    duration.days
+  ].join("|");
 }
 
 function buildHeroMilestone(milestoneBadge) {
@@ -203,7 +187,8 @@ Page({
       exact: false
     },
     sceneDecorations: [],
-    notesCount: 0
+    notesCount: 0,
+    lastSceneRefreshKey: ""
   },
 
   onLoad() {
@@ -212,11 +197,9 @@ Page({
     });
     this.loadPageData();
 
-    if (wx.onThemeChange) {
-      wx.onThemeChange(() => {
-        this.loadPageData(true);
-      });
-    }
+    ui.bindThemeChange(this, () => {
+      this.loadPageData(true);
+    });
   },
 
   onShow() {
@@ -230,6 +213,7 @@ Page({
 
   onUnload() {
     this.stopTimer();
+    ui.unbindThemeChange(this);
   },
 
   pickQuote() {
@@ -271,7 +255,9 @@ Page({
       notes = [];
     }
 
-    syncNavigationBar(profile.theme);
+    ui.syncNavigationBar(profile.theme);
+
+    const refreshKey = buildSceneRefreshKey(scene, milestoneBadge, duration);
 
     this.setData({
       themeClass: `theme-${profile.theme || "blush"}`,
@@ -292,7 +278,8 @@ Page({
       milestoneBadge,
       heroMilestone: buildHeroMilestone(milestoneBadge),
       sceneDecorations: scene.decorations || [],
-      notesCount: notes.length
+      notesCount: notes.length,
+      lastSceneRefreshKey: refreshKey
     });
   },
 
@@ -314,28 +301,48 @@ Page({
   updateTimer() {
     const profile = this.data.profile.personA ? this.data.profile : profileUtils.getProfile();
     const duration = time.getDuration(profile.startTime);
+    const nextRefreshKey = buildTimerRefreshKey(duration);
+
+    if (this.timerRefreshKey === nextRefreshKey) {
+      this.setData({
+        "timer.seconds": duration.seconds
+      });
+      return;
+    }
+
+    this.timerRefreshKey = nextRefreshKey;
+
     const scene = specialScene.getSpecialScene(profile);
     const milestoneBadge = milestone.getMilestoneBadgeData(profile.startTime);
-
-    this.setData({
-      themeClass: `theme-${profile.theme || "blush"}`,
-      sceneClass: scene.sceneClass || "scene-default",
+    const sceneRefreshKey = buildSceneRefreshKey(scene, milestoneBadge, duration);
+    const sceneChanged = sceneRefreshKey !== this.data.lastSceneRefreshKey;
+    const nextData = {
       timer: duration,
       coverLine: buildCoverLine(profile, duration),
-      startDateLabel: formatStartDateLabel(profile.startTime),
-      coverTags: buildCoverTags(profile, scene),
-      dateMeta: buildDateMeta(profile),
-      momentPanel: buildMomentPanel(profile, scene, this.data.quote, duration),
-      specialLabel: buildSpecialLabel(scene),
-      scene,
-      milestoneBadge,
-      heroMilestone: buildHeroMilestone(milestoneBadge),
-      sceneDecorations: scene.decorations || []
-    });
+      momentPanel: buildMomentPanel(profile, sceneChanged ? scene : this.data.scene, this.data.quote, duration)
+    };
+
+    if (sceneChanged) {
+      Object.assign(nextData, {
+        themeClass: `theme-${profile.theme || "blush"}`,
+        sceneClass: scene.sceneClass || "scene-default",
+        startDateLabel: formatStartDateLabel(profile.startTime),
+        coverTags: buildCoverTags(profile, scene),
+        dateMeta: buildDateMeta(profile),
+        specialLabel: buildSpecialLabel(scene),
+        scene,
+        milestoneBadge,
+        heroMilestone: buildHeroMilestone(milestoneBadge),
+        sceneDecorations: scene.decorations || [],
+        lastSceneRefreshKey: sceneRefreshKey
+      });
+    }
+
+    this.setData(nextData);
   },
 
   refreshQuote() {
-    tapFeedback();
+    ui.tapFeedback();
     const quote = this.pickQuote();
 
     this.setData({
