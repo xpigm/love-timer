@@ -2,9 +2,8 @@ const PROFILE = {
   personA: "孟",
   personB: "张",
   startTime: "2020-07-04 22:54:00",
-  title: "我们已经相恋",
+  title: "我们一直在相爱",
   city: "北京",
-  promise: "今天也想和你一起好好过。",
   theme: "blush",
   specialDates: [
     {
@@ -12,7 +11,7 @@ const PROFILE = {
       month: 1,
       day: 1,
       title: "新年快乐",
-      tag: "新的一年也继续把彼此放在心上。"
+      tag: "新的一年，也继续把彼此放在心上。"
     },
     {
       key: "springfestival",
@@ -21,7 +20,7 @@ const PROFILE = {
       month: 1,
       day: 1,
       title: "春节快乐",
-      tag: "新的一岁，也想继续一起认真生活。",
+      tag: "新的一岁，继续一起把日子过热乎。",
       badge: "春节"
     },
     {
@@ -31,7 +30,7 @@ const PROFILE = {
       month: 1,
       day: 15,
       title: "今天是元宵节",
-      tag: "适合一起看灯，也适合把团圆留在今天。",
+      tag: "灯火亮起来的时候，也把团圆留在今天。",
       badge: "元宵"
     },
     {
@@ -47,7 +46,7 @@ const PROFILE = {
       month: 3,
       day: 6,
       title: "今天是领证纪念日",
-      tag: "海淀民政局的那天，正式把彼此写进了以后。",
+      tag: "从海淀民政局那天起，彼此正式写进了以后。",
       badge: "领证纪念日"
     },
     {
@@ -55,7 +54,7 @@ const PROFILE = {
       month: 3,
       day: 7,
       title: "今天是女生节",
-      tag: "今天适合把偏爱说得更明显一点。",
+      tag: "今天适合把偏爱说得更明亮一点。",
       badge: "女生节"
     },
     {
@@ -63,7 +62,7 @@ const PROFILE = {
       month: 3,
       day: 8,
       title: "今天是女神节",
-      tag: "今天适合认真宠爱，也适合认真感谢。",
+      tag: "今天适合好好宠爱，也好好感谢。",
       badge: "女神节"
     },
     {
@@ -71,7 +70,7 @@ const PROFILE = {
       month: 3,
       day: 14,
       title: "今天是白色情人节",
-      tag: "适合把喜欢再确认一次。",
+      tag: "适合把喜欢再温柔确认一次。",
       badge: "白色情人节"
     },
     {
@@ -79,7 +78,7 @@ const PROFILE = {
       month: 4,
       day: 1,
       title: "今天是愚人节",
-      tag: "玩笑可以轻一点，喜欢可以认真一点。",
+      tag: "玩笑可以轻一点，喜欢要认真一点。",
       badge: "愚人节"
     },
     {
@@ -89,7 +88,7 @@ const PROFILE = {
       month: 5,
       day: 15,
       title: "今天是张的生日",
-      tag: "今天适合认真庆祝，也适合把偏爱说得更明确。",
+      tag: "今天要认真庆祝，也要把偏爱说清楚。",
       badge: "张的生日"
     },
     {
@@ -106,8 +105,9 @@ const PROFILE = {
       key: "anniversary",
       month: 7,
       day: 4,
-      title: "恋爱纪念日",
-      tag: "今天适合认真庆祝一下。"
+      title: "今天是恋爱纪念日",
+      tag: "从 2020.07.04 开始，每一年都值得认真庆祝。",
+      badge: "恋爱纪念"
     },
     {
       key: "qixi",
@@ -116,7 +116,7 @@ const PROFILE = {
       month: 7,
       day: 7,
       title: "今天是七夕",
-      tag: "今天适合把喜欢说得更认真一点。",
+      tag: "今晚适合把喜欢说得更郑重一点。",
       badge: "七夕"
     },
     {
@@ -126,7 +126,7 @@ const PROFILE = {
       month: 8,
       day: 15,
       title: "今天是中秋节",
-      tag: "月亮很好，想念和陪伴也都刚好。",
+      tag: "月亮很好，想念与陪伴也都刚好。",
       badge: "中秋"
     },
     {
@@ -134,7 +134,7 @@ const PROFILE = {
       month: 9,
       day: 9,
       title: "今天是久久日",
-      tag: "把长久和偏爱都写进今天。",
+      tag: "把长久和偏爱，都写进今天。",
       badge: "九月九日"
     },
     {
@@ -145,7 +145,7 @@ const PROFILE = {
       month: 9,
       day: 27,
       title: "今天是结婚纪念日",
-      tag: "从 2024.09.27 开始，往后的每一年都值得认真庆祝。",
+      tag: "从 2024.09.27 开始，往后的每一年都要认真庆祝。",
       badge: "结婚纪念"
     },
     {
@@ -155,7 +155,7 @@ const PROFILE = {
       month: 11,
       day: 11,
       title: "今天是孟的生日",
-      tag: "想把蛋糕、愿望和偏爱都留给你。",
+      tag: "蛋糕、愿望和偏爱，今天都留给你。",
       badge: "孟的生日"
     },
     {
@@ -163,7 +163,7 @@ const PROFILE = {
       month: 12,
       day: 24,
       title: "今天是平安夜",
-      tag: "想把温柔和礼物都悄悄交给你。",
+      tag: "想把温柔和礼物，都悄悄交给你。",
       badge: "平安夜"
     },
     {
@@ -171,7 +171,8 @@ const PROFILE = {
       month: 12,
       day: 25,
       title: "今天是圣诞节",
-      tag: "适合拥抱、拍照和认真庆祝。"
+      tag: "适合拥抱、拍照，也适合好好庆祝。",
+      badge: "圣诞"
     },
     {
       key: "winter",
@@ -180,7 +181,7 @@ const PROFILE = {
       month: 12,
       day: 8,
       title: "今天是腊八",
-      tag: "冬天很长，但有你就会暖一点。",
+      tag: "冬天很长，有你就会暖一点。",
       badge: "腊八"
     },
     {
@@ -188,7 +189,7 @@ const PROFILE = {
       month: 12,
       day: 31,
       title: "今天是跨年夜",
-      tag: "把今年的喜欢，一起带到明年。",
+      tag: "把今年的喜欢，一起带去明年。",
       badge: "跨年夜"
     }
   ]

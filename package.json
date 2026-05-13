@@ -1,6 +1,6 @@
 {
   "name": "love-miniprogram",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "private": true,
   "description": "情侣纪念与情感记录微信小程序",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "miniprogram": {
     "robot": 1,
-    "uploadDescription": "2.5.1 优化首页与留言墙性能，补齐深色主题节日场景效果，并新增场景回归检查。"
+    "uploadDescription": "2.5.2 优化纪念日与节日场景文案，清理未生效的个人配置字段。"
   },
   "dependencies": {
     "solarlunar": "^2.0.7"
