@@ -833,3 +833,24 @@ picker {
   height: 100%;
   border-radius: 44rpx;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb,
+  .scene-fx,
+  .float-subtle,
+  .animate-enter,
+  .text-gradient,
+  .gradient-border-wrap,
+  .neon-spark,
+  .hero-glow,
+  .hero-stage-aura,
+  .hero-stage-wrap::before,
+  .hero-timer-card::after,
+  .hero-milestone-pill-dot,
+  .lower-memory-breathe,
+  .wall-composer-glow,
+  .wall-composer-breathe {
+    animation: none !important;
+    transition: none !important;
+  }
+}
