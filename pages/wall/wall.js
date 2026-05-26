@@ -146,7 +146,7 @@ function buildWallViewData(profile, scene, notes, options = {}) {
   const visibleCount = options.visibleCount || Math.min(INITIAL_NOTES_LIMIT, notes.length);
 
   return {
-    themeClass: `theme-${profile.theme || "blush"}`,
+    themeClass: ui.resolveThemeClass(profile),
     sceneClass: scene.sceneClass || "scene-default",
     profile,
     scene,

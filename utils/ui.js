@@ -9,6 +9,28 @@ const NAVIGATION_THEME = {
   }
 };
 
+function isSystemDark() {
+  if (!wx.getSystemInfoSync) {
+    return false;
+  }
+  try {
+    return wx.getSystemInfoSync().theme === "dark";
+  } catch (error) {
+    return false;
+  }
+}
+
+function resolveThemeClass(profile) {
+  const explicit = profile && profile.theme ? profile.theme : "blush";
+  if (explicit === "midnight") {
+    return "theme-midnight";
+  }
+  if (isSystemDark()) {
+    return `theme-${explicit} theme-midnight`;
+  }
+  return `theme-${explicit}`;
+}
+
 function tapFeedback() {
   if (wx.vibrateShort) {
     wx.vibrateShort({ type: "light" });
@@ -51,6 +73,7 @@ function unbindThemeChange(page) {
 
 module.exports = {
   bindThemeChange,
+  resolveThemeClass,
   syncNavigationBar,
   tapFeedback,
   unbindThemeChange

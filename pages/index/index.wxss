@@ -730,24 +730,6 @@
   color: rgba(246, 237, 248, 0.84);
 }
 
-@media (prefers-color-scheme: dark) {
-  .hero-nameplate,
-  .hero-statement {
-    text-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.26);
-  }
-
-  .lower-stage-card::after {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 34%, rgba(255, 255, 255, 0.04) 100%);
-  }
-
-  .lower-stage-card {
-    background:
-      radial-gradient(circle at top right, rgba(255, 120, 173, 0.14), transparent 26%),
-      radial-gradient(circle at 16% 82%, rgba(117, 216, 255, 0.12), transparent 24%),
-      linear-gradient(145deg, var(--glass-bg) 0%, var(--glass-quiet-bg) 100%);
-  }
-}
-
 .theme-midnight .hero-nameplate,
 .theme-midnight .hero-statement {
   text-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.26);

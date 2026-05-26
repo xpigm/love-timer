@@ -260,7 +260,7 @@ Page({
     const refreshKey = buildSceneRefreshKey(scene, milestoneBadge, duration);
 
     this.setData({
-      themeClass: `theme-${profile.theme || "blush"}`,
+      themeClass: ui.resolveThemeClass(profile),
       sceneClass: scene.sceneClass || "scene-default",
       profile,
       quote,
@@ -324,7 +324,7 @@ Page({
 
     if (sceneChanged) {
       Object.assign(nextData, {
-        themeClass: `theme-${profile.theme || "blush"}`,
+        themeClass: ui.resolveThemeClass(profile),
         sceneClass: scene.sceneClass || "scene-default",
         startDateLabel: formatStartDateLabel(profile.startTime),
         coverTags: buildCoverTags(profile, scene),
