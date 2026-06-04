@@ -234,7 +234,11 @@ Page({
   },
 
   onShow() {
-    this.loadData();
+    if (this._justFromPreview) {
+      this._justFromPreview = false;
+    } else {
+      this.loadData();
+    }
     this.startRelativeTimer();
   },
 
@@ -458,6 +462,8 @@ Page({
       return;
     }
 
+    ui.tapFeedback();
+    this._justFromPreview = true;
     wx.previewImage({
       urls: [src],
       current: src

@@ -1,6 +1,6 @@
 {
   "name": "love-miniprogram",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "private": true,
   "description": "情侣纪念与情感记录微信小程序",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "miniprogram": {
     "robot": 1,
-    "uploadDescription": "2.5.3 修复首页相恋天数卡片扫光动画的收尾，精简冗余样式并统一深色模式来源。"
+    "uploadDescription": "2.5.4 优化评论区图片预览:模糊留白衬底避免裁切,放大角标提示可点,点按震动反馈,修复预览关闭后页面跳顶。"
   },
   "dependencies": {
     "solarlunar": "^2.0.7"

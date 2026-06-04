@@ -651,17 +651,56 @@
   white-space: pre-wrap;
 }
 
+.wall-image-frame {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  margin-top: 14rpx;
+  overflow: hidden;
+  border-radius: 24rpx;
+  background: var(--glass-quiet-bg);
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  box-shadow: 0 10rpx 22rpx rgba(214, 188, 205, 0.13);
+}
+
+.wall-image-frame-bg {
+  position: absolute;
+  inset: -8rpx;
+  width: calc(100% + 16rpx);
+  height: calc(100% + 16rpx);
+  filter: blur(28rpx) saturate(1.1);
+  opacity: 0.55;
+  transform: scale(1.08);
+}
+
+.wall-image-zoom-badge {
+  position: absolute;
+  right: 14rpx;
+  bottom: 14rpx;
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18rpx;
+  background: rgba(20, 16, 32, 0.48);
+  backdrop-filter: blur(8rpx);
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.2);
+  font-size: 28rpx;
+  line-height: 1;
+}
+
+.wall-note-image-frame {
+  height: 380rpx;
+}
+
 .wall-note-image {
   position: relative;
   z-index: 1;
   display: block;
   width: 100%;
-  height: 340rpx;
-  margin-top: 14rpx;
-  border-radius: 24rpx;
-  background: var(--glass-quiet-bg);
-  border: 1px solid rgba(255, 255, 255, 0.56);
-  box-shadow: 0 10rpx 22rpx rgba(214, 188, 205, 0.13);
+  height: 100%;
 }
 
 .wall-note-actions {
@@ -769,15 +808,19 @@
   white-space: pre-wrap;
 }
 
-.wall-reply-image {
-  display: block;
-  width: 320rpx;
+.wall-reply-image-frame {
+  width: 360rpx;
   max-width: 100%;
-  height: 190rpx;
+  height: 240rpx;
   margin-top: 8rpx;
   border-radius: 18rpx;
-  background: var(--glass-quiet-bg);
-  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.wall-reply-image {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .wall-reply-composer {
@@ -997,8 +1040,7 @@ button.wall-state-action::after {
 }
 
 .theme-midnight .wall-image-preview,
-.theme-midnight .wall-note-image,
-.theme-midnight .wall-reply-image {
+.theme-midnight .wall-image-frame {
   border-color: rgba(255, 235, 249, 0.13);
   box-shadow: 0 10rpx 24rpx rgba(5, 4, 18, 0.22);
 }

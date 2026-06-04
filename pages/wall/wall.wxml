@@ -123,7 +123,11 @@
             <view class="wall-note-latest" wx:if="{{item.isLatest}}">最新</view>
           </view>
           <view class="wall-note-content" wx:if="{{item.content}}">“{{item.content}}”</view>
-          <image class="wall-note-image" src="{{item.imageUrl}}" mode="aspectFill" data-src="{{item.imageUrl}}" bindtap="previewImage" wx:if="{{item.imageUrl}}"></image>
+          <view class="wall-image-frame wall-note-image-frame" data-src="{{item.imageUrl}}" bindtap="previewImage" wx:if="{{item.imageUrl}}">
+            <image class="wall-image-frame-bg" src="{{item.imageUrl}}" mode="aspectFill"></image>
+            <image class="wall-note-image" src="{{item.imageUrl}}" mode="aspectFit"></image>
+            <view class="wall-image-zoom-badge">🔍</view>
+          </view>
           <view class="wall-note-actions">
             <view class="action-link wall-like-link {{item.likedByMe ? 'is-liked' : ''}} {{likeLoadingId === item.id ? 'is-loading' : ''}}" data-id="{{item.id}}" bindtap="toggleLike">{{item.likedByMe ? '已喜欢' : '喜欢'}}<text wx:if="{{item.likesCount}}"> · {{item.likesCount}}</text></view>
             <view class="action-link" data-id="{{item.id}}" bindtap="openReply">{{activeReplyNoteId === item.id ? '收起' : '回复'}}</view>
@@ -137,7 +141,11 @@
               <view class="wall-reply-main">
                 <view class="wall-reply-meta">{{reply.author}} · {{reply.displayTime}}<text wx:if="{{reply.city}}"> · {{reply.city}}</text></view>
                 <view class="wall-reply-content" wx:if="{{reply.content}}">{{reply.content}}</view>
-                <image class="wall-reply-image" src="{{reply.imageUrl}}" mode="aspectFill" data-src="{{reply.imageUrl}}" bindtap="previewImage" wx:if="{{reply.imageUrl}}"></image>
+                <view class="wall-image-frame wall-reply-image-frame" data-src="{{reply.imageUrl}}" bindtap="previewImage" wx:if="{{reply.imageUrl}}">
+                  <image class="wall-image-frame-bg" src="{{reply.imageUrl}}" mode="aspectFill"></image>
+                  <image class="wall-reply-image" src="{{reply.imageUrl}}" mode="aspectFit"></image>
+                  <view class="wall-image-zoom-badge">🔍</view>
+                </view>
               </view>
             </view>
           </view>
