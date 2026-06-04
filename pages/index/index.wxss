@@ -246,24 +246,25 @@
   background: linear-gradient(
     115deg,
     transparent 0%,
-    transparent 40%,
-    rgba(255, 255, 255, 0.12) 47%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.12) 46%,
     rgba(255, 255, 255, 0.52) 50%,
-    rgba(255, 255, 255, 0.12) 53%,
-    transparent 60%,
+    rgba(255, 255, 255, 0.12) 54%,
+    transparent 62%,
     transparent 100%
   );
-  background-size: 250% 100%;
-  background-position: 100% 0;
+  background-size: 260% 100%;
+  background-position: 130% 0;
   background-repeat: no-repeat;
   z-index: 3;
   pointer-events: none;
-  animation: poster-sheen 7.8s ease-in-out infinite;
+  animation: poster-sheen 9s ease-out infinite;
 }
 
 @keyframes poster-sheen {
-  0%, 18% { background-position: 100% 0; }
-  46%, 100% { background-position: 0% 0; }
+  0%   { background-position: 130% 0; }
+  42%  { background-position: -30% 0; }
+  100% { background-position: -30% 0; }
 }
 
 @keyframes hero-stage-breathe {
